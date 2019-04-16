@@ -7,10 +7,10 @@ public class Computer {
 	private long id;
 	private String name;
 	
-	private Timestamp introduced;
-	private Timestamp discontinued;
-
-	private long companyId;
+	// OPTIONNAL
+	private Timestamp introduced = null;
+	private Timestamp discontinued = null;
+	private long companyId = -1;
 
 	public Computer(long id, String name) {
 		super();
@@ -18,6 +18,17 @@ public class Computer {
 		this.name = name;
 	}
 
+	@Override
+	public String toString() {
+		return "{\n"+
+				"\t"+"id:"+id+"\n"+
+				"\t"+"name:"+name+"\n"+
+				(introduced!=null?"\t"+introduced+"\n":"")+
+				(discontinued!=null?"\t"+discontinued+"\n":"")+
+				(companyId!=-1?"\t"+companyId+"\n":"")+
+				"}";
+	}
+	
 	// GETTER AND SETTER
 	public long getId() {return id;}
 	public void setId(long id) {this.id = id;}
