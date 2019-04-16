@@ -12,12 +12,7 @@ import java.util.ResourceBundle;
 import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.model.dao.mapper.ComputerMapper;
 
-public class ComputerDAO {
-	
-	private String driver;
-	private String url;
-	private String user;
-	private String passwd;
+public class ComputerDAO extends DAO{
 	
 	private ComputerMapper computerMapper;
 	
@@ -25,15 +20,6 @@ public class ComputerDAO {
 	public ComputerDAO() {
 		super();
 		computerMapper = new ComputerMapper();
-		
-		ResourceBundle bundle = ResourceBundle.getBundle("resources.config");
-		boolean debug = bundle.getString("debug").equals("true");
-		
-		driver = bundle.getString("sgbd.driver");
-		user = bundle.getString("sgbd.login");		
-		url = debug ? bundle.getString("sgbd.test.url") : bundle.getString("sgbd.url");
-		passwd = bundle.getString("sgbd.pwd");
-		
 	}
 
 
@@ -76,7 +62,11 @@ public class ComputerDAO {
 			System.out.println("Connexion effective !");         
 
 			//Création d'un objet prepared statement
-			PreparedStatement state = conn.prepareStatement("SELECT * FROM computer WHERE id = ?"); 
+			PreparedStatement state = conn.prepareStatement(
+					"  SELECT C.id, C.name, C.introduced, C.discontinued, B.id, B.name"
+					+ " FROM computer C JOIN company B "
+					+ "WHERE C.company_id = B.id "
+					+ "AND C.id = ? "); 
 			//On renseigne le paremetre
 			state.setLong(1, idL);
 			ResultSet result = state.executeQuery();
