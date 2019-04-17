@@ -4,7 +4,6 @@ import java.util.ResourceBundle;
 
 public abstract class DAO{
 	
-	
 	protected String driver;
 	protected String url;
 	protected String user;

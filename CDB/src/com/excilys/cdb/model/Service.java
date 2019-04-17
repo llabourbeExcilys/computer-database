@@ -29,6 +29,23 @@ public class Service {
 	public Computer getComputerById(long idL) {
 		return computerDAO.getComputerById(idL);
 	}
+
+	public void addComputer(String name) {
+		computerDAO.addComputer(name);
+	}
+
+	public void deleteComputerById(long idL2) {
+		computerDAO.deleteComputerById(idL2);
+	}
+
+	public void updateName(Computer c, String name) {
+		computerDAO.updateName(c,name);
+		
+	}
+
+	public void updateComputerCompany(Computer c, long company) {
+		computerDAO.updateCompany(c,company);
+	}
 	
 
 }

@@ -11,7 +11,6 @@ public class Controller {
 	private Service service;
 	
 	
-	
 	public Controller() {
 		super();
 		service = new Service();
@@ -25,11 +24,27 @@ public class Controller {
 		return service.getCompanyList();
 	}
 
-	public Computer getComputerById(String id) {
+	public Computer getComputerById(long id) {	
+		return service.getComputerById(id);
+	}
 
-		long idL = Long.parseLong(id);
+	public void addComputer(String name) {
+		if(name!=null) {
+			service.addComputer(name);
+		}
+	}
+
+	public void deleteComputerById(long idL2) {
+		service.deleteComputerById(idL2);
+	}
+
+	public void updateName(Computer c, String name) {
+		service.updateName(c,name);
+	}
+
+	public void updateComputerCompany(Computer c, long company) {
+		service.updateComputerCompany(c,company);
 		
-		return service.getComputerById(idL);
 	}
 	
 	

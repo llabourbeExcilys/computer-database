@@ -16,13 +16,10 @@ public class ComputerDAO extends DAO{
 	
 	private ComputerMapper computerMapper;
 	
-	
 	public ComputerDAO() {
 		super();
 		computerMapper = new ComputerMapper();
 	}
-
-
 
 	public List<Computer> getComputerList() {
 		List<Computer> resultList = new ArrayList<Computer>();
@@ -35,9 +32,19 @@ public class ComputerDAO extends DAO{
 			//Création d'un objet Statement
 			Statement state = conn.createStatement();
 			//L'objet ResultSet contient le résultat de la requête SQL
-			ResultSet result = state.executeQuery("SELECT * FROM computer");
+			String query = "SELECT C.id AS computer_id,"
+					+ " C.name AS computer_name,"
+					+ " C.introduced AS computer_introduced,"
+					+ "	C.discontinued AS computer_discontinued,"
+					+ " B.id AS company_id,"
+					+ " B.name AS company_name"
+					+ "	FROM computer C LEFT JOIN company B"
+					+ "	ON C.company_id = B.id";
+					
+					
+			ResultSet result = state.executeQuery(query);
 			
-			while(result.next()){
+			while(result.next()){ 
 				Computer computer = computerMapper.getComputer(result);
 				resultList.add(computer);				
 			}
@@ -46,27 +53,32 @@ public class ComputerDAO extends DAO{
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
 		return resultList;
 	}
-
 
 
 	public Computer getComputerById(long idL) {
 
 		Computer computer = null;
-		
+
 		try {	
 			Class.forName(driver);
 			Connection conn = DriverManager.getConnection(url, user, passwd);
-			System.out.println("Connexion effective !");         
 
 			//Création d'un objet prepared statement
-			PreparedStatement state = conn.prepareStatement(
-					"  SELECT C.id, C.name, C.introduced, C.discontinued, B.id, B.name"
-					+ " FROM computer C JOIN company B "
-					+ "WHERE C.company_id = B.id "
-					+ "AND C.id = ? "); 
+			
+			String query = 
+					  " SELECT C.id AS computer_id,"
+					+ " C.name AS computer_name,"
+					+ " C.introduced AS computer_introduced,"
+					+ "	C.discontinued AS computer_discontinued,"
+					+ " B.id AS company_id,"
+					+ " B.name AS company_name"
+					+ " FROM computer C LEFT JOIN company B"
+					+ " ON C.company_id = B.id"
+					+ " WHERE C.id = ?";
+			
+			PreparedStatement state = conn.prepareStatement(query); 
 			//On renseigne le paremetre
 			state.setLong(1, idL);
 			ResultSet result = state.executeQuery();
@@ -81,6 +93,90 @@ public class ComputerDAO extends DAO{
 		}
 		
 		return computer;
+	}
+
+	public void addComputer(String name) {
+		try {	
+			Class.forName(driver);
+			Connection conn = DriverManager.getConnection(url, user, passwd);
+
+			//Création d'un objet prepared statement
+			PreparedStatement state = 
+					conn.prepareStatement("INSERT INTO computer (name) values (?)"); 
+			//On renseigne le paremetre
+			state.setString(1, name);
+			state.executeUpdate();
+		
+			state.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+	}
+
+	public void deleteComputerById(long id) {
+		try {	
+			Class.forName(driver);
+			Connection conn = DriverManager.getConnection(url, user, passwd);
+
+			//Création d'un objet prepared statement
+			PreparedStatement state = conn.prepareStatement(
+					"DELETE FROM computer WHERE id = ? "); 
+			//On renseigne le paremetre
+			state.setLong(1, id);
+			state.executeUpdate();
+			System.out.println("Delete OK !");
+			state.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+
+	public void updateName(Computer c, String name) {
+		try {	
+			Class.forName(driver);
+			Connection conn = DriverManager.getConnection(url, user, passwd);
+
+			//Création d'un objet prepared statement
+			PreparedStatement state = 
+					conn.prepareStatement("UPDATE computer " + 
+										  "SET computer.name = ? " + 
+										  "WHERE computer.id = ? "); 
+			//On renseigne le paremetre
+			state.setString(1, name);
+			state.setLong(2, c.getId());
+			state.executeUpdate();
+		
+			state.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		
+	}
+
+	public void updateCompany(Computer c, long company) {
+		try {	
+			Class.forName(driver);
+			Connection conn = DriverManager.getConnection(url, user, passwd);
+
+			//Création d'un objet prepared statement
+			PreparedStatement state = 
+					conn.prepareStatement("UPDATE computer " + 
+										  "SET computer.company_id = ? " + 
+										  "WHERE computer.id = ? "); 
+			//On renseigne le paremetre
+			state.setLong(1, company);
+			state.setLong(2, c.getId());
+			state.executeUpdate();
+		
+			state.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		
 	}
 
 }

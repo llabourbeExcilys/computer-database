@@ -1,6 +1,7 @@
 package com.excilys.cdb.model;
 
 import java.sql.Timestamp;
+import java.time.LocalDate;
 
 public class Computer {
 	
@@ -8,9 +9,9 @@ public class Computer {
 	private String name;
 	
 	// OPTIONNAL
-	private Timestamp introduced = null;
-	private Timestamp discontinued = null;
-	private long companyId = -1;
+	private LocalDate ldIntroduced = null;
+	private LocalDate ldDiscontinued = null;
+	private Company company=null;
 
 	public Computer(long id, String name) {
 		super();
@@ -23,9 +24,9 @@ public class Computer {
 		return "{\n"+
 				"\t"+"id:"+id+"\n"+
 				"\t"+"name:"+name+"\n"+
-				(introduced!=null?"\t"+introduced+"\n":"")+
-				(discontinued!=null?"\t"+discontinued+"\n":"")+
-				(companyId!=-1?"\t"+companyId+"\n":"")+
+				(ldIntroduced!=null?"\tintroduced:"+ldIntroduced+"\n":"")+
+				(ldDiscontinued!=null?"\tdiscontinued:"+ldDiscontinued+"\n":"")+
+				(company!=null?"\t\tcomputer:"+company+"\n":"")+
 				"}";
 	}
 	
@@ -34,12 +35,13 @@ public class Computer {
 	public void setId(long id) {this.id = id;}
 	public String getName() {return name;}
 	public void setName(String name) {this.name = name;}
-	public Timestamp getIntroduced() {return introduced;}
-	public void setIntroduced(Timestamp introduced) {this.introduced = introduced;}
-	public Timestamp getDiscontinued() {return discontinued;}
-	public void setDiscontinued(Timestamp discontinued) {this.discontinued = discontinued;}
-	public long getCompanyId() {return companyId;}
-	public void setCompanyId(long companyId) {this.companyId = companyId;}
-
+	public Company getCompany() {return company;}
+	public void setCompany(Company company) { this.company = company;}
+	public LocalDate getLdIntroduced() {return ldIntroduced;}
+	public void setLdIntroduced(LocalDate ldIntroduced) {this.ldIntroduced = ldIntroduced;}
+	public LocalDate getLdDiscontinued() {return ldDiscontinued;}
+	public void setLdDiscontinued(LocalDate ldDiscontinued) {this.ldDiscontinued = ldDiscontinued;}
+	
+	
 
 }
