@@ -9,6 +9,7 @@ import com.excilys.cdb.controller.Controller;
 import com.excilys.cdb.exception.BadCompanyIdException;
 import com.excilys.cdb.exception.NotFoundException;
 import com.excilys.cdb.model.Computer;
+import com.excilys.cdb.page.Page;
 
 public class CLIview implements View {
 	
@@ -20,17 +21,17 @@ public class CLIview implements View {
 		super();
 		this.controller = controller;
 		this.sc = new Scanner(System.in);
-
 	}
 
 	public void start() {
 		boolean exit = false;
-		 
 		do {
+			// Show possible actions
 			showActions();
 			System.out.print("->");
 			if(sc.hasNextLine()) {
 				String result = sc.nextLine();
+				// Read and execute user input, return true to finish
 				exit = readSwitchAction(result);
 			}
 			try {
@@ -51,6 +52,7 @@ public class CLIview implements View {
 						+  "4.......Create a computer\n"
 						+  "5.......Delete a computer\n"
 						+  "6.......Update a computer\n"
+						+  "7.......Show a page of computer\n"
 						+  "exit....Exit\n");
 	}
 	
@@ -86,6 +88,13 @@ public class CLIview implements View {
 				c = controller.getComputerById(id);
 				System.out.println(c);
 				updateComputer(c); //UPDATE COMPUTER
+				break; 
+			case "7":
+				System.out.print("Show page number ?\n->");
+				String sNumPage = sc.nextLine();
+				int iNumPage = Integer.parseInt(sNumPage);
+				Page p = new Page(10);
+				p.show(controller.getComputerList(), iNumPage);
 				break;
 			case "exit": 
 				System.out.println("Goodbye !\n");
@@ -100,6 +109,8 @@ public class CLIview implements View {
 			System.out.println(e.getMessage()+"\n");
 		}catch(BadCompanyIdException e) {
 			System.out.println(e.getMessage()+"\n");
+		}catch(NumberFormatException e) {
+			System.out.println("Bad number format\n");
 		}
 		return false;
 	}
@@ -171,7 +182,8 @@ public class CLIview implements View {
 			if (obtained.equals("")) 
 				return null;
 			System.out.println("\n"+toOtain+":"+obtained+"\n"
-								+ "(Enter) OK (abort) Abort");
+								+ "Enter.......OK\n"
+								+ "abort.......Abort");
 			String result = sc.nextLine();
 			switch(result) {
 				case "": return obtained; 	//Enter key pressed 
@@ -180,9 +192,6 @@ public class CLIview implements View {
 			}
 		}while(true);
 	}
-	
-	
-	
-	
+
 	
 }
