@@ -1,5 +1,6 @@
 package com.excilys.cdb.model;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import com.excilys.cdb.model.dao.CompanyDAO;
@@ -10,12 +11,10 @@ public class Service {
 	private CompanyDAO companyDAO;
 	private ComputerDAO computerDAO;
 	
-	
-	
-	public Service() {
+	public Service(ComputerDAO computerDAO, CompanyDAO companyDAO) {
 		super();
-		companyDAO = new CompanyDAO();
-		computerDAO = new ComputerDAO();
+		this.companyDAO = companyDAO;
+		this.computerDAO = computerDAO;
 	}
 
 	public List<Computer> getComputerList() {
@@ -30,8 +29,8 @@ public class Service {
 		return computerDAO.getComputerById(idL);
 	}
 
-	public void addComputer(String name) {
-		computerDAO.addComputer(name);
+	public long addComputer(String name) {
+		return computerDAO.addComputer(name);
 	}
 
 	public void deleteComputerById(long idL2) {
@@ -45,6 +44,14 @@ public class Service {
 
 	public void updateComputerCompany(Computer c, long company) {
 		computerDAO.updateCompany(c,company);
+	}
+
+	public void updateComputerIntroduced(Computer c, LocalDate ldate) {
+		computerDAO.updateComputerIntroduced(c,ldate);
+	}
+
+	public void updateComputerDiscontinued(Computer c, LocalDate ldate) {
+		computerDAO.updateComputerDiscontinued(c,ldate);
 	}
 	
 

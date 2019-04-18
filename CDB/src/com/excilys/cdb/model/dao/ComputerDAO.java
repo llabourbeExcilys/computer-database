@@ -1,14 +1,19 @@
 package com.excilys.cdb.model.dao;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.sql.Statement;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.ResourceBundle;
 
+import com.excilys.cdb.exception.BadCompanyIdException;
+import com.excilys.cdb.exception.NotFoundException;
 import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.model.dao.mapper.ComputerMapper;
 
@@ -16,9 +21,9 @@ public class ComputerDAO extends DAO{
 	
 	private ComputerMapper computerMapper;
 	
-	public ComputerDAO() {
+	public ComputerDAO(ComputerMapper computerMapper) {
 		super();
-		computerMapper = new ComputerMapper();
+		this.computerMapper = computerMapper;
 	}
 
 	public List<Computer> getComputerList() {
@@ -83,35 +88,42 @@ public class ComputerDAO extends DAO{
 			state.setLong(1, idL);
 			ResultSet result = state.executeQuery();
 			
-			while(result.next()){
-				computer = computerMapper.getComputer(result);
-			}
+			boolean next = result.next();
+			if(!next)
+				throw new NotFoundException("Id not found");
+			
+			computer = computerMapper.getComputer(result);
+			
 			result.close();
 			state.close();
-		} catch (Exception e) {
+		} catch (SQLException | ClassNotFoundException e) {
 			e.printStackTrace();
 		}
 		
 		return computer;
 	}
 
-	public void addComputer(String name) {
+	public long addComputer(String name) {
 		try {	
 			Class.forName(driver);
 			Connection conn = DriverManager.getConnection(url, user, passwd);
 
 			//Création d'un objet prepared statement
 			PreparedStatement state = 
-					conn.prepareStatement("INSERT INTO computer (name) values (?)"); 
+					conn.prepareStatement(
+							"INSERT INTO computer (name) values (?)",Statement.RETURN_GENERATED_KEYS); 
 			//On renseigne le paremetre
 			state.setString(1, name);
 			state.executeUpdate();
-		
+			ResultSet generatedKeys = state.getGeneratedKeys();
+			generatedKeys.first();
+			long id = generatedKeys.getLong(1);
 			state.close();
+			return id;
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
+		return -1;
 	}
 
 	public void deleteComputerById(long id) {
@@ -124,10 +136,13 @@ public class ComputerDAO extends DAO{
 					"DELETE FROM computer WHERE id = ? "); 
 			//On renseigne le paremetre
 			state.setLong(1, id);
-			state.executeUpdate();
+			int resultCode = state.executeUpdate();			
+			if(resultCode == 0) 
+				throw new NotFoundException("There is no computer with id "+id);
+			
 			System.out.println("Delete OK !");
 			state.close();
-		} catch (Exception e) {
+		} catch (SQLException | ClassNotFoundException e) {
 			e.printStackTrace();
 		}
 	}
@@ -146,10 +161,12 @@ public class ComputerDAO extends DAO{
 			//On renseigne le paremetre
 			state.setString(1, name);
 			state.setLong(2, c.getId());
-			state.executeUpdate();
-		
+			int resultCode = state.executeUpdate();
+			if(resultCode == 0) 
+				throw new NotFoundException("Id not found");
+			
 			state.close();
-		} catch (Exception e) {
+		} catch (SQLException | ClassNotFoundException e) {
 			e.printStackTrace();
 		}
 		
@@ -169,14 +186,67 @@ public class ComputerDAO extends DAO{
 			//On renseigne le paremetre
 			state.setLong(1, company);
 			state.setLong(2, c.getId());
-			state.executeUpdate();
+			int resultCode = state.executeUpdate();
+			if(resultCode == 0) 
+				throw new NotFoundException("Id not found");
 		
+			
 			state.close();
-		} catch (Exception e) {
+		} catch ( SQLIntegrityConstraintViolationException e) {
+			throw new BadCompanyIdException("There is no company with id "+company);
+		} catch (SQLException | ClassNotFoundException e) {
 			e.printStackTrace();
 		}
 		
 		
 	}
+
+	public void updateComputerIntroduced(Computer c, LocalDate ldate) {
+		try {	
+			Class.forName(driver);
+			Connection conn = DriverManager.getConnection(url, user, passwd);
+
+			//Création d'un objet prepared statement
+			PreparedStatement state = 
+					conn.prepareStatement("UPDATE computer " + 
+										  "SET computer.introduced = ? " + 
+										  "WHERE computer.id = ? "); 
+			//On renseigne le paremetre
+			state.setDate(1,  Date.valueOf(ldate));
+			state.setLong(2, c.getId());
+			int resultCode = state.executeUpdate();
+			if(resultCode == 0) 
+				throw new NotFoundException("Id not found");
+		
+			state.close();
+		} catch (SQLException | ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void updateComputerDiscontinued(Computer c, LocalDate ldate) {
+		try {	
+			Class.forName(driver);
+			Connection conn = DriverManager.getConnection(url, user, passwd);
+
+			//Création d'un objet prepared statement
+			PreparedStatement state = 
+					conn.prepareStatement("UPDATE computer " + 
+										  "SET computer.discontinued = ? " + 
+										  "WHERE computer.id = ? "); 
+			//On renseigne le paremetre
+			state.setDate(1,  Date.valueOf(ldate));
+			state.setLong(2, c.getId());
+			int resultCode = state.executeUpdate();
+			if(resultCode == 0) 
+				throw new NotFoundException("Id not found");
+		
+			state.close();
+		} catch (SQLException | ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	
 
 }

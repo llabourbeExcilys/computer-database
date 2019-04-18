@@ -1,10 +1,13 @@
 package com.excilys.cdb.view;
 
+import java.time.DateTimeException;
 import java.util.List;
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
 import com.excilys.cdb.controller.Controller;
+import com.excilys.cdb.exception.BadCompanyIdException;
+import com.excilys.cdb.exception.NotFoundException;
 import com.excilys.cdb.model.Computer;
 
 public class CLIview implements View {
@@ -42,8 +45,9 @@ public class CLIview implements View {
 	
 	private boolean showSwitchAction(String s) {
 		String id;
-		long idL;
-		switch(s) {
+		Computer c;
+		try {
+			switch(s) {
 			case "1": 
 				showList(controller.getCompanyList());
 				break;
@@ -51,32 +55,26 @@ public class CLIview implements View {
 				showList(controller.getComputerList());
 				break;
 			case "3":
-				System.out.println("id of computer to show details ?");
-				System.out.print("->");
+				System.out.println("id of computer to show details ?\n ->\n");
 				id = sc.nextLine();
-				idL = Long.parseLong(id);
-				System.out.println(controller.getComputerById(idL));
+				c = controller.getComputerById(id);
+				System.out.println(c);
 				break;
 			case "4":
+				System.out.println("Creating a computer");
 				registerComputer();
 				break;
 			case "5":
-				System.out.println("id of computer to delete ?");
-				System.out.print("->");
+				System.out.println("id of computer to delete ?\n ->\n");
 				id = sc.nextLine();
-				idL = Long.parseLong(id);
-				controller.deleteComputerById(idL);
+				controller.deleteComputerById(id);
 				break;
-			case "6":
-				System.out.println("id of computer to update ?");
-				System.out.print("->");
+			case "6":  
+				System.out.println("id of computer to update ?\n ->\n");
 				id = sc.nextLine();
-				idL = Long.parseLong(id);
-				Computer c = controller.getComputerById(idL);
-				if(c!=null) {
-					System.out.println(c);
-					updateComputer(c);
-				}
+				c = controller.getComputerById(id);
+				System.out.println(c);
+				updateComputer(c);
 				break;
 			case "exit": 
 				System.out.println("Goodbye !\n");
@@ -84,7 +82,15 @@ public class CLIview implements View {
 			default : 
 				System.out.println("Unknown action, try again !\n");
 				break;
+			}
+		}catch(NotFoundException e) {
+			System.out.println(e.getMessage());
+		}catch(DateTimeException e) {
+			System.out.println(e.getMessage());
+		}catch(BadCompanyIdException e) {
+			System.out.println(e.getMessage());
 		}
+		
 		return false;
 	}
 	
@@ -101,103 +107,61 @@ public class CLIview implements View {
 		
 			String result = sc.nextLine();
 			switch(result) {
-			case "1":
-				updateComputerName(c);
+			case "1": updateComputerName(c);
 				break;
-			case "2":
-				updateComputerCompany(c);
+			case "2": updateComputerCompany(c);
 				break;
-			case "3":
+			case "3": updateComputerIntroduced(c);
 				break;
-			case "4":
+			case "4": updateComputerDiscontinued(c);
 				break;
 			case "abort":
 				break;
-			default : 
-				ok = false;
-				System.out.println("");
+			default : ok = false; 
+					  System.out.println("");
 			}
 		}while(!ok);		
 	}
 	
+
+
 	private void updateComputerName(Computer c) {
-		boolean ok = false;
-		do {
-			System.out.print("computer name ?\n->");
-			String name = sc.nextLine();
-			System.out.println("\nDoes it look ok ? - name:"+name+"\n");
-			System.out.println("Press :\n"
-					+ "Enter to confirm\n"
-					+ "try to try again\n"
-					+ "Anything else to abort\n");
-			String result = sc.nextLine();
-			switch(result) {
-				case ""://Enter key pressed 
-					ok=true;
-					controller.updateName(c,name);
-					break;
-				case "try": 
-					break;
-				default : 
-					System.out.println("");
-					return;
-			}
-		}while(!ok);
+		String name = obtainInformation("name");
+		controller.updateName(c,name);
 	}
 	
 	private void updateComputerCompany(Computer c) {
-		boolean ok = false;
-		do {
-			System.out.print("computer company id ?\n->");
-			String company = sc.nextLine();
-			long companyId  = Long.parseLong(company);
-
-			System.out.println("\nDoes it look ok ? - company:"+companyId+"\n");
-			System.out.println("Press :\n"
-					+ "Enter to confirm\n"
-					+ "try to try again\n"
-					+ "Anything else to abort\n");
-			String result = sc.nextLine();
-			switch(result) {
-				case ""://Enter key pressed 
-					ok=true;
-					controller.updateComputerCompany(c,companyId);
-					break;
-				case "try": 
-					break;
-				default : 
-					System.out.println("");
-					return;
-			}
-		}while(!ok);
+		String company = obtainInformation("company id");
+		controller.updateComputerCompany(c,company);
+	}
+	
+	private void updateComputerIntroduced(Computer c) {
+		String date = obtainInformation("date of introduction");
+		controller.updateComputerIntroduced(c,date);
+	}
+	
+	private void updateComputerDiscontinued(Computer c) {
+		String date = obtainInformation("date of discontinuation");
+		controller.updateComputerDiscontinued(c,date);
 	}
 	
 	
 	private void registerComputer() {
-		boolean ok = false;
-		do {
-			System.out.print("computer name ?\n->");
-			String name = sc.nextLine();
-			System.out.println("\nDoes it look ok ?\n");
-			System.out.println("computer:");
-			System.out.println("\tname:"+name+"\n");
-			System.out.println("Press :\n"
-					+ "Enter to confirm\n"
-					+ "try to try again\n"
-					+ "Anything else to abort\n");
-			String result = sc.nextLine();
-			switch(result) {
-			case ""://Enter key pressed 
-				ok=true;
-				controller.addComputer(name);
-				break;
-			case "try": 
-				break;
-			default : 
-				System.out.println("");
-				return;
-			}
-		}while(!ok);
+		String name = obtainInformation("name");		
+		String companyID = obtainInformation("company id");
+		String dateIntroduction = obtainInformation("date of introduction");
+		String dateDiscontinued = obtainInformation("date of discontinuation");
+
+		if(name!=null) {
+			long id = controller.addComputer(name);
+			Computer c = controller.getComputerById(id);
+			if(companyID!=null)
+				controller.updateComputerCompany(c, companyID);
+			if(dateIntroduction!=null)
+				controller.updateComputerIntroduced(c, dateIntroduction);
+			if(dateDiscontinued!=null)
+				controller.updateComputerDiscontinued(c, dateDiscontinued);
+		}
 	}
 
 	private <T> void showList(List<T> list) {
@@ -205,6 +169,24 @@ public class CLIview implements View {
 			System.out.println(t);
 	}
 
+	private String obtainInformation(String toOtain) {
+		do {
+			System.out.print("computer "+toOtain+" ?\n->");
+			String obtained = sc.nextLine();
+			if (obtained.equals("")) 
+				return null;
+			System.out.println("\n"+toOtain+":"+obtained+"\n"
+								+ "(Enter) OK (abort) Abort");
+			String result = sc.nextLine();
+			switch(result) {
+				case "": return obtained; 	//Enter key pressed 
+				case "abort": return null;
+				default : break;
+			}
+		}while(true);
+	}
+	
+	
 	private void showActions() {
 		System.out.println("List of action:\n"
 						+  "---------------\n"

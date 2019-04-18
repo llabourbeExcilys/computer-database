@@ -1,6 +1,5 @@
 package com.excilys.cdb.model;
 
-import java.sql.Timestamp;
 import java.time.LocalDate;
 
 public class Computer {
@@ -18,6 +17,8 @@ public class Computer {
 		this.id = id;
 		this.name = name;
 	}
+	
+	
 
 	@Override
 	public String toString() {

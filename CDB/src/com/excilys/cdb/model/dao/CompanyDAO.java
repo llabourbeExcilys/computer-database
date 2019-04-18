@@ -16,13 +16,13 @@ public class CompanyDAO extends DAO{
 
 	private CompanyMapper companyMapper;
 	 
-	public CompanyDAO() {
+	public CompanyDAO(CompanyMapper companyMapper) {
 		super();
-		companyMapper = new CompanyMapper();
+		this.companyMapper = companyMapper;
 	}
 
 	public List<Company> getCompanyList() {
-		List<Company> resultList = new ArrayList();
+		List<Company> resultList = new ArrayList<Company>();
 		
 		try {	
 			Class.forName(driver);
