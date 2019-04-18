@@ -21,6 +21,8 @@ public class CompanyDAO extends DAO{
 		this.companyMapper = companyMapper;
 	}
 
+	// Read
+	
 	public List<Company> getCompanyList() {
 		List<Company> resultList = new ArrayList<Company>();
 		
