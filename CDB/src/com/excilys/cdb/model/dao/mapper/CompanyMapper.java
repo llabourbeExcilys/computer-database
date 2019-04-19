@@ -6,6 +6,7 @@ import com.excilys.cdb.model.Company;
 
 public class CompanyMapper {
 	
+	// Create a company from a ResultSet
 	public Company getCompany(ResultSet result) {
 		long id;
 		String name;

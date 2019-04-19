@@ -14,7 +14,6 @@ import com.excilys.cdb.page.Page;
 public class CLIview implements View {
 	
 	private Controller controller;
-
 	private Scanner sc;
 	
 	public CLIview(Controller controller) {
@@ -61,35 +60,35 @@ public class CLIview implements View {
 		Computer c;
 		try {
 			switch(s) {
-			case "1": 
+			case "1": //Show Company list
 				showList(controller.getCompanyList());
 				break;
-			case "2": 
+			case "2": //Show Computer list
 				showList(controller.getComputerList());
 				break;
-			case "3":
+			case "3": //Show computer detail
 				System.out.print("id of computer to show details ?\n->");
 				id = sc.nextLine();
 				c = controller.getComputerById(id);
 				System.out.println(c);
 				break;
-			case "4":
+			case "4": //Create a computer
 				System.out.println("Creating a computer");
 				registerComputer(); //REGISTER COMPUTER
 				break;
-			case "5":
+			case "5": //Delete a computer
 				System.out.print("id of computer to delete ?\n->");
 				id = sc.nextLine(); 
 				controller.deleteComputerById(id);
 				break;
-			case "6":  
+			case "6": //Update a computer
 				System.out.print("id of computer to update ?\n->");
 				id = sc.nextLine();
 				c = controller.getComputerById(id);
 				System.out.println(c);
 				updateComputer(c); //UPDATE COMPUTER
 				break; 
-			case "7":
+			case "7": //Show page
 				System.out.print("Show page number ?\n->");
 				String sNumPage = sc.nextLine();
 				int iNumPage = Integer.parseInt(sNumPage);
@@ -115,6 +114,7 @@ public class CLIview implements View {
 		return false;
 	}
 	
+	//Perform system.out.println on a list of T
 	private <T> void showList(List<T> list) {
 		for(T t : list)
 			System.out.println(t);
@@ -175,6 +175,7 @@ public class CLIview implements View {
 		}while(!ok);		
 	}
 	
+	// Ask the user to give a name for a variable
 	private String obtainInformation(String toOtain) {
 		do {
 			System.out.print("computer "+toOtain+" ?\n->");

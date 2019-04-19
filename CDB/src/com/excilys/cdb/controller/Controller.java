@@ -57,12 +57,12 @@ public class Controller {
 	}
 
 	public void updateComputerIntroduced(Computer c, String date) {
-		LocalDate ldate = checkDate(date);
+		LocalDate ldate = checkAndCreateDate(date);
 		service.updateComputerIntroduced(c, ldate);
 	}
 
 	public void updateComputerDiscontinued(Computer c, String date) {
-		LocalDate discontDate = checkDate(date);
+		LocalDate discontDate = checkAndCreateDate(date);
 		LocalDate introductionDate = c.getLdIntroduced();
 		
 		if(discontDate.isBefore(introductionDate))
@@ -71,7 +71,11 @@ public class Controller {
 		service.updateComputerDiscontinued(c, discontDate);
 	}
 	
-	private LocalDate checkDate(String date) {
+	// Check if a string can be used to create a LocalDate
+	// Expected string format:yyyy-mm-dd
+	// Return the LocalDate if ok
+	// Throw DateTimeException exception if not ok
+	private LocalDate checkAndCreateDate(String date) {
 		String [] datePart = date.split("-");
 		
 		if(datePart.length!=3) 
