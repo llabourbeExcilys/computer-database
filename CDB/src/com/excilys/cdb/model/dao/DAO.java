@@ -12,12 +12,14 @@ public abstract class DAO{
 	public DAO() {
 		super();
 
+		// Look for config.properties file
 		ResourceBundle bundle = ResourceBundle.getBundle("resources.config");
 		boolean debug = bundle.getString("debug").equals("true");
 		
-		driver = bundle.getString("sgbd.driver");
-		user = bundle.getString("sgbd.login");		
+		// if debug is true, use test database
 		url = debug ? bundle.getString("sgbd.test.url") : bundle.getString("sgbd.url");
+		driver = bundle.getString("sgbd.driver");
+		user = bundle.getString("sgbd.login");
 		passwd = bundle.getString("sgbd.pwd");
 	}
 	
