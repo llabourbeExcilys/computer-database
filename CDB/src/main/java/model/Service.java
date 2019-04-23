@@ -2,6 +2,7 @@ package model;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 import model.dao.CompanyDAO;
 import model.dao.ComputerDAO;
@@ -19,8 +20,8 @@ public class Service {
 	
 	// Create
 	
-	public long addComputer(String name, LocalDate ldateIntroduction, LocalDate ldateDiscontinuation, String companyId) {
-		return computerDAO.addComputer(name,ldateIntroduction,ldateDiscontinuation,companyId);
+	public long addComputer(String name, LocalDate ldateIntroduction, LocalDate ldateDiscontinuation, Optional<Long> idL) {
+		return computerDAO.addComputer(name,ldateIntroduction,ldateDiscontinuation,idL);
 	}
 	
 	// Read
@@ -33,11 +34,11 @@ public class Service {
 		return companyDAO.getCompanyList();
 	}
 
-	public Computer getComputerById(long idL) {
+	public Optional<Computer> getComputerById(long idL) {
 		return computerDAO.getComputerById(idL);
 	}
 	
-	public Company getCompanyById(long idL) {
+	public Optional<Company> getCompanyById(long idL) {
 		return companyDAO.getCompanyByID(idL);
 	}
 

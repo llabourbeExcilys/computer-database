@@ -8,6 +8,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import exception.NotFoundException;
 import model.Company;
@@ -32,19 +33,16 @@ public class CompanyDAO extends DAO{
 	public List<Company> getCompanyList() {
 		List<Company> resultList = new ArrayList<Company>();
 		
-		try {	
+		try (Connection conn = DriverManager.getConnection(url, user, passwd);
+			 Statement state = conn.createStatement();) {	
 			Class.forName(driver);
-			Connection conn = DriverManager.getConnection(url, user, passwd);
-			System.out.println("Connexion effective !");         
 
-			//Création d'un objet Statement
-			Statement state = conn.createStatement();
-			//L'objet ResultSet contient le résultat de la requête SQL
 			ResultSet result = state.executeQuery(SQL_SELECT_ALL_COMPANY);
 			
 			while(result.next()){
-				Company company = companyMapper.getCompany(result);
-				resultList.add(company);				
+				Optional<Company> company = companyMapper.getCompany(result);
+				if(company.isPresent())
+					resultList.add(company.get());				
 			}
 			result.close();
 			state.close();
@@ -55,15 +53,11 @@ public class CompanyDAO extends DAO{
 		return resultList;
 	}
 
-	public Company getCompanyByID(long idL) {
-		Company company = null;
+	public Optional<Company> getCompanyByID(long idL) {
+		try (Connection conn = DriverManager.getConnection(url, user, passwd);
+			 PreparedStatement state = conn.prepareStatement(SQL_SELECT_COMPANY_BY_ID); ){	
 
-		try {	
 			Class.forName(driver);
-			Connection conn = DriverManager.getConnection(url, user, passwd);
-
-			//Création d'un objet prepared statement
-			PreparedStatement state = conn.prepareStatement(SQL_SELECT_COMPANY_BY_ID); 
 			//On renseigne le paremetre
 			state.setLong(1, idL);
 			ResultSet result = state.executeQuery();
@@ -72,15 +66,13 @@ public class CompanyDAO extends DAO{
 			if(!next)
 				throw new NotFoundException("Id not found");
 			
-			company = companyMapper.getCompany(result);
+			return companyMapper.getCompany(result);
 			
-			result.close();
-			state.close();
 		} catch (SQLException | ClassNotFoundException e) {
 			e.printStackTrace();
 		}
 		
-		return company;
+		return Optional.empty();
 	}
 
 

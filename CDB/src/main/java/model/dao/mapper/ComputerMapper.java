@@ -4,6 +4,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.LocalDate;
+import java.util.Optional;
 
 import model.Company;
 import model.Computer;
@@ -11,7 +12,7 @@ import model.Computer;
 public class ComputerMapper {
 
 	// Create a computer from a ResultSet
-	public Computer getComputer(ResultSet result) {
+	public Optional<Computer> getComputer(ResultSet result) {
 		try {
 			Computer computer;
 			computer = new Computer(result.getLong("computer_id"),
@@ -43,11 +44,11 @@ public class ComputerMapper {
 				computer.setCompany(company);
 			}
 			
-			return computer;
+			return Optional.ofNullable(computer);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return null;
+		return Optional.empty();
 	}
 	
 }

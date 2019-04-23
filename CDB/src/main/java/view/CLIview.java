@@ -2,11 +2,13 @@ package view;
 
 import java.time.DateTimeException;
 import java.util.List;
+import java.util.Optional;
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
 import controller.Controller;
 import exception.BadCompanyIdException;
+import exception.BadInputException;
 import exception.NotFoundException;
 import model.Computer;
 import page.Page;
@@ -59,7 +61,7 @@ public class CLIview implements View {
 	
 	private boolean readSwitchAction(String s) {
 		String id;
-		Computer c;
+		Optional<Computer> c;
 		try {
 			switch(s) {
 			case "1": //Show Company list
@@ -72,7 +74,10 @@ public class CLIview implements View {
 				System.out.print("id of computer to show details ?\n->");
 				id = sc.nextLine();
 				c = controller.getComputerById(id);
-				System.out.println(c);
+				if(c.isPresent())
+					System.out.println(c.get());
+				else	
+					System.out.println("The computer with id:"+id+" was not found");
 				break;
 			case "4": //Create a computer
 				System.out.println("Creating a computer");
@@ -88,7 +93,11 @@ public class CLIview implements View {
 				id = sc.nextLine();
 				c = controller.getComputerById(id);
 				System.out.println(c);
-				updateComputer(c); //UPDATE COMPUTER
+				
+				if(c.isPresent())
+					updateComputer(c.get());
+				else 
+					throw new NotFoundException("The computer with id:"+id+" cannot be found.");
 				break; 
 			case "7": //Show page
 				System.out.print("Show page number ?\n->");
@@ -112,6 +121,8 @@ public class CLIview implements View {
 			System.out.println(e.getMessage()+"\n");
 		}catch(NumberFormatException e) {
 			System.out.println("Bad number format\n");
+		}catch(BadInputException e) {
+			
 		}
 		return false;
 	}
@@ -123,14 +134,17 @@ public class CLIview implements View {
 	}
 	 
 	private void registerComputer() {
-		String name = obtainInformation("name");		
-		String companyID = obtainInformation("company id");
-		String dateIntroduction = obtainInformation("date of introduction");
-		String dateDiscontinued = obtainInformation("date of discontinuation");
+		Optional<String> name = obtainInformation("name");		
+		Optional<String> companyID = obtainInformation("company id");
+		Optional<String> dateIntroduction = obtainInformation("date of introduction");
+		Optional<String> dateDiscontinued = obtainInformation("date of discontinuation");
 
-		if(name!=null) {
-			controller.addComputer(name,dateIntroduction,dateDiscontinued,companyID);
+		if (name.isPresent()) {
+			controller.addComputer(name.get(),dateIntroduction,dateDiscontinued,companyID);
+		}else {
+			throw new BadInputException("The 'name' field must be provided.");
 		}
+		
 	}
 	
 	private void updateComputer(Computer c){
@@ -147,20 +161,24 @@ public class CLIview implements View {
 			String result = sc.nextLine();
 			switch(result) {
 			case "1": 
-				String name = obtainInformation("name");
-				controller.updateName(c,name);
+				Optional<String> name = obtainInformation("name");
+				if(name.isPresent())
+					controller.updateName(c,name.get());
 				break;
 			case "2": 
-				String company = obtainInformation("company id");
-				controller.updateComputerCompany(c,company);
+				Optional<String> company = obtainInformation("company id");
+				if(company.isPresent())
+					controller.updateComputerCompany(c,company.get());
 				break;
 			case "3": 
-				String date = obtainInformation("date of introduction",dateFormat);
-				controller.updateComputerIntroduced(c,date);
+				Optional<String> date = obtainInformation("date of introduction",dateFormat);
+				if(date.isPresent())
+					controller.updateComputerIntroduced(c,date.get());
 				break;
 			case "4": 
 				date = obtainInformation("date of discontinuation",dateFormat);
-				controller.updateComputerDiscontinued(c,date);
+				if(date.isPresent())
+					controller.updateComputerDiscontinued(c,date.get());
 				break;
 			case "abort":
 				break;
@@ -171,23 +189,23 @@ public class CLIview implements View {
 	}
 	
 	// Ask the user to give a name for a variable
-	private String obtainInformation(String toOtain) {
+	private Optional<String> obtainInformation(String toOtain) {
 		return obtainInformation(toOtain, "");
 	}
 	
-	private String obtainInformation(String toOtain, String formatExpected) {
+	private Optional<String> obtainInformation(String toOtain, String formatExpected) {
 		do {
 			System.out.print("computer "+toOtain+" ? "+formatExpected+"\n->");
 			String obtained = sc.nextLine();
 			if (obtained.equals("")) 
-				return null;
+				return Optional.empty();
 			System.out.println("\n"+toOtain+":"+obtained+"\n"
 								+ "Enter.......OK\n"
 								+ "abort.......Abort");
 			String result = sc.nextLine();
 			switch(result) {
-				case "": return obtained; 	//Enter key pressed 
-				case "abort": return null;
+				case "": return Optional.ofNullable(obtained); 	//Enter key pressed 
+				case "abort": return Optional.empty();
 				default : break;
 			}
 		}while(true);

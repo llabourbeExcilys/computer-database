@@ -2,6 +2,7 @@ package controller;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 import exception.BadCompanyIdException;
 import exception.DateFormatException;
@@ -20,30 +21,25 @@ public class Controller {
 
 	// Create
 
-	public long addComputer(String name, String dIntroduction, String dDiscontinuation, String company) {
+	public long addComputer(String name, Optional<String> dateIntroduction, Optional<String> dateDiscontinued, Optional<String> companyID) {
 		LocalDate ldateIntroduction = null, ldateDiscontinuation = null;
-
-		if (dIntroduction != null)
-			ldateIntroduction = checkAndCreateDate(dIntroduction);
-
-		if (dDiscontinuation != null)
-			ldateDiscontinuation = checkAndCreateDate(dDiscontinuation);
-
-		if (company != null)
-			checkCompanyIdFormat(company);
-
-		if (name != null) {
-			return service.addComputer(name, ldateIntroduction, ldateDiscontinuation, company);
-		}
-
-		return -1;
+		Optional<Long> idL = Optional.empty();
+		
+		
+		if (dateIntroduction.isPresent())
+			ldateIntroduction = checkAndCreateDate(dateIntroduction.get());
+		if (dateDiscontinued.isPresent())
+			ldateDiscontinuation = checkAndCreateDate(dateDiscontinued.get());
+		if (companyID.isPresent())
+			idL = Optional.ofNullable(checkCompanyIdFormat(companyID.get()));
+		return service.addComputer(name, ldateIntroduction, ldateDiscontinuation, idL);
 	}
 
-	private void checkCompanyIdFormat(String companyId) {
+	private long checkCompanyIdFormat(String companyId) {
 		long idL = Long.parseLong(companyId);
 		if (idL < 0)
 			throw new BadCompanyIdException("L'id ne peut pas être <= 0");
-
+		return idL;
 	}
 
 	// Read
@@ -56,12 +52,12 @@ public class Controller {
 		return service.getCompanyList();
 	}
 
-	public Computer getComputerById(String id) {
+	public Optional<Computer> getComputerById(String id) {
 		long idL = Long.parseLong(id);
 		return getComputerById(idL);
 	}
 
-	public Computer getComputerById(long idL) {
+	public Optional<Computer> getComputerById(long idL) {
 		return service.getComputerById(idL);
 	}
 
@@ -75,9 +71,13 @@ public class Controller {
 
 	public void updateComputerCompany(Computer c, String sCompanyId) {
 		long companyId = Long.parseLong(sCompanyId);
-		Company company = service.getCompanyById(companyId);
-		c.setCompany(company);
-		service.update(c);
+		Optional<Company> company = service.getCompanyById(companyId);
+		if(company.isPresent()) {
+			c.setCompany(company.get());
+			service.update(c);
+		}else {
+			throw new BadCompanyIdException("Le nouvel company id ne correspond à aucune company dans la base");
+		}			
 	}
 
 	public void updateComputerIntroduced(Computer c, String date) {
