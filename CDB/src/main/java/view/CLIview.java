@@ -16,6 +16,8 @@ public class CLIview implements View {
 	private Controller controller;
 	private Scanner sc;
 	
+	private final String dateFormat = "yyyy-mm-dd";
+	
 	public CLIview(Controller controller) {
 		super();
 		this.controller = controller;
@@ -127,14 +129,7 @@ public class CLIview implements View {
 		String dateDiscontinued = obtainInformation("date of discontinuation");
 
 		if(name!=null) {
-			long id = controller.addComputer(name);
-			Computer c = controller.getComputerById(id);
-			if(companyID!=null)
-				controller.updateComputerCompany(c, companyID);
-			if(dateIntroduction!=null)
-				controller.updateComputerIntroduced(c, dateIntroduction);
-			if(dateDiscontinued!=null)
-				controller.updateComputerDiscontinued(c, dateDiscontinued);
+			controller.addComputer(name,dateIntroduction,dateDiscontinued,companyID);
 		}
 	}
 	
@@ -160,11 +155,11 @@ public class CLIview implements View {
 				controller.updateComputerCompany(c,company);
 				break;
 			case "3": 
-				String date = obtainInformation("date of introduction");
+				String date = obtainInformation("date of introduction",dateFormat);
 				controller.updateComputerIntroduced(c,date);
 				break;
 			case "4": 
-				date = obtainInformation("date of discontinuation");
+				date = obtainInformation("date of discontinuation",dateFormat);
 				controller.updateComputerDiscontinued(c,date);
 				break;
 			case "abort":
@@ -177,8 +172,12 @@ public class CLIview implements View {
 	
 	// Ask the user to give a name for a variable
 	private String obtainInformation(String toOtain) {
+		return obtainInformation(toOtain, "");
+	}
+	
+	private String obtainInformation(String toOtain, String formatExpected) {
 		do {
-			System.out.print("computer "+toOtain+" ?\n->");
+			System.out.print("computer "+toOtain+" ? "+formatExpected+"\n->");
 			String obtained = sc.nextLine();
 			if (obtained.equals("")) 
 				return null;

@@ -1,1 +1,7 @@
 resources.config.properties
+
+/target
+/.settings
+
+.classpath
+.project

@@ -31,6 +31,58 @@ public class Computer {
 				"}";
 	}
 	
+	
+	
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((company == null) ? 0 : company.hashCode());
+		result = prime * result + (int) (id ^ (id >>> 32));
+		result = prime * result + ((ldDiscontinued == null) ? 0 : ldDiscontinued.hashCode());
+		result = prime * result + ((ldIntroduced == null) ? 0 : ldIntroduced.hashCode());
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		return result;
+	}
+
+
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Computer other = (Computer) obj;
+		if (company == null) {
+			if (other.company != null)
+				return false;
+		} else if (!company.equals(other.company))
+			return false;
+		if (id != other.id)
+			return false;
+		if (ldDiscontinued == null) {
+			if (other.ldDiscontinued != null)
+				return false;
+		} else if (!ldDiscontinued.equals(other.ldDiscontinued))
+			return false;
+		if (ldIntroduced == null) {
+			if (other.ldIntroduced != null)
+				return false;
+		} else if (!ldIntroduced.equals(other.ldIntroduced))
+			return false;
+		if (name == null) {
+			if (other.name != null)
+				return false;
+		} else if (!name.equals(other.name))
+			return false;
+		return true;
+	}
+
+
+
 	// GETTER AND SETTER
 	public long getId() {return id;}
 	public void setId(long id) {this.id = id;}

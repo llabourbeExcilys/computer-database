@@ -19,6 +19,35 @@ import model.dao.mapper.ComputerMapper;
 
 public class ComputerDAO extends DAO{
 	
+	private final static String SQL_SELECT_ALL_COMPUTER = 
+			"SELECT C.id AS computer_id,"
+			+ " C.name AS computer_name,"
+			+ " C.introduced AS computer_introduced,"
+			+ "	C.discontinued AS computer_discontinued,"
+			+ " B.id AS company_id,"
+			+ " B.name AS company_name"
+			+ "	FROM computer C LEFT JOIN company B"
+			+ " ON C.company_id = B.id";
+	
+	private final static String SQL_SELECT_COMPUTER_BY_ID =  
+			SQL_SELECT_ALL_COMPUTER
+			+ " WHERE C.id = ?";
+	
+	private final static String SQL_CREATE_COMPUTER = 
+			"INSERT INTO computer (name,introduced,discontinued,company_id) "
+			+ "values (?,?,?,?)";
+
+	
+	private final static String SQL_UPDATE_COMPUTER = "UPDATE computer " + 
+			  										  	"SET name = ?, " +
+			  												"introduced = ?,"+
+			  												"discontinued = ?,"+
+			  												"company_id = ? "+
+			  											"WHERE id = ? ";
+	
+	private final static String SQL_DELETE_COMPUTER_BY_ID = "DELETE FROM computer WHERE id = ? ";
+
+	
 	private ComputerMapper computerMapper;
 	
 	public ComputerDAO(ComputerMapper computerMapper) {
@@ -35,10 +64,36 @@ public class ComputerDAO extends DAO{
 
 			//Création d'un objet prepared statement
 			PreparedStatement state = 
-					conn.prepareStatement(
-							"INSERT INTO computer (name) values (?)",Statement.RETURN_GENERATED_KEYS); 
+					conn.prepareStatement(SQL_CREATE_COMPUTER, Statement.RETURN_GENERATED_KEYS); 
 			//On renseigne le paremetre
 			state.setString(1, name);
+			state.executeUpdate();
+			ResultSet generatedKeys = state.getGeneratedKeys();
+			generatedKeys.first();
+			long id = generatedKeys.getLong(1);
+			state.close();
+			return id;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return -1;
+	}
+	
+	public long addComputer(String name, LocalDate ldateIntroduction, LocalDate ldateDiscontinuation, String companyId) {
+		try {	
+			Class.forName(driver);
+			Connection conn = DriverManager.getConnection(url, user, passwd);
+
+			//Création d'un objet prepared statement
+			PreparedStatement state = 
+					conn.prepareStatement(SQL_CREATE_COMPUTER, Statement.RETURN_GENERATED_KEYS); 
+			//On renseigne le paremetre
+			state.setString(1, name);
+			state.setDate(2, ldateIntroduction != null ? Date.valueOf(ldateIntroduction) : null);
+			state.setDate(3, ldateDiscontinuation != null ? Date.valueOf(ldateDiscontinuation) : null);
+			state.setString(4, companyId);
+
+
 			state.executeUpdate();
 			ResultSet generatedKeys = state.getGeneratedKeys();
 			generatedKeys.first();
@@ -63,18 +118,8 @@ public class ComputerDAO extends DAO{
 
 			//Création d'un objet Statement
 			Statement state = conn.createStatement();
-			//L'objet ResultSet contient le résultat de la requête SQL
-			String query = "SELECT C.id AS computer_id,"
-					+ " C.name AS computer_name,"
-					+ " C.introduced AS computer_introduced,"
-					+ "	C.discontinued AS computer_discontinued,"
-					+ " B.id AS company_id,"
-					+ " B.name AS company_name"
-					+ "	FROM computer C LEFT JOIN company B"
-					+ "	ON C.company_id = B.id";
-					
-					
-			ResultSet result = state.executeQuery(query);
+			//L'objet ResultSet contient le résultat de la requête SQL					
+			ResultSet result = state.executeQuery(SQL_SELECT_ALL_COMPUTER);
 			
 			while(result.next()){ 
 				Computer computer = computerMapper.getComputer(result);
@@ -98,19 +143,7 @@ public class ComputerDAO extends DAO{
 			Connection conn = DriverManager.getConnection(url, user, passwd);
 
 			//Création d'un objet prepared statement
-			
-			String query = 
-					  " SELECT C.id AS computer_id,"
-					+ " C.name AS computer_name,"
-					+ " C.introduced AS computer_introduced,"
-					+ "	C.discontinued AS computer_discontinued,"
-					+ " B.id AS company_id,"
-					+ " B.name AS company_name"
-					+ " FROM computer C LEFT JOIN company B"
-					+ " ON C.company_id = B.id"
-					+ " WHERE C.id = ?";
-			
-			PreparedStatement state = conn.prepareStatement(query); 
+			PreparedStatement state = conn.prepareStatement(SQL_SELECT_COMPUTER_BY_ID); 
 			//On renseigne le paremetre
 			state.setLong(1, idL);
 			ResultSet result = state.executeQuery();
@@ -132,105 +165,37 @@ public class ComputerDAO extends DAO{
 
 	// Update
 	
-	public void updateName(Computer c, String name) {
+	public void update(Computer c) {
+		Date ldateIntroduction = c.getLdIntroduced() != null ? Date.valueOf(c.getLdIntroduced()) : null;
+		Date ldateDiscontinuation = c.getLdDiscontinued() != null ? Date.valueOf(c.getLdDiscontinued()) : null;
+		
 		try {	
 			Class.forName(driver);
 			Connection conn = DriverManager.getConnection(url, user, passwd);
 
 			//Création d'un objet prepared statement
-			PreparedStatement state = 
-					conn.prepareStatement("UPDATE computer " + 
-										  "SET computer.name = ? " + 
-										  "WHERE computer.id = ? "); 
+			PreparedStatement state = conn.prepareStatement(SQL_UPDATE_COMPUTER); 
 			//On renseigne le paremetre
-			state.setString(1, name);
-			state.setLong(2, c.getId());
+			state.setString(1, c.getName());
+			state.setDate(2, ldateIntroduction);
+			state.setDate(3, ldateDiscontinuation);
+			state.setLong(4, c.getCompany().getId());
+			state.setLong(5, c.getId());
 			int resultCode = state.executeUpdate();
 			if(resultCode == 0) 
 				throw new NotFoundException("Id not found");
 			
 			state.close();
+		}catch ( SQLIntegrityConstraintViolationException e) {
+				throw new BadCompanyIdException("There is no company with id "+c.getCompany().getId());
 		} catch (SQLException | ClassNotFoundException e) {
 			e.printStackTrace();
 		}
 		
-		
-	}
-
-	public void updateCompany(Computer c, long company) {
-		try {	
-			Class.forName(driver);
-			Connection conn = DriverManager.getConnection(url, user, passwd);
-
-			//Création d'un objet prepared statement
-			PreparedStatement state = 
-					conn.prepareStatement("UPDATE computer " + 
-										  "SET computer.company_id = ? " + 
-										  "WHERE computer.id = ? "); 
-			//On renseigne le paremetre
-			state.setLong(1, company);
-			state.setLong(2, c.getId());
-			int resultCode = state.executeUpdate();
-			if(resultCode == 0) 
-				throw new NotFoundException("Id not found");
-		
-			
-			state.close();
-		} catch ( SQLIntegrityConstraintViolationException e) {
-			throw new BadCompanyIdException("There is no company with id "+company);
-		} catch (SQLException | ClassNotFoundException e) {
-			e.printStackTrace();
-		}
-		
-		
-	}
-
-	public void updateComputerIntroduced(Computer c, LocalDate ldate) {
-		try {	
-			Class.forName(driver);
-			Connection conn = DriverManager.getConnection(url, user, passwd);
-
-			//Création d'un objet prepared statement
-			PreparedStatement state = 
-					conn.prepareStatement("UPDATE computer " + 
-										  "SET computer.introduced = ? " + 
-										  "WHERE computer.id = ? "); 
-			//On renseigne le paremetre
-			state.setDate(1,  Date.valueOf(ldate));
-			state.setLong(2, c.getId());
-			int resultCode = state.executeUpdate();
-			if(resultCode == 0) 
-				throw new NotFoundException("Id not found");
-		
-			state.close();
-		} catch (SQLException | ClassNotFoundException e) {
-			e.printStackTrace();
-		}
-	}
-
-	public void updateComputerDiscontinued(Computer c, LocalDate ldate) {
-		try {	
-			Class.forName(driver);
-			Connection conn = DriverManager.getConnection(url, user, passwd);
-
-			//Création d'un objet prepared statement
-			PreparedStatement state = 
-					conn.prepareStatement("UPDATE computer " + 
-										  "SET computer.discontinued = ? " + 
-										  "WHERE computer.id = ? "); 
-			//On renseigne le paremetre 
-			state.setDate(1,  Date.valueOf(ldate));
-			state.setLong(2, c.getId());
-			int resultCode = state.executeUpdate();
-			if(resultCode == 0) 
-				throw new NotFoundException("Id not found");
-		
-			state.close();
-		} catch (SQLException | ClassNotFoundException e) {
-			e.printStackTrace();
-		}
 	}
 	
+
+
 	// Delete
 	
 	public void deleteComputerById(long id) {
@@ -239,8 +204,7 @@ public class ComputerDAO extends DAO{
 			Connection conn = DriverManager.getConnection(url, user, passwd);
 
 			//Création d'un objet prepared statement
-			PreparedStatement state = conn.prepareStatement(
-					"DELETE FROM computer WHERE id = ? "); 
+			PreparedStatement state = conn.prepareStatement(SQL_DELETE_COMPUTER_BY_ID); 
 			//On renseigne le paremetre
 			state.setLong(1, id);
 			int resultCode = state.executeUpdate();			
@@ -253,5 +217,9 @@ public class ComputerDAO extends DAO{
 			e.printStackTrace();
 		}
 	}
+
+	
+
+	
 
 }

@@ -18,9 +18,9 @@ public class Service {
 	}
 	
 	// Create
- 
-	public long addComputer(String name) {
-		return computerDAO.addComputer(name);
+	
+	public long addComputer(String name, LocalDate ldateIntroduction, LocalDate ldateDiscontinuation, String companyId) {
+		return computerDAO.addComputer(name,ldateIntroduction,ldateDiscontinuation,companyId);
 	}
 	
 	// Read
@@ -36,23 +36,15 @@ public class Service {
 	public Computer getComputerById(long idL) {
 		return computerDAO.getComputerById(idL);
 	}
+	
+	public Company getCompanyById(long idL) {
+		return companyDAO.getCompanyByID(idL);
+	}
 
 	// Update
 	
-	public void updateName(Computer c, String name) {
-		computerDAO.updateName(c,name);
-	}
-
-	public void updateComputerCompany(Computer c, long company) {
-		computerDAO.updateCompany(c,company);
-	}
-
-	public void updateComputerIntroduced(Computer c, LocalDate ldate) {
-		computerDAO.updateComputerIntroduced(c,ldate);
-	}
-
-	public void updateComputerDiscontinued(Computer c, LocalDate ldate) {
-		computerDAO.updateComputerDiscontinued(c,ldate);
+	public void update(Computer c){
+		computerDAO.update(c);
 	}
 	
 	// Delete
