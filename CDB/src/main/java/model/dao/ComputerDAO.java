@@ -49,12 +49,23 @@ public class ComputerDAO extends DAO{
 	private final static String SQL_DELETE_COMPUTER_BY_ID = "DELETE FROM computer WHERE id = ? ";
 
 	
-	private ComputerMapper computerMapper;
+	private static ComputerMapper computerMapper;
 	
-	public ComputerDAO(ComputerMapper computerMapper) {
-		super();
-		this.computerMapper = computerMapper;
-	}
+	/** Constructeur privé */
+    private ComputerDAO(){}
+     
+    /** Instance unique non préinitialisée */
+    private static ComputerDAO INSTANCE = null;
+     
+    /** Point d'accès pour l'instance unique du singleton */
+    public static synchronized ComputerDAO getInstance(){
+    	computerMapper = ComputerMapper.getInstance();
+
+        if (INSTANCE == null)
+        	INSTANCE = new ComputerDAO(); 
+        
+        return INSTANCE;
+    }
 	
 	// Create
 	

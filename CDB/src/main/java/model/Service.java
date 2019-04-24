@@ -9,14 +9,27 @@ import model.dao.ComputerDAO;
 
 public class Service {
 	
-	private CompanyDAO companyDAO;
-	private ComputerDAO computerDAO;
+	private static CompanyDAO companyDAO;
+	private static ComputerDAO computerDAO;
 	
-	public Service(ComputerDAO computerDAO, CompanyDAO companyDAO) {
-		super();
-		this.companyDAO = companyDAO;
-		this.computerDAO = computerDAO;
-	}
+
+	
+	
+	/** Constructeur privé */
+    private Service(){}
+     
+    /** Instance unique non préinitialisée */
+    private static Service INSTANCE = null;
+     
+    /** Point d'accès pour l'instance unique du singleton */
+    public static synchronized Service getInstance(){
+    	companyDAO = CompanyDAO.getInstance();
+    	computerDAO = ComputerDAO.getInstance();
+        if (INSTANCE == null)
+        	INSTANCE = new Service(); 
+        
+        return INSTANCE;
+    }
 	
 	// Create
 	

@@ -11,6 +11,20 @@ import model.Computer;
 
 public class ComputerMapper {
 
+	 /** Constructeur privé */
+    private ComputerMapper(){}
+     
+    /** Instance unique non préinitialisée */
+    private static ComputerMapper INSTANCE = null;
+     
+    /** Point d'accès pour l'instance unique du singleton */
+    public static synchronized ComputerMapper getInstance(){           
+        if (INSTANCE == null)
+           INSTANCE = new ComputerMapper(); 
+        
+        return INSTANCE;
+    }	
+	
 	// Create a computer from a ResultSet
 	public Optional<Computer> getComputer(ResultSet result) {
 		try {

@@ -12,12 +12,22 @@ import model.Service;
 
 public class Controller {
 
-	private Service service;
+	private static Service service;
 
-	public Controller(Service service) {
-		super();
-		this.service = service;
-	}
+	/** Constructeur privé */
+    private Controller(){}
+     
+    /** Instance unique non préinitialisée */
+    private static Controller INSTANCE = null;
+     
+    /** Point d'accès pour l'instance unique du singleton */
+    public static synchronized Controller getInstance(){
+    	service = Service.getInstance();
+        if (INSTANCE == null)
+        	INSTANCE = new Controller(); 
+        
+        return INSTANCE;
+    }
 
 	// Create
 

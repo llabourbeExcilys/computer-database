@@ -8,6 +8,20 @@ import model.Company;
 
 public class CompanyMapper {
 	
+	/** Constructeur privé */
+    private CompanyMapper(){}
+     
+    /** Instance unique non préinitialisée */
+    private static CompanyMapper INSTANCE = null;
+     
+    /** Point d'accès pour l'instance unique du singleton */
+    public static synchronized CompanyMapper getInstance(){           
+        if (INSTANCE == null)
+        	INSTANCE = new CompanyMapper(); 
+        
+        return INSTANCE;
+    }
+	
 	// Create a company from a ResultSet
 	public Optional<Company> getCompany(ResultSet result) {
 		long id;
