@@ -6,14 +6,21 @@ import java.util.Optional;
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import controller.Controller;
 import exception.BadCompanyIdException;
 import exception.BadInputException;
 import exception.NotFoundException;
+import main.Main;
 import model.Computer;
 import page.Page;
 
 public class CLIview implements View {
+	
+	private static Logger logger = LoggerFactory.getLogger( Main.class );
+
 	
 	private Controller controller;
 	private Scanner sc;
@@ -114,12 +121,18 @@ public class CLIview implements View {
 				break;
 			}
 		}catch(NotFoundException e) {
+			logger.debug("An exception occured.",e);
+			logger.error("An exception occured.",e);
 			System.out.println(e.getMessage()+"\n");
 		}catch(DateTimeException e) {
-			System.out.println(e.getMessage()+"\n");
+			logger.debug("An exception occured.",e);
+			logger.error("An exception occured.",e);
 		}catch(BadCompanyIdException e) {
-			System.out.println(e.getMessage()+"\n");
+			logger.debug("An exception occured.",e);
+			logger.error("An exception occured.",e);
 		}catch(NumberFormatException e) {
+			logger.debug("An exception occured.",e);
+			logger.error("An exception occured.",e);
 			System.out.println("Bad number format\n");
 		}catch(BadInputException e) {
 			

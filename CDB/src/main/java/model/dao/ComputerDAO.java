@@ -13,12 +13,19 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import exception.BadCompanyIdException;
 import exception.NotFoundException;
+import main.Main;
 import model.Computer;
 import model.dao.mapper.ComputerMapper;
 
 public class ComputerDAO extends DAO{
+
+	private static Logger logger = LoggerFactory.getLogger( Main.class );
+
 	
 	private final static String SQL_SELECT_ALL_COMPUTER = 
 			"SELECT C.id AS computer_id,"
@@ -185,7 +192,7 @@ public class ComputerDAO extends DAO{
 			if(resultCode == 0) 
 				throw new NotFoundException("There is no computer with id "+id);
 			
-			System.out.println("Delete OK !");
+			logger.debug("Delete OK !");
 		} catch (SQLException | ClassNotFoundException e) {
 			e.printStackTrace();
 		}

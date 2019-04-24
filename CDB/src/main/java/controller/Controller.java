@@ -4,13 +4,20 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import exception.BadCompanyIdException;
 import exception.DateFormatException;
+import main.Main;
 import model.Company;
 import model.Computer;
 import model.Service;
 
 public class Controller {
+	
+	private static Logger logger = LoggerFactory.getLogger( Main.class );
+
 
 	private static Service service;
 
@@ -143,7 +150,7 @@ public class Controller {
 		int monthI = Integer.parseInt(month);
 		int dayI = Integer.parseInt(day);
 		
-		System.out.println(yearI+" "+monthI+" "+dayI);
+		logger.debug(yearI+" "+monthI+" "+dayI);
 
 		return LocalDate.of(yearI, monthI, dayI);
 	}
