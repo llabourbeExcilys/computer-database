@@ -94,7 +94,5 @@ public class Computer {
 	public void setLdIntroduced(LocalDate ldIntroduced) {this.ldIntroduced = ldIntroduced;}
 	public LocalDate getLdDiscontinued() {return ldDiscontinued;}
 	public void setLdDiscontinued(LocalDate ldDiscontinued) {this.ldDiscontinued = ldDiscontinued;}
-	
-	
 
 }

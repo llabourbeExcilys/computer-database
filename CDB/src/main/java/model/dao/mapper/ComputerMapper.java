@@ -32,6 +32,8 @@ public class ComputerMapper {
 			computer = new Computer(result.getLong("computer_id"),
 									result.getString("computer_name"));
 			
+			
+			
 			// Check if introduction date was given
 			String introduced = result.getString("computer_introduced");
 			if(introduced != null) {
@@ -57,8 +59,8 @@ public class ComputerMapper {
 				Company company = new Company(company_id,company_name);
 				computer.setCompany(company);
 			}
-			
-			return Optional.ofNullable(computer);
+			if(computer.getId() != 0L && computer.getName() !=null)
+				return Optional.ofNullable(computer);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

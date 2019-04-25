@@ -19,23 +19,17 @@ public class CompanyDAO extends DAO{
 	private final static String SQL_SELECT_ALL_COMPANY = "SELECT * FROM company";
 	private final static String SQL_SELECT_COMPANY_BY_ID = "SELECT * FROM company WHERE C.id = ?";
 
-
 	private static CompanyMapper companyMapper;
-	
-	
-	/** Constructeur privé */
-    private CompanyDAO(){}
-     
-    /** Instance unique non préinitialisée */
-    private static CompanyDAO INSTANCE = null;
-     
-    /** Point d'accès pour l'instance unique du singleton */
-    public static synchronized CompanyDAO getInstance(){
-		companyMapper = CompanyMapper.getInstance();
 
+    private static CompanyDAO INSTANCE = null;
+	
+    private CompanyDAO(){
+		companyMapper = CompanyMapper.getInstance();
+    }
+     
+    public static synchronized CompanyDAO getInstance(){
         if (INSTANCE == null)
         	INSTANCE = new CompanyDAO(); 
-        
         return INSTANCE;
     }
 	

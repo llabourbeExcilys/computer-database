@@ -29,7 +29,9 @@ public class CompanyMapper {
 		try {
 			id = result.getLong("id");
 			name = result.getString("name");
-			return Optional.ofNullable(new Company(id,name));
+			
+			if(id != 0 && name != null)
+				return Optional.ofNullable(new Company(id,name));
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

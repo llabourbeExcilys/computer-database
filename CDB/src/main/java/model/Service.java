@@ -16,18 +16,18 @@ public class Service {
 	
 	
 	/** Constructeur privé */
-    private Service(){}
+    private Service(){
+    	companyDAO = CompanyDAO.getInstance();
+    	computerDAO = ComputerDAO.getInstance();
+    }
      
     /** Instance unique non préinitialisée */
     private static Service INSTANCE = null;
      
     /** Point d'accès pour l'instance unique du singleton */
     public static synchronized Service getInstance(){
-    	companyDAO = CompanyDAO.getInstance();
-    	computerDAO = ComputerDAO.getInstance();
         if (INSTANCE == null)
         	INSTANCE = new Service(); 
-        
         return INSTANCE;
     }
 	
