@@ -28,32 +28,44 @@ public class ComputerDAO extends DAO{
 
 	
 	private final static String SQL_SELECT_ALL_COMPUTER = 
-			"SELECT C.id AS computer_id,"
-			+ " C.name AS computer_name,"
-			+ " C.introduced AS computer_introduced,"
-			+ "	C.discontinued AS computer_discontinued,"
-			+ " B.id AS company_id,"
-			+ " B.name AS company_name"
-			+ "	FROM computer C LEFT JOIN company B"
-			+ " ON C.company_id = B.id";
+			"SELECT "
+			+	"C.id AS computer_id, "
+			+	"C.name AS computer_name, "
+			+	"C.introduced AS computer_introduced, "
+			+	"C.discontinued AS computer_discontinued, "
+			+	"B.id AS company_id, "
+			+	"B.name AS company_name "
+			+"FROM "
+			+	"computer C LEFT JOIN company B "
+			+"ON "
+			+	"C.company_id = B.id ";
 	
 	private final static String SQL_SELECT_COMPUTER_BY_ID =  
 			SQL_SELECT_ALL_COMPUTER
-			+ " WHERE C.id = ?";
+			+"WHERE "
+			+ 	"C.id = ?";
 	
 	private final static String SQL_CREATE_COMPUTER = 
-			"INSERT INTO computer (name,introduced,discontinued,company_id) "
-			+ "values (?,?,?,?)";
+			"INSERT INTO "
+			+ 	"computer (name,introduced,discontinued,company_id) "
+			+"VALUES "
+			+ 	"(?,?,?,?)";
 
+	private final static String SQL_UPDATE_COMPUTER = 
+			"UPDATE "
+			+ 	"computer " 
+		    +"SET name = ?, "
+			+	"introduced = ?, "
+			+	"discontinued = ?, "
+			+	"company_id = ? "
+			+"WHERE "
+			+	"id = ? ";
 	
-	private final static String SQL_UPDATE_COMPUTER = "UPDATE computer " + 
-			  										  	"SET name = ?, " +
-			  												"introduced = ?,"+
-			  												"discontinued = ?,"+
-			  												"company_id = ? "+
-			  											"WHERE id = ? ";
-	
-	private final static String SQL_DELETE_COMPUTER_BY_ID = "DELETE FROM computer WHERE id = ? ";
+	private final static String SQL_DELETE_COMPUTER_BY_ID = 
+			"DELETE FROM "
+			+	"computer "
+			+"WHERE "
+			+	"id = ? ";
 
 	
 	private static ComputerMapper computerMapper;

@@ -16,8 +16,18 @@ import model.dao.mapper.CompanyMapper;
 
 public class CompanyDAO extends DAO{
 
-	private final static String SQL_SELECT_ALL_COMPANY = "SELECT * FROM company";
-	private final static String SQL_SELECT_COMPANY_BY_ID = "SELECT * FROM company WHERE C.id = ?";
+	private final static String SQL_SELECT_ALL_COMPANY = 
+			"SELECT "
+			+	"* "
+			+"FROM "
+			+	"company";
+	private final static String SQL_SELECT_COMPANY_BY_ID = 
+			"SELECT "
+			+	"* "
+			+"FROM "
+			+	"company "
+			+"WHERE "
+			+	"company.id = ?";
 
 	private static CompanyMapper companyMapper;
 
@@ -40,7 +50,7 @@ public class CompanyDAO extends DAO{
 		List<Company> resultList = new ArrayList<Company>();
 		
 		try (Connection conn = DriverManager.getConnection(url, user, passwd);
-			 Statement state = conn.createStatement();) {	
+			 Statement state = conn.createStatement();) {
 			Class.forName(driver);
 
 			ResultSet result = state.executeQuery(SQL_SELECT_ALL_COMPANY);
@@ -50,12 +60,9 @@ public class CompanyDAO extends DAO{
 				if(company.isPresent())
 					resultList.add(company.get());				
 			}
-			result.close();
-			state.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
 		return resultList;
 	}
 
@@ -64,7 +71,6 @@ public class CompanyDAO extends DAO{
 			 PreparedStatement state = conn.prepareStatement(SQL_SELECT_COMPANY_BY_ID); ){	
 
 			Class.forName(driver);
-			//On renseigne le paremetre
 			state.setLong(1, idL);
 			ResultSet result = state.executeQuery();
 			
@@ -77,7 +83,6 @@ public class CompanyDAO extends DAO{
 		} catch (SQLException | ClassNotFoundException e) {
 			e.printStackTrace();
 		}
-		
 		return Optional.empty();
 	}
 
