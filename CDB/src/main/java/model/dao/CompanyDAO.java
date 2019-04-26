@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import exception.NotFoundException;
 import model.Company;
 import model.dao.mapper.CompanyMapper;
 
@@ -74,10 +73,7 @@ public class CompanyDAO extends DAO{
 			state.setLong(1, idL);
 			ResultSet result = state.executeQuery();
 			
-			boolean next = result.next();
-			if(!next)
-				throw new NotFoundException("Id not found");
-			
+			result.next();
 			return companyMapper.getCompany(result);
 			
 		} catch (SQLException | ClassNotFoundException e) {

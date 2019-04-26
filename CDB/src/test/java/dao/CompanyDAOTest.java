@@ -8,17 +8,13 @@ import java.util.Optional;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.junit.MockitoJUnitRunner;
 
 import model.Company;
 import model.dao.CompanyDAO;
 
-@RunWith(MockitoJUnitRunner.class)
 public class CompanyDAOTest {
 	
 	private CompanyDAO companyDAO = CompanyDAO.getInstance();
-
 	private TestDatabase testDataBase;
 	
 	@Before
@@ -33,18 +29,14 @@ public class CompanyDAOTest {
 	}
 	
 	@Test
-	public void testGetAllCompany() {
-		
+	public void getAllCompanyTest() {
 		List<Company> companyList = companyDAO.getCompanyList();
-		
 		List<Company> testCompanyList = testDataBase.findAllCompanies();
-		
 		Assert.assertEquals(companyList, testCompanyList);
-		
 	}
 	
 	@Test
-	public void testGetCompanyById() {
+	public void getCompanyByIdTest() {
 		
 		Optional<Company> company = companyDAO.getCompanyByID(2);
 		if(company.isEmpty())
@@ -56,7 +48,23 @@ public class CompanyDAOTest {
 		
 		Assert.assertEquals(company.get(), testCompany);
 		
+		company = companyDAO.getCompanyByID(5);
+		if(company.isEmpty())
+			Assert.fail();
+		
+		testCompany = testDataBase.findCompanyById(5L);
+		if(testCompany == null)
+			Assert.fail();
+		
+		Assert.assertEquals(company.get(), testCompany);
 	}
+	
+	@Test
+	public void getEmptyCompanyByIdTest() {
+		Optional<Company> company = companyDAO.getCompanyByID(19);
+		Assert.assertTrue(company.isEmpty());
+	}
+	
 	
 	
 }

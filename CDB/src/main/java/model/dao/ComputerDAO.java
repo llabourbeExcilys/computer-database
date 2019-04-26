@@ -147,8 +147,8 @@ public class ComputerDAO extends DAO{
 			ResultSet result = state.executeQuery();
 			
 			boolean next = result.next();
-			if(!next)
-				throw new NotFoundException("Id not found");
+			//if(!next)
+			//	throw new NotFoundException("Id not found");
 			
 			return computerMapper.getComputer(result);
 
