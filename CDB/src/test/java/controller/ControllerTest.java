@@ -2,16 +2,14 @@ package controller;
 import java.time.LocalDate;
 import java.util.Optional;
 
-import org.junit.runner.RunWith;
+import org.junit.Assert;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.junit.MockitoJUnitRunner;
-import org.junit.Assert;
 
 import model.Company;
 import model.Service;
 
-@RunWith(MockitoJUnitRunner.class)
+//@RunWith(MockitoJUnitRunner.class)
 public class ControllerTest {
 	
 	@Mock
