@@ -25,7 +25,6 @@ public class ComputerDAOTest {
 		try {
 			testDataBase.reload();
 		} catch (IOException | SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -47,7 +46,7 @@ public class ComputerDAOTest {
 		
 		Optional<Computer> cReturned = computerDAO.getComputerById(id);
 		
-		if(cReturned.isEmpty())
+		if(!cReturned.isPresent())
 			Assert.fail();
 		
 		Assert.assertEquals(cReturned.get(), c);
@@ -64,7 +63,7 @@ public class ComputerDAOTest {
 	@Test
 	public void getComputerByIdTest() {		
 		Optional<Computer> computer = computerDAO.getComputerById(2L);
-		if(computer.isEmpty())
+		if(!computer.isPresent())
 			Assert.fail();
 		
 		Computer testComputer = testDataBase.findComputerById(2L);
@@ -74,7 +73,7 @@ public class ComputerDAOTest {
 		Assert.assertEquals(computer.get(), testComputer);
 		
 		computer = computerDAO.getComputerById(5L);
-		if(computer.isEmpty())
+		if(!computer.isPresent())
 			Assert.fail();
 		
 		testComputer = testDataBase.findComputerById(5L);
@@ -87,7 +86,7 @@ public class ComputerDAOTest {
 	@Test
 	public void getEmptyComputerByIdTest() {
 		Optional<Computer> computer = computerDAO.getComputerById(34L);
-		Assert.assertTrue(computer.isEmpty());
+		Assert.assertTrue(!computer.isPresent());
 	}
 	
 	@Test
@@ -140,7 +139,7 @@ public class ComputerDAOTest {
 		
 		computerDAO.deleteComputerById(id);
 		cOptional = computerDAO.getComputerById(id);
-		Assert.assertTrue(cOptional.isEmpty());
+		Assert.assertTrue(!cOptional.isPresent());
 	}
 	
 	

@@ -162,4 +162,14 @@ public class Controller {
 		service.deleteComputerById(idL);
 	}
 
+	public static Service getService() {
+		return service;
+	}
+
+	public static void setService(Service service) {
+		Controller.service = service;
+	}
+	
+	
+
 }

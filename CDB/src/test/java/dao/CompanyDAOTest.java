@@ -39,7 +39,7 @@ public class CompanyDAOTest {
 	public void getCompanyByIdTest() {
 		
 		Optional<Company> company = companyDAO.getCompanyByID(2);
-		if(company.isEmpty())
+		if(!company.isPresent())
 			Assert.fail();
 		
 		Company testCompany = testDataBase.findCompanyById(2L);
@@ -49,7 +49,7 @@ public class CompanyDAOTest {
 		Assert.assertEquals(company.get(), testCompany);
 		
 		company = companyDAO.getCompanyByID(5);
-		if(company.isEmpty())
+		if(!company.isPresent())
 			Assert.fail();
 		
 		testCompany = testDataBase.findCompanyById(5L);
@@ -62,7 +62,7 @@ public class CompanyDAOTest {
 	@Test
 	public void getEmptyCompanyByIdTest() {
 		Optional<Company> company = companyDAO.getCompanyByID(19);
-		Assert.assertTrue(company.isEmpty());
+		Assert.assertTrue(!company.isPresent());
 	}
 	
 	

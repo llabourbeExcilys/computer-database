@@ -51,7 +51,7 @@ public class CompanyMapperTest {
 			
 			Optional<Company> company = companyMapper.getCompany(resultSet);
 						
-			Assert.assertTrue(company.isEmpty());
+			Assert.assertTrue(!company.isPresent());
 							
 		} catch (SQLException e) {
 			Assert.fail("SQL Exception");

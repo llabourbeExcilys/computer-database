@@ -24,8 +24,6 @@ public class ComputerMapperTest {
 	@Mock
     private ResultSet resultSet;
 	
-
-	
 	@Test
 	public void testGetComputerOk() {
 		
@@ -65,10 +63,9 @@ public class ComputerMapperTest {
 			Mockito.when(resultSet.getString("company_name")).thenReturn(null);
 
 			Optional<Computer> optComputer = computerMapper.getComputer(resultSet);
-			Assert.assertTrue(optComputer.isEmpty());
+			Assert.assertTrue(!optComputer.isPresent());
 
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

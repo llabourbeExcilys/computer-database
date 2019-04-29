@@ -141,12 +141,10 @@ public class ComputerDAO extends DAO{
 			 PreparedStatement state = conn.prepareStatement(SQL_SELECT_COMPUTER_BY_ID);){	
 			Class.forName(driver);
 
-			//Création d'un objet prepared statement
-			//On renseigne le paremetre
 			state.setLong(1, idL);
 			ResultSet result = state.executeQuery();
 			
-			boolean next = result.next();
+			result.next();
 			//if(!next)
 			//	throw new NotFoundException("Id not found");
 			
