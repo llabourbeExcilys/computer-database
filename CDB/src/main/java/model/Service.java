@@ -71,6 +71,10 @@ public class Service {
 		computerDAO.deleteComputerById(idL2);
 	}
 
+	public int getNumberOfComputer() {
+		return computerDAO.getNumberOfComputer();
+	}
+
 	
 
 }

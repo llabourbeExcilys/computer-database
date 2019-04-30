@@ -101,21 +101,26 @@
     <footer class="navbar-fixed-bottom">
         <div class="container text-center">
             <ul class="pagination">
-                <li>
-                    <a href="#" aria-label="Previous">
+              <c:if test="${(page-1) > 0}">
+            	 <li>
+            	 	<a href="?page=${page-1}" aria-label="Previous">
                       <span aria-hidden="true">&laquo;</span>
-                  </a>
-              </li>
-              <li><a href="?page=1">1</a></li>
-              <li><a href="?page=2">2</a></li>
-              <li><a href="?page=3">3</a></li>
-              <li><a href="?page=4">4</a></li>
-              <li><a href="?page=5">5</a></li>
-              <li>
-                <a href="#" aria-label="Next">
-                    <span aria-hidden="true">&raquo;</span>
-                </a>
-            </li>
+                 	</a>
+             	 </li>
+              </c:if>
+              <li><a href="?page=${page}">${page}</a></li>
+              <c:if test="${page+1<=lastPage}"><li><a href="?page=${page+1}">${page+1}</a></li></c:if>
+              <c:if test="${page+2<=lastPage}"><li><a href="?page=${page+2}">${page+2}</a></li></c:if>
+              <c:if test="${page+3<=lastPage}"><li><a href="?page=${page+3}">${page+3}</a></li></c:if>
+              <c:if test="${page+4<=lastPage}"><li><a href="?page=${page+4}">${page+4}</a></li></c:if>
+              <c:if test="${page+1<=lastPage}">
+              	<li>
+	                <a href="?page=${page+1}" aria-label="Next">
+	                    <span aria-hidden="true">&raquo;</span>
+	                </a>
+            	</li>
+              </c:if>
+              
         </ul>
         
         <ul class="pagination pull-right">

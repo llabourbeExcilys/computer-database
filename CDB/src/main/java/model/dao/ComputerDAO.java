@@ -36,6 +36,10 @@ public class ComputerDAO extends DAO{
 			+"ON "
 			+	"C.company_id = B.id ";
 	
+	private static final String SQL_COUNT_ALL_COMPUTER = 
+			"SELECT COUNT(*) AS count from computer";
+
+	
 	private final static String SQL_SELECT_COMPUTER_BY_ID =  
 			SQL_SELECT_ALL_COMPUTER
 			+"WHERE "
@@ -71,6 +75,7 @@ public class ComputerDAO extends DAO{
 			+	"? "
 			+"OFFSET "
 			+	"? ";
+
 
 	
 	private static ComputerMapper computerMapper;
@@ -117,6 +122,19 @@ public class ComputerDAO extends DAO{
 	}
 
 	// Read
+	
+	public int getNumberOfComputer() {
+		int size = 0;
+		try (Connection conn = DriverManager.getConnection(url, user, passwd);
+				 Statement state = conn.createStatement();) {	
+						
+				ResultSet result = state.executeQuery(SQL_COUNT_ALL_COMPUTER);
+				return (result.next()) ? result.getInt("count") : 0;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return size;
+	}
 	
 	public List<Computer> getComputerList() {
 		List<Computer> resultList = new ArrayList<Computer>();
@@ -228,6 +246,8 @@ public class ComputerDAO extends DAO{
 			e.printStackTrace();
 		}
 	}
+
+	
 
 
 

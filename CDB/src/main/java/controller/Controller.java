@@ -83,6 +83,10 @@ public class Controller {
 		
 		return service.getComputerPage(page,nbByPage);
 	}
+	
+	public int getNumberOfComputer() {
+		return service.getNumberOfComputer();
+	}
 
 	// Update
 	
