@@ -54,6 +54,10 @@ public class Service {
 	public Optional<Company> getCompanyById(long idL) {
 		return companyDAO.getCompanyByID(idL);
 	}
+	
+	public List<Computer> getComputerPage(int page, int nbByPage) {
+		return computerDAO.getComputerPage(page,nbByPage);
+	}
 
 	// Update
 	
@@ -66,5 +70,7 @@ public class Service {
 	public void deleteComputerById(long idL2) {
 		computerDAO.deleteComputerById(idL2);
 	}
+
+	
 
 }

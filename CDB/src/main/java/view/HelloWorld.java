@@ -24,9 +24,9 @@ public class HelloWorld extends HttpServlet {
 	private Controller controller = Controller.getInstance();
 	
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-		List<Computer> computers = controller.getComputerList().stream().limit(10).collect(Collectors.toList());
 		
+		List<Computer> computers = controller.getComputerPage(1, 10);
+
 		request.setAttribute("computers", computers);
 		getServletContext().getRequestDispatcher("/WEB-INF/views/dashboard.jsp").forward(request, response);
 	}

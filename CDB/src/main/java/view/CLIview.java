@@ -13,9 +13,9 @@ import controller.Controller;
 import exception.BadCompanyIdException;
 import exception.BadInputException;
 import exception.NotFoundException;
+import exception.RequestedPageException;
 import main.Main;
 import model.Computer;
-import page.Page;
 
 public class CLIview implements View {
 	
@@ -110,8 +110,7 @@ public class CLIview implements View {
 				System.out.print("Show page number ?\n->");
 				String sNumPage = sc.nextLine();
 				int iNumPage = Integer.parseInt(sNumPage);
-				Page p = new Page(10);
-				p.show(controller.getComputerList(), iNumPage);
+				showList(controller.getComputerPage(iNumPage, 10));
 				break;
 			case "exit": 
 				System.out.println("Goodbye !\n");
@@ -135,8 +134,13 @@ public class CLIview implements View {
 			logger.error("An exception occured.",e);
 			System.out.println("Bad number format\n");
 		}catch(BadInputException e) {
-			
+			logger.debug("An exception occured.",e);
+			logger.error("An exception occured.",e);
+		}catch(RequestedPageException e) {
+			logger.debug("An exception occured.",e);
+			logger.error("An exception occured.",e);
 		}
+		
 		return false;
 	}
 	

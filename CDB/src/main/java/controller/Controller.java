@@ -6,6 +6,7 @@ import java.util.Optional;
 
 import exception.BadCompanyIdException;
 import exception.DateFormatException;
+import exception.RequestedPageException;
 import model.Company;
 import model.Computer;
 import model.Service;
@@ -57,12 +58,12 @@ public class Controller {
 
 	// Read
 
-	public List<Computer> getComputerList() {
-		return service.getComputerList();
-	}
-
 	public List<Company> getCompanyList() {
 		return service.getCompanyList();
+	}
+	
+	public List<Computer> getComputerList() {
+		return service.getComputerList();
 	}
 
 	public Optional<Computer> getComputerById(String id) {
@@ -73,10 +74,18 @@ public class Controller {
 	public Optional<Computer> getComputerById(long idL) {
 		return service.getComputerById(idL);
 	}
+	
+	public List<Computer> getComputerPage(int page, int nbByPage){
+		if(page<=0)
+			throw new RequestedPageException("La page demandé ne peut pas etre negative ou egal a 0.");
+		if(nbByPage<0)
+			throw new RequestedPageException("Le nombre d'ordinateur par page ne peut etre negatif.");
+		
+		return service.getComputerPage(page,nbByPage);
+	}
 
 	// Update
 	
-
 	public void updateName(Computer c, String name) {
 		c.setName(name);
 		service.update(c);

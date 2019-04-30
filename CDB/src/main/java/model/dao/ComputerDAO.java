@@ -39,13 +39,13 @@ public class ComputerDAO extends DAO{
 	private final static String SQL_SELECT_COMPUTER_BY_ID =  
 			SQL_SELECT_ALL_COMPUTER
 			+"WHERE "
-			+ 	"C.id = ?";
+			+ 	"C.id = ? ";
 	
 	private final static String SQL_CREATE_COMPUTER = 
 			"INSERT INTO "
 			+ 	"computer (name,introduced,discontinued,company_id) "
 			+"VALUES "
-			+ 	"(?,?,?,?)";
+			+ 	"(?,?,?,?) ";
 
 	private final static String SQL_UPDATE_COMPUTER = 
 			"UPDATE "
@@ -62,6 +62,15 @@ public class ComputerDAO extends DAO{
 			+	"computer "
 			+"WHERE "
 			+	"id = ? ";
+
+	private static final String SQL_SELECT_COMPUTER_PAGE = 
+			SQL_SELECT_ALL_COMPUTER
+			+"ORDER BY "
+			+	"C.id "
+			+"ASC LIMIT "
+			+	"? "
+			+"OFFSET "
+			+	"? ";
 
 	
 	private static ComputerMapper computerMapper;
@@ -149,6 +158,27 @@ public class ComputerDAO extends DAO{
 		
 		return Optional.empty();
 	}
+	
+	public List<Computer> getComputerPage(int page, int nbByPage) {
+		List<Computer> resultList = new ArrayList<Computer>();
+		try (Connection conn = DriverManager.getConnection(url, user, passwd);
+				 PreparedStatement state = conn.prepareStatement(SQL_SELECT_COMPUTER_PAGE);){	
+
+				state.setInt(1, nbByPage);
+				state.setInt(2, (page-1)*nbByPage);
+
+				ResultSet result = state.executeQuery();
+				
+				while(result.next()){ 
+					Optional<Computer> computer = computerMapper.getComputer(result);
+					if(computer.isPresent())
+						resultList.add(computer.get());				
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		return resultList;
+	}
 
 	// Update
 	
@@ -198,6 +228,8 @@ public class ComputerDAO extends DAO{
 			e.printStackTrace();
 		}
 	}
+
+
 
 
 }

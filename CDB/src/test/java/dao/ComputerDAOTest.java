@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -82,6 +83,19 @@ public class ComputerDAOTest {
 		
 		Assert.assertEquals(computer.get(), testComputer);
 	}
+	
+	@Test
+	public void getComputerPageTest() {
+		int page = 2;
+		int nbByPage = 5;
+		List<Computer> computers = computerDAO.getComputerPage(page, nbByPage);
+		
+		List<Computer> expectedComputers = testDataBase.findAllComputers()
+				.stream().skip(((page-1)*nbByPage)).limit(nbByPage)
+				.collect(Collectors.toList());
+		Assert.assertEquals(computers, expectedComputers);
+	}
+	
 	
 	@Test
 	public void getEmptyComputerByIdTest() {
