@@ -130,13 +130,15 @@
                 </a>
             </li>
         </ul>
-
-        <div class="btn-group btn-group-sm pull-right" role="group" >
-            <button type="button" class="btn btn-default">10</button>
-            <button type="button" class="btn btn-default">50</button>
-            <button type="button" class="btn btn-default">100</button>
-        </div>
-
+        
+        <ul class="pagination pull-right">
+        	<li><a href="?nbByPage=10">10</a></li>
+        	<li><a href="?nbByPage=50">50</a></li>
+        	<li><a href="?nbByPage=100">100</a></li>
+        </ul>
+        
+        
+	</div>
     </footer>
 <script src="static/js/jquery.min.js"></script>
 <script src="static/js/bootstrap.min.js"></script>

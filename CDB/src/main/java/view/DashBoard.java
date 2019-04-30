@@ -16,16 +16,22 @@ import model.Computer;
 
 @WebServlet( name = "HelloWorldServlet",
 description = "Testing servlet",
-urlPatterns = {"/"})
-public class HelloWorld extends HttpServlet {
+urlPatterns = {"/dashboard"})
+public class DashBoard extends HttpServlet {
 
 	private static final long serialVersionUID = 5700829257941123519L;
 
 	private Controller controller = Controller.getInstance();
 	
+	private int nbByPage = 10;
+	
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		List<Computer> computers = controller.getComputerPage(1, 10);
+		String nbString = request.getParameter("nbByPage");
+		if(nbString!=null)
+			nbByPage = Integer.parseInt(nbString);
+
+		List<Computer> computers = controller.getComputerPage(1, nbByPage);
 
 		request.setAttribute("computers", computers);
 		getServletContext().getRequestDispatcher("/WEB-INF/views/dashboard.jsp").forward(request, response);
