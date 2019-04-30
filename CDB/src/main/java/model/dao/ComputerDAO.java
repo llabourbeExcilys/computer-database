@@ -13,18 +13,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import exception.BadCompanyIdException;
 import exception.NotFoundException;
-import main.Main;
 import model.Computer;
 import model.dao.mapper.ComputerMapper;
 
 public class ComputerDAO extends DAO{
 
-	private static Logger logger = LoggerFactory.getLogger( Main.class );
+	//private static Logger logger = LoggerFactory.getLogger( Main.class );
 
 	
 	private final static String SQL_SELECT_ALL_COMPUTER = 
@@ -93,7 +89,6 @@ public class ComputerDAO extends DAO{
 		try (Connection conn = DriverManager.getConnection(url, user, passwd);
 			 PreparedStatement state = conn.prepareStatement(SQL_CREATE_COMPUTER, 
 					 										 Statement.RETURN_GENERATED_KEYS);) {	
-			Class.forName(driver);
 			
 			state.setString(1, name);
 			state.setDate(2, ldateIntroduction != null ? Date.valueOf(ldateIntroduction) : null);
@@ -118,7 +113,6 @@ public class ComputerDAO extends DAO{
 		List<Computer> resultList = new ArrayList<Computer>();
 		try (Connection conn = DriverManager.getConnection(url, user, passwd);
 			 Statement state = conn.createStatement();) {	
-			Class.forName(driver);
 			
 			//L'objet ResultSet contient le résultat de la requête SQL					
 			ResultSet result = state.executeQuery(SQL_SELECT_ALL_COMPUTER);
@@ -139,7 +133,6 @@ public class ComputerDAO extends DAO{
 
 		try (Connection conn = DriverManager.getConnection(url, user, passwd);
 			 PreparedStatement state = conn.prepareStatement(SQL_SELECT_COMPUTER_BY_ID);){	
-			Class.forName(driver);
 
 			state.setLong(1, idL);
 			ResultSet result = state.executeQuery();
@@ -150,7 +143,7 @@ public class ComputerDAO extends DAO{
 			
 			return computerMapper.getComputer(result);
 
-		} catch (SQLException | ClassNotFoundException e) {
+		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		
@@ -165,7 +158,6 @@ public class ComputerDAO extends DAO{
 		
 		try (Connection conn = DriverManager.getConnection(url, user, passwd);
 			PreparedStatement state = conn.prepareStatement(SQL_UPDATE_COMPUTER);){	
-			Class.forName(driver);
 
 			//Création d'un objet prepared statement
 			//On renseigne le paremetre
@@ -180,7 +172,7 @@ public class ComputerDAO extends DAO{
 			
 		}catch ( SQLIntegrityConstraintViolationException e) {
 				throw new BadCompanyIdException("There is no company with id "+c.getCompany().getId());
-		} catch (SQLException | ClassNotFoundException e) {
+		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		
@@ -193,7 +185,6 @@ public class ComputerDAO extends DAO{
 	public void deleteComputerById(long id) {
 		try (Connection conn = DriverManager.getConnection(url, user, passwd);
 			 PreparedStatement state = conn.prepareStatement(SQL_DELETE_COMPUTER_BY_ID);){
-			Class.forName(driver);
 
 			//Création d'un objet prepared statement
 			//On renseigne le paremetre
@@ -202,8 +193,8 @@ public class ComputerDAO extends DAO{
 			if(resultCode == 0) 
 				throw new NotFoundException("There is no computer with id "+id);
 			
-			logger.debug("Delete OK !");
-		} catch (SQLException | ClassNotFoundException e) {
+			//logger.debug("Delete OK !");
+		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 	}

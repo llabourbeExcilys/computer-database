@@ -50,8 +50,7 @@ public class CompanyDAO extends DAO{
 		
 		try (Connection conn = DriverManager.getConnection(url, user, passwd);
 			 Statement state = conn.createStatement();) {
-			Class.forName(driver);
-
+			
 			ResultSet result = state.executeQuery(SQL_SELECT_ALL_COMPANY);
 			
 			while(result.next()){
@@ -69,14 +68,13 @@ public class CompanyDAO extends DAO{
 		try (Connection conn = DriverManager.getConnection(url, user, passwd);
 			 PreparedStatement state = conn.prepareStatement(SQL_SELECT_COMPANY_BY_ID); ){	
 
-			Class.forName(driver);
 			state.setLong(1, idL);
 			ResultSet result = state.executeQuery();
 			
 			result.next();
 			return companyMapper.getCompany(result);
 			
-		} catch (SQLException | ClassNotFoundException e) {
+		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		return Optional.empty();
