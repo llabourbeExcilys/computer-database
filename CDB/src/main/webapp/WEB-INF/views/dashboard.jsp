@@ -78,19 +78,6 @@
                 </thead>
                 <!-- Browse attribute computers -->
                 <tbody id="results">
-                
-                    <tr>
-                        <td class="editMode">
-                            <input type="checkbox" name="cb" class="cb" value="0">
-                        </td>
-                        <td>
-                            <a href="editComputer.html" onclick="">Commodore 64</a>
-                        </td>
-                        <td>1982-08-01</td>
-                        <td>1994-01-01</td>
-                        <td>Commodore International</td>
-
-                    </tr>
                     
                     <c:forEach var="computer" items="${computers}">
 	                     <tr>
@@ -119,11 +106,11 @@
                       <span aria-hidden="true">&laquo;</span>
                   </a>
               </li>
-              <li><a href="#">1</a></li>
-              <li><a href="#">2</a></li>
-              <li><a href="#">3</a></li>
-              <li><a href="#">4</a></li>
-              <li><a href="#">5</a></li>
+              <li><a href="?page=1">1</a></li>
+              <li><a href="?page=2">2</a></li>
+              <li><a href="?page=3">3</a></li>
+              <li><a href="?page=4">4</a></li>
+              <li><a href="?page=5">5</a></li>
               <li>
                 <a href="#" aria-label="Next">
                     <span aria-hidden="true">&raquo;</span>

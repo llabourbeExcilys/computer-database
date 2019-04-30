@@ -24,14 +24,20 @@ public class DashBoard extends HttpServlet {
 	private Controller controller = Controller.getInstance();
 	
 	private int nbByPage = 10;
+	private int page = 1;
 	
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
-		String nbString = request.getParameter("nbByPage");
-		if(nbString!=null)
-			nbByPage = Integer.parseInt(nbString);
 
-		List<Computer> computers = controller.getComputerPage(1, nbByPage);
+		
+		String nbByPageString = request.getParameter("nbByPage");
+		if(nbByPageString!=null)
+			nbByPage = Integer.parseInt(nbByPageString);
+		
+		String pageString = request.getParameter("page");
+		if(pageString!=null)
+			page = Integer.parseInt(pageString);
+
+		List<Computer> computers = controller.getComputerPage(page, nbByPage);
 
 		request.setAttribute("computers", computers);
 		getServletContext().getRequestDispatcher("/WEB-INF/views/dashboard.jsp").forward(request, response);
