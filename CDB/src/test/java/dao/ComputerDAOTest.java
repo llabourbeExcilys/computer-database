@@ -51,7 +51,7 @@ public class ComputerDAOTest {
 		if(!cReturned.isPresent())
 			Assert.fail();
 		
-		Assert.assertEquals(cReturned.get(), c);
+		Assert.assertEquals("Test de l'ajout d'un computer",cReturned.get(), c);
 		
 	}
 	
@@ -59,7 +59,7 @@ public class ComputerDAOTest {
 	public void getAllComputerTest() {
 		List<Computer> ComputerList = computerDAO.getComputerList();
 		List<Computer> testComputerList = testDataBase.findAllComputers();
-		Assert.assertEquals(testComputerList,ComputerList);	
+		Assert.assertEquals("La liste des computer n'est pas identique à la liste de test.",testComputerList,ComputerList);	
 	}
 	
 	@Test
@@ -82,26 +82,30 @@ public class ComputerDAOTest {
 		if(testComputer == null)
 			Assert.fail();
 		
-		Assert.assertEquals(computer.get(), testComputer);
+		Assert.assertEquals("Le getById ne renvoie pas un computer identique a celui de test",
+				computer.get(), testComputer);
 	}
 	
 	@Test
 	public void getEmptyComputerByIdTest() {
 		Optional<Computer> computer = computerDAO.getComputerById(34L);
-		Assert.assertTrue(!computer.isPresent());
+		Assert.assertTrue("",!computer.isPresent());
 	}
 	
 	@Test
 	public void getComputerByNameTest() {
 		Optional<Computer> computer = computerDAO.getComputerByName("MacBook Pro 15.4 inch");
-		Assert.assertTrue(computer.isPresent());
-		Assert.assertEquals(computer.get(), testDataBase.findComputerById(computer.get().getId()));
+		Assert.assertTrue("Il n'existe pas de computer avec ce name dans la base de test",
+				computer.isPresent());
+		Assert.assertEquals("Le computer avec ce name ne correspond pas à celui de test.",
+				computer.get(), testDataBase.findComputerById(computer.get().getId()));
 	}
 	
 	@Test
 	public void getEmptyComputerByNameTest() {
 		Optional<Computer> computer = computerDAO.getComputerByName("A computer that's not present");
-		Assert.assertTrue(!computer.isPresent());
+		Assert.assertTrue("Il ne devrait pas exister un computer avec ce name.",
+				!computer.isPresent());
 	}
 
 	
@@ -114,7 +118,8 @@ public class ComputerDAOTest {
 		List<Computer> expectedComputers = testDataBase.findAllComputers()
 				.stream().skip(((page-1)*nbByPage)).limit(nbByPage)
 				.collect(Collectors.toList());
-		Assert.assertEquals(computers, expectedComputers);
+		Assert.assertEquals("Les computers de la page ne correspondent pas."
+				,computers, expectedComputers);
 	}
 	
 	
@@ -126,7 +131,8 @@ public class ComputerDAOTest {
 		long id = 15L;
 		
 		Optional<Computer> optComputer = computerDAO.getComputerById(id);
-		Assert.assertTrue(optComputer.isPresent());
+		Assert.assertTrue("Il n'existe pas de computer avec l'id "+id,
+				optComputer.isPresent());
 		Computer c = optComputer.get();
 		 
 		String newName = c.getName()+"modified";
@@ -134,10 +140,12 @@ public class ComputerDAOTest {
 		computerDAO.update(c);
 		
 		optComputer = computerDAO.getComputerById(id);
-		Assert.assertTrue(optComputer.isPresent());
+		Assert.assertTrue("Il n'existe plus de computer avec l'id "+id,
+				optComputer.isPresent());
 		c = optComputer.get();
 		
-		Assert.assertEquals(c.getName(),newName);
+		Assert.assertEquals("Les computer ne sont pas identiques."
+				,c.getName(),newName);
 	}
 	
 	@Test
@@ -145,20 +153,24 @@ public class ComputerDAOTest {
 		long id = 5L;
 		
 		Optional<Computer> optComputer = computerDAO.getComputerById(id);
-		Assert.assertTrue(optComputer.isPresent());
+		Assert.assertTrue("Le computer d'id "+id+" n'est pas present",
+				optComputer.isPresent());
 		Computer c = optComputer.get();
 		
-		Assert.assertTrue(c.getLdIntroduced()!=null);
+		Assert.assertTrue("La date d'introduction ne devrait pas etre null"
+				,c.getLdIntroduced()!=null);
 		 
 		LocalDate dateModified= c.getLdIntroduced().plusYears(1);
 		c.setLdIntroduced(dateModified);
 		computerDAO.update(c);
 		
 		optComputer = computerDAO.getComputerById(id);
-		Assert.assertTrue(optComputer.isPresent());
+		Assert.assertTrue("Le computer d'id \"+id+\" n'est pas present",
+				optComputer.isPresent());
 		c = optComputer.get();
 		
-		Assert.assertEquals(c.getLdIntroduced(),dateModified);
+		Assert.assertEquals("La date d'introduction n'a pas été correctement modifiée."
+				,c.getLdIntroduced(),dateModified);
 
 	}
 	
@@ -173,11 +185,13 @@ public class ComputerDAOTest {
 		long id = 20;
 		
 		Optional<Computer> cOptional = computerDAO.getComputerById(id);
-		Assert.assertTrue(cOptional.isPresent());
+		Assert.assertTrue("Le computer d'id "+id+" devrait etre présent",
+				cOptional.isPresent());
 		
 		computerDAO.deleteComputerById(id);
 		cOptional = computerDAO.getComputerById(id);
-		Assert.assertTrue(!cOptional.isPresent());
+		Assert.assertTrue("Le computer d'id "+id+" aurait du etre supprimé.",
+				!cOptional.isPresent());
 	}
 	
 	
