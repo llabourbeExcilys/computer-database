@@ -32,7 +32,8 @@ public class CompanyDAOTest {
 	public void getAllCompanyTest() {
 		List<Company> companyList = companyDAO.getCompanyList();
 		List<Company> testCompanyList = testDataBase.findAllCompanies();
-		Assert.assertEquals(companyList, testCompanyList);
+		Assert.assertEquals("La list de company renvoyée par la DAO devrait etre identique a celle de test"
+				,companyList, testCompanyList);
 	}
 	
 	@Test
@@ -46,7 +47,8 @@ public class CompanyDAOTest {
 		if(testCompany == null)
 			Assert.fail();
 		
-		Assert.assertEquals(company.get(), testCompany);
+		Assert.assertEquals("La company renvoyée par la companyDAO n'est pas identique a celle de test",
+				company.get(), testCompany);
 		
 		company = companyDAO.getCompanyByID(5);
 		if(!company.isPresent())
@@ -56,13 +58,16 @@ public class CompanyDAOTest {
 		if(testCompany == null)
 			Assert.fail();
 		
-		Assert.assertEquals(company.get(), testCompany);
+		Assert.assertEquals("La company renvoyée par la companyDAO n'est pas identique a celle de test",
+				company.get(), testCompany);
 	}
 	
 	@Test
 	public void getEmptyCompanyByIdTest() {
-		Optional<Company> company = companyDAO.getCompanyByID(19);
-		Assert.assertTrue(!company.isPresent());
+		long id = 19;
+		Optional<Company> company = companyDAO.getCompanyByID(id);
+		Assert.assertTrue("La companyDAO n'aurait pas du renvoyer de company pour l'id "+id,
+				!company.isPresent());
 	}
 	
 	
