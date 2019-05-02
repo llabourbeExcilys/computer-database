@@ -75,6 +75,11 @@ public class Controller {
 		return service.getComputerById(idL);
 	}
 	
+	public Optional<Computer> getComputerByName(String computerSearch) {
+		return service.getComputerByName(computerSearch);
+		
+	}
+	
 	public List<Computer> getComputerPage(int page, int nbByPage){
 		if(page<=0)
 			throw new RequestedPageException("La page demandé ne peut pas etre negative ou egal a 0.");
@@ -178,6 +183,8 @@ public class Controller {
 	public static void setService(Service service) {
 		Controller.service = service;
 	}
+
+
 	
 	
 

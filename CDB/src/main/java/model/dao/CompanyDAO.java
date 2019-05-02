@@ -49,11 +49,14 @@ public class CompanyDAO extends DAO{
 		List<Company> resultList = new ArrayList<Company>();
 		
 		try (Connection conn = DriverManager.getConnection(url, user, passwd);
-			 Statement state = conn.createStatement();) {
+			 Statement state = conn.createStatement(
+								ResultSet.TYPE_SCROLL_INSENSITIVE,
+								ResultSet.CONCUR_UPDATABLE);){
 			
 			ResultSet result = state.executeQuery(SQL_SELECT_ALL_COMPANY);
 			
 			while(result.next()){
+				result.previous();
 				Optional<Company> company = companyMapper.getCompany(result);
 				if(company.isPresent())
 					resultList.add(company.get());				
@@ -71,7 +74,6 @@ public class CompanyDAO extends DAO{
 			state.setLong(1, idL);
 			ResultSet result = state.executeQuery();
 			
-			result.next();
 			return companyMapper.getCompany(result);
 			
 		} catch (SQLException e) {

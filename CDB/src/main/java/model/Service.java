@@ -75,6 +75,10 @@ public class Service {
 		return computerDAO.getNumberOfComputer();
 	}
 
+	public Optional<Computer> getComputerByName(String computerSearch) {
+		return computerDAO.getComputerByName(computerSearch);
+	}
+
 	
 
 }

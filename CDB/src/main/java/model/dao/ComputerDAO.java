@@ -76,6 +76,10 @@ public class ComputerDAO extends DAO{
 			+"OFFSET "
 			+	"? ";
 
+	private static final String SQL_SELECT_COMPUTER_BY_NAME = 
+			SQL_SELECT_ALL_COMPUTER+
+			"WHERE C.name = ?";
+
 
 	
 	private static ComputerMapper computerMapper;
@@ -129,7 +133,7 @@ public class ComputerDAO extends DAO{
 				 Statement state = conn.createStatement();) {	
 						
 				ResultSet result = state.executeQuery(SQL_COUNT_ALL_COMPUTER);
-				return (result.next()) ? result.getInt("count") : 0;
+				return result.next() ? result.getInt("count") : 0;
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -139,12 +143,16 @@ public class ComputerDAO extends DAO{
 	public List<Computer> getComputerList() {
 		List<Computer> resultList = new ArrayList<Computer>();
 		try (Connection conn = DriverManager.getConnection(url, user, passwd);
-			 Statement state = conn.createStatement();) {	
-			
-			//L'objet ResultSet contient le résultat de la requête SQL					
+			 Statement state = conn.createStatement(
+					 							ResultSet.TYPE_SCROLL_INSENSITIVE,
+					 							ResultSet.CONCUR_UPDATABLE);) {	
+							
 			ResultSet result = state.executeQuery(SQL_SELECT_ALL_COMPUTER);
 			
-			while(result.next()){ 
+			
+			
+			while(result.next()){
+				result.previous();
 				Optional<Computer> computer = computerMapper.getComputer(result);
 				if(computer.isPresent())
 					resultList.add(computer.get());				
@@ -164,10 +172,6 @@ public class ComputerDAO extends DAO{
 			state.setLong(1, idL);
 			ResultSet result = state.executeQuery();
 			
-			result.next();
-			//if(!next)
-			//	throw new NotFoundException("Id not found");
-			
 			return computerMapper.getComputer(result);
 
 		} catch (SQLException e) {
@@ -177,17 +181,36 @@ public class ComputerDAO extends DAO{
 		return Optional.empty();
 	}
 	
+	public Optional<Computer> getComputerByName(String computerSearch) {
+		try (Connection conn = DriverManager.getConnection(url, user, passwd);
+				 PreparedStatement state = conn.prepareStatement(SQL_SELECT_COMPUTER_BY_NAME);){	
+
+				state.setString(1, computerSearch);
+				ResultSet result = state.executeQuery();
+				return computerMapper.getComputer(result);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			return Optional.empty();
+	}
+
+	
 	public List<Computer> getComputerPage(int page, int nbByPage) {
 		List<Computer> resultList = new ArrayList<Computer>();
 		try (Connection conn = DriverManager.getConnection(url, user, passwd);
-				 PreparedStatement state = conn.prepareStatement(SQL_SELECT_COMPUTER_PAGE);){	
+				 PreparedStatement state = conn.prepareStatement(SQL_SELECT_COMPUTER_PAGE,
+						 										 ResultSet.TYPE_SCROLL_INSENSITIVE,
+						 										ResultSet.CONCUR_UPDATABLE);){	
 
+			
+		
 				state.setInt(1, nbByPage);
 				state.setInt(2, (page-1)*nbByPage);
 
 				ResultSet result = state.executeQuery();
 				
-				while(result.next()){ 
+				while(result.next()){
+					result.previous();
 					Optional<Computer> computer = computerMapper.getComputer(result);
 					if(computer.isPresent())
 						resultList.add(computer.get());				
@@ -197,7 +220,7 @@ public class ComputerDAO extends DAO{
 			}
 		return resultList;
 	}
-
+	
 	// Update
 	
 	public void update(Computer c) {
@@ -246,6 +269,7 @@ public class ComputerDAO extends DAO{
 			e.printStackTrace();
 		}
 	}
+
 
 	
 

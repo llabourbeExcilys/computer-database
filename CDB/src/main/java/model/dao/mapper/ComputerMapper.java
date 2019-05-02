@@ -6,10 +6,16 @@ import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.util.Optional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import model.Company;
 import model.Computer;
 
 public class ComputerMapper {
+	
+	private static Logger logger = LoggerFactory.getLogger( ComputerMapper.class );
+
 
 	 /** Constructeur privé */
     private ComputerMapper(){}
@@ -28,11 +34,12 @@ public class ComputerMapper {
 	// Create a computer from a ResultSet
 	public Optional<Computer> getComputer(ResultSet result) {
 		try {
-			Computer computer;
-			computer = new Computer(result.getLong("computer_id"),
+			
+			if (!result.next())
+				return Optional.empty();
+			
+			Computer computer = new Computer(result.getLong("computer_id"),
 									result.getString("computer_name"));
-			
-			
 			
 			// Check if introduction date was given
 			String introduced = result.getString("computer_introduced");
@@ -63,6 +70,7 @@ public class ComputerMapper {
 				return Optional.ofNullable(computer);
 		} catch (SQLException e) {
 			e.printStackTrace();
+			logger.error("An exception occured",e);
 		}
 		return Optional.empty();
 	}

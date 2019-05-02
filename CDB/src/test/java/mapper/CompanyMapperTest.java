@@ -19,7 +19,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 @RunWith(MockitoJUnitRunner.class)
 public class CompanyMapperTest {
 	
-	private CompanyMapper companyMapper= CompanyMapper.getInstance();
+	private CompanyMapper companyMapper = CompanyMapper.getInstance();
 	
 	@Mock
     private ResultSet resultSet;
@@ -30,12 +30,17 @@ public class CompanyMapperTest {
 		try {
 			Mockito.when(resultSet.getLong("id")).thenReturn(5L);
 			Mockito.when(resultSet.getString("name")).thenReturn("Asus");
+			Mockito.when(resultSet.next()).thenReturn(true);
+
 			
-			Optional<Company> company = companyMapper.getCompany(resultSet);
+			Optional<Company> optCompany = companyMapper.getCompany(resultSet);
 			
 			Company testCompany = new Company(5L,"Asus");
 			
-			Assert.assertEquals(company.get(), testCompany);
+			if(!optCompany.isPresent())
+				Assert.fail();
+			
+			Assert.assertEquals(optCompany.get(), testCompany);
 							
 		} catch (SQLException e) {
 			Assert.fail("SQL Exception");
@@ -46,8 +51,7 @@ public class CompanyMapperTest {
 	public void testGetCompanyEmpty() {
 		
 		try {
-			Mockito.when(resultSet.getLong("id")).thenReturn(0L);
-			Mockito.when(resultSet.getString("name")).thenReturn(null);
+			Mockito.when(resultSet.next()).thenReturn(false);
 			
 			Optional<Company> company = companyMapper.getCompany(resultSet);
 						

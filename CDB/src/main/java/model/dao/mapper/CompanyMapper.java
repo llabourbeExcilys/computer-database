@@ -24,11 +24,13 @@ public class CompanyMapper {
 	
 	// Create a company from a ResultSet
 	public Optional<Company> getCompany(ResultSet result) {
-		long id;
-		String name;
 		try {
-			id = result.getLong("id");
-			name = result.getString("name");
+			
+			if (!result.next())
+				return Optional.empty();
+			
+			long id = result.getLong("id");
+			String name = result.getString("name");
 			
 			if(id != 0 && name != null)
 				return Optional.ofNullable(new Company(id,name));

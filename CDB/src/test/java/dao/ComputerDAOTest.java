@@ -58,7 +58,7 @@ public class ComputerDAOTest {
 	public void getAllComputerTest() {
 		List<Computer> ComputerList = computerDAO.getComputerList();
 		List<Computer> testComputerList = testDataBase.findAllComputers();
-		Assert.assertEquals(ComputerList, testComputerList);	
+		Assert.assertEquals(testComputerList,ComputerList);	
 	}
 	
 	@Test
@@ -85,6 +85,26 @@ public class ComputerDAOTest {
 	}
 	
 	@Test
+	public void getEmptyComputerByIdTest() {
+		Optional<Computer> computer = computerDAO.getComputerById(34L);
+		Assert.assertTrue(!computer.isPresent());
+	}
+	
+	@Test
+	public void getComputerByNameTest() {
+		Optional<Computer> computer = computerDAO.getComputerByName("MacBook Pro 15.4 inch");
+		Assert.assertTrue(computer.isPresent());
+		Assert.assertEquals(computer.get(), testDataBase.findComputerById(computer.get().getId()));
+	}
+	
+	@Test
+	public void getEmptyComputerByNameTest() {
+		Optional<Computer> computer = computerDAO.getComputerByName("A computer that's not present");
+		Assert.assertTrue(!computer.isPresent());
+	}
+
+	
+	@Test
 	public void getComputerPageTest() {
 		int page = 2;
 		int nbByPage = 5;
@@ -97,11 +117,8 @@ public class ComputerDAOTest {
 	}
 	
 	
-	@Test
-	public void getEmptyComputerByIdTest() {
-		Optional<Computer> computer = computerDAO.getComputerById(34L);
-		Assert.assertTrue(!computer.isPresent());
-	}
+	
+	
 	
 	@Test
 	public void updateComputerNameTest() {

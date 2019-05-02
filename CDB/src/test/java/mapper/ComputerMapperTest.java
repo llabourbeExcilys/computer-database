@@ -34,6 +34,10 @@ public class ComputerMapperTest {
 			Mockito.when(resultSet.getString("computer_discontinued")).thenReturn("2005-10-10 00:00:00");
 			Mockito.when(resultSet.getLong("company_id")).thenReturn(5L);
 			Mockito.when(resultSet.getString("company_name")).thenReturn("Asus");
+			Mockito.when(resultSet.next()).thenReturn(true);
+
+			
+
 
 			Optional<Computer> optComputer = computerMapper.getComputer(resultSet);
 			Computer computer = optComputer.get();
@@ -47,7 +51,7 @@ public class ComputerMapperTest {
 			Assert.assertEquals(computer,testComputer);
 
 		} catch (SQLException e) {
-			e.printStackTrace();
+			Assert.fail();
 		}
 	}
 	
@@ -55,18 +59,13 @@ public class ComputerMapperTest {
 	public void testGetComputerEmpty() {
 		
 		try {
-			Mockito.when(resultSet.getLong("computer_id")).thenReturn(0L);
-			Mockito.when(resultSet.getString("computer_name")).thenReturn(null);
-			Mockito.when(resultSet.getString("computer_introduced")).thenReturn(null);
-			Mockito.when(resultSet.getString("computer_discontinued")).thenReturn(null);
-			Mockito.when(resultSet.getLong("company_id")).thenReturn(0L);
-			Mockito.when(resultSet.getString("company_name")).thenReturn(null);
+			Mockito.when(resultSet.next()).thenReturn(false);
 
 			Optional<Computer> optComputer = computerMapper.getComputer(resultSet);
 			Assert.assertTrue(!optComputer.isPresent());
 
 		} catch (SQLException e) {
-			e.printStackTrace();
+			Assert.fail();
 		}
 	}
 	
