@@ -11,6 +11,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import exception.NotFoundException;
 import model.Company;
 import model.Computer;
 import model.dao.ComputerDAO;
@@ -159,6 +160,12 @@ public class ComputerDAOTest {
 		
 		Assert.assertEquals(c.getLdIntroduced(),dateModified);
 
+	}
+	
+	@Test(expected = NotFoundException.class)
+	public void updateComputerIdNotFound() {
+		Computer computer = new Computer(50, "a computer");
+		computerDAO.update(computer);
 	}
 	
 	@Test

@@ -13,8 +13,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import com.sun.xml.internal.ws.wsdl.writer.document.Types;
+
 import exception.BadCompanyIdException;
 import exception.NotFoundException;
+import model.Company;
 import model.Computer;
 import model.dao.mapper.ComputerMapper;
 
@@ -149,17 +152,15 @@ public class ComputerDAO extends DAO{
 							
 			ResultSet result = state.executeQuery(SQL_SELECT_ALL_COMPUTER);
 			
-			
-			
 			while(result.next()){
 				result.previous();
 				Optional<Computer> computer = computerMapper.getComputer(result);
 				if(computer.isPresent())
 					resultList.add(computer.get());				
 			}
-		} catch (Exception e) {
+		} catch (SQLException e) {
 			e.printStackTrace();
-		}
+		} 
 		return resultList;
 	}
 
@@ -202,8 +203,6 @@ public class ComputerDAO extends DAO{
 						 										 ResultSet.TYPE_SCROLL_INSENSITIVE,
 						 										ResultSet.CONCUR_UPDATABLE);){	
 
-			
-		
 				state.setInt(1, nbByPage);
 				state.setInt(2, (page-1)*nbByPage);
 
@@ -230,12 +229,15 @@ public class ComputerDAO extends DAO{
 		try (Connection conn = DriverManager.getConnection(url, user, passwd);
 			PreparedStatement state = conn.prepareStatement(SQL_UPDATE_COMPUTER);){	
 
-			//Création d'un objet prepared statement
-			//On renseigne le paremetre
 			state.setString(1, c.getName());
 			state.setDate(2, ldateIntroduction);
 			state.setDate(3, ldateDiscontinuation);
-			state.setLong(4, c.getCompany().getId());
+		
+			if(c.getCompany()!=null)
+				state.setLong(4, c.getCompany().getId());
+			else
+				state.setNull(4, java.sql.Types.BIGINT);
+
 			state.setLong(5, c.getId());
 			int resultCode = state.executeUpdate();
 			if(resultCode == 0) 
