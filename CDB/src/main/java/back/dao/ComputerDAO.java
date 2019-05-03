@@ -13,14 +13,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.slf4j.LoggerFactory;
+
 import back.exception.BadCompanyIdException;
 import back.exception.NotFoundException;
 import back.mapper.ComputerMapper;
 import back.model.Computer;
+import ch.qos.logback.classic.Logger;
 
 public class ComputerDAO extends DAO{
 
-	//private static Logger logger = LoggerFactory.getLogger( Main.class );
+	private static Logger logger = (Logger) LoggerFactory.getLogger( ComputerDAO.class );
 
 	
 	private final static String SQL_SELECT_ALL_COMPUTER = 
@@ -108,10 +111,16 @@ public class ComputerDAO extends DAO{
 			 PreparedStatement state = conn.prepareStatement(SQL_CREATE_COMPUTER, 
 					 										 Statement.RETURN_GENERATED_KEYS);) {	
 			
+
+			//logger.debug(ldateIntroduction != null ? Date.valueOf(ldateIntroduction).toString() : "pas de date");
+			
 			state.setString(1, name);
 			state.setDate(2, ldateIntroduction != null ? Date.valueOf(ldateIntroduction) : null);
 			state.setDate(3, ldateDiscontinuation != null ? Date.valueOf(ldateDiscontinuation) : null);
-			state.setLong(4, idL.isPresent() ? idL.get() : null);
+			state.setObject(4,
+					idL.isPresent() ?
+					idL.get() : 
+					null);
 
 
 			state.executeUpdate();
