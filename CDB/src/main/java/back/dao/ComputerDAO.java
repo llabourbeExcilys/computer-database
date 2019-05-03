@@ -112,7 +112,8 @@ public class ComputerDAO extends DAO{
 					 										 Statement.RETURN_GENERATED_KEYS);) {	
 			
 
-			//logger.debug(ldateIntroduction != null ? Date.valueOf(ldateIntroduction).toString() : "pas de date");
+			logger.debug(ldateIntroduction != null ? Date.valueOf(ldateIntroduction).toString() : "pas de date");
+			System.out.println(ldateIntroduction != null ? Date.valueOf(ldateIntroduction).toString() : "pas de date");
 			
 			state.setString(1, name);
 			state.setDate(2, ldateIntroduction != null ? Date.valueOf(ldateIntroduction) : null);
@@ -272,7 +273,6 @@ public class ComputerDAO extends DAO{
 			if(resultCode == 0) 
 				throw new NotFoundException("There is no computer with id "+id);
 			
-			//logger.debug("Delete OK !");
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
