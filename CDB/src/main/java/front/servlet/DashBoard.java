@@ -1,4 +1,4 @@
-package view;
+package front.servlet;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -11,11 +11,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import controller.Controller;
-import model.Computer;
+import back.controller.Controller;
+import back.dto.ComputerDTO;
 
 
 @WebServlet(urlPatterns = {"/dashboard"})
@@ -28,8 +25,6 @@ public class DashBoard extends HttpServlet {
 	private int nbByPage = 10;
 	private int page = 1;
 	
-	
-	private static Logger logger = LoggerFactory.getLogger( DashBoard.class );
 	
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
@@ -45,10 +40,10 @@ public class DashBoard extends HttpServlet {
 		int lastPage = nbComputerFound/nbByPage;
 		
 		
-		List<Computer> computers = new ArrayList<>();
+		List<ComputerDTO> computers = new ArrayList<>();
 		String computerSearch =  request.getParameter("search");
 		if(computerSearch!=null) {
-			Optional<Computer> optComputer = controller.getComputerByName(computerSearch);
+			Optional<ComputerDTO> optComputer = controller.getComputerByName(computerSearch);
 			if (optComputer.isPresent()) 
 				computers.add(optComputer.get());
 		}else {

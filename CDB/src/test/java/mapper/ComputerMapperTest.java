@@ -12,9 +12,10 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import model.Company;
-import model.Computer;
-import model.dao.mapper.ComputerMapper;
+import back.mapper.ComputerMapper;
+import back.model.Company;
+import back.model.Computer;
+import back.model.ComputerBuilder;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ComputerMapperTest {
@@ -43,10 +44,10 @@ public class ComputerMapperTest {
 			Computer computer = optComputer.get();
 					
 			Company testCompany = new Company(5L,"Asus");
-			Computer testComputer = new Computer(23l,"Asus Computer");
-			testComputer.setLdIntroduced(LocalDate.of(1990, 02, 10));
-			testComputer.setLdDiscontinued(LocalDate.of(2005, 10, 10));
-			testComputer.setCompany(testCompany);
+			Computer testComputer = new ComputerBuilder(23l,"Asus Computer")
+					.withIntroductionDate(LocalDate.of(1990, 02, 10))
+					.withdiscontinuationDate(LocalDate.of(2005, 10, 10))
+					.withCompany(testCompany).build();
 			
 			Assert.assertEquals(computer,testComputer);
 

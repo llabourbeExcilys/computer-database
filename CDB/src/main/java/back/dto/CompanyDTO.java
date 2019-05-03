@@ -1,11 +1,11 @@
-package back.model;
+package back.dto;
 
-public class Company {
+public class CompanyDTO {
 	
 	private long id;
 	private String name;
 	
-	public Company(long id, String name) {
+	public CompanyDTO(long id, String name) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -36,7 +36,7 @@ public class Company {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Company other = (Company) obj;
+		CompanyDTO other = (CompanyDTO) obj;
 		if (id != other.id)
 			return false;
 		if (name == null) {
@@ -47,9 +47,12 @@ public class Company {
 		return true;
 	}
 
+	
+	
 	// GETTER AND SETTER
 	public long getId() {return id;}
 	public void setId(long id) {this.id = id;}
 	public String getName() {return name;}
 	public void setName(String name) {this.name = name;}
+	
 }

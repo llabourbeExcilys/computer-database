@@ -1,4 +1,4 @@
-package model.dao.mapper;
+package back.mapper;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -9,13 +9,14 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import model.Company;
-import model.Computer;
+import back.dto.ComputerDTO;
+import back.model.Company;
+import back.model.Computer;
+import back.model.ComputerBuilder;
 
 public class ComputerMapper {
 	
 	private static Logger logger = LoggerFactory.getLogger( ComputerMapper.class );
-
 
 	 /** Constructeur privé */
     private ComputerMapper(){}
@@ -24,7 +25,7 @@ public class ComputerMapper {
     private static ComputerMapper INSTANCE = null;
      
     /** Point d'accès pour l'instance unique du singleton */
-    public static synchronized ComputerMapper getInstance(){           
+    public static synchronized ComputerMapper getInstance(){
         if (INSTANCE == null)
            INSTANCE = new ComputerMapper(); 
         
@@ -38,8 +39,9 @@ public class ComputerMapper {
 			if (!result.next())
 				return Optional.empty();
 			
-			Computer computer = new Computer(result.getLong("computer_id"),
-									result.getString("computer_name"));
+			Computer computer = new ComputerBuilder(result.getLong("computer_id"),
+									result.getString("computer_name")).build();
+			
 			
 			// Check if introduction date was given
 			String introduced = result.getString("computer_introduced");
@@ -72,6 +74,21 @@ public class ComputerMapper {
 			e.printStackTrace();
 			logger.error("An exception occured",e);
 		}
+		return Optional.empty();
+	}
+	
+	public ComputerDTO computerToDTO(Computer c) {
+		return new ComputerDTO(c.getId(),
+				c.getName(),
+				c.getLdIntroduced(),
+				c.getLdDiscontinued(),
+				(c.getCompany() != null) ? c.getCompany().getId() : null,
+				(c.getCompany() != null) ? c.getCompany().getName() : null);
+	}
+	
+	public Optional<ComputerDTO> computerToDTO(Optional<Computer> c) {
+		if (c.isPresent())
+			return Optional.ofNullable(computerToDTO(c.get()));
 		return Optional.empty();
 	}
 	

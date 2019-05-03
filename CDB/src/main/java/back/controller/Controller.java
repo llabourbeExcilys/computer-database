@@ -1,15 +1,21 @@
-package controller;
+package back.controller;
 
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
-import exception.BadCompanyIdException;
-import exception.DateFormatException;
-import exception.RequestedPageException;
-import model.Company;
-import model.Computer;
-import model.Service;
+import back.dto.CompanyDTO;
+import back.dto.ComputerDTO;
+import back.exception.BadCompanyIdException;
+import back.exception.ComputerDtoNotMatchingException;
+import back.exception.DateFormatException;
+import back.exception.RequestedPageException;
+import back.mapper.CompanyMapper;
+import back.mapper.ComputerMapper;
+import back.model.Company;
+import back.model.Computer;
+import back.service.Service;
 
 public class Controller {
 	
@@ -17,6 +23,8 @@ public class Controller {
 
 
 	private static Service service;
+	private static CompanyMapper companyMapper;
+	private static ComputerMapper computerMapper;
 
 	/** Constructeur privé */
     private Controller(){}
@@ -27,6 +35,8 @@ public class Controller {
     /** Point d'accès pour l'instance unique du singleton */
     public static synchronized Controller getInstance(){
     	service = Service.getInstance();
+    	companyMapper = CompanyMapper.getInstance();
+    	computerMapper = ComputerMapper.getInstance();
         if (INSTANCE == null)
         	INSTANCE = new Controller(); 
         
@@ -58,35 +68,46 @@ public class Controller {
 
 	// Read
 
-	public List<Company> getCompanyList() {
-		return service.getCompanyList();
+	public List<CompanyDTO> getCompanyList() {
+		return service.getCompanyList()
+				.stream()
+				.map(p -> companyMapper.companyToDto(p))
+				.collect(Collectors.toList());
 	}
 	
-	public List<Computer> getComputerList() {
-		return service.getComputerList();
+	public List<ComputerDTO> getComputerList() {		
+		
+		return service.getComputerList()
+				.stream()
+				.map(computerMapper::computerToDTO)
+				.collect(Collectors.toList());
 	}
 
-	public Optional<Computer> getComputerById(String id) {
+	public Optional<ComputerDTO> getComputerById(String id) {
 		long idL = Long.parseLong(id);
 		return getComputerById(idL);
 	}
 
-	public Optional<Computer> getComputerById(long idL) {
-		return service.getComputerById(idL);
+	public Optional<ComputerDTO> getComputerById(long idL) {
+		Optional<Computer> cOptional = service.getComputerById(idL);
+		return computerMapper.computerToDTO(cOptional);
 	}
 	
-	public Optional<Computer> getComputerByName(String computerSearch) {
-		return service.getComputerByName(computerSearch);
-		
+	public Optional<ComputerDTO> getComputerByName(String computerSearch) {
+		Optional<Computer> cOptional = service.getComputerByName(computerSearch);
+		return computerMapper.computerToDTO(cOptional);		
 	}
 	
-	public List<Computer> getComputerPage(int page, int nbByPage){
+	public List<ComputerDTO> getComputerPage(int page, int nbByPage){
 		if(page<=0)
 			throw new RequestedPageException("La page demandé ne peut pas etre negative ou egal a 0.");
 		if(nbByPage<0)
 			throw new RequestedPageException("Le nombre d'ordinateur par page ne peut etre negatif.");
 		
-		return service.getComputerPage(page,nbByPage);
+		List<Computer> computers = service.getComputerPage(page,nbByPage);
+		return computers.stream()
+				.map(p -> computerMapper.computerToDTO(p))
+				.collect(Collectors.toList());
 	}
 	
 	public int getNumberOfComputer() {
@@ -95,46 +116,59 @@ public class Controller {
 
 	// Update
 	
-	public void updateName(Computer c, String name) {
-		c.setName(name);
-		service.update(c);
+	private Computer getComputer(ComputerDTO computerDTO) {
+		Optional<Computer> cOptional = service.getComputerById(computerDTO.getId());
+		
+		if(!cOptional.isPresent())
+			throw new ComputerDtoNotMatchingException("The computer DTO has no match in database");
+		
+		return cOptional.get();
+	}
+	
+	public void updateName(ComputerDTO computerDTO, String name) {
+		
+		Computer computer = getComputer(computerDTO);
+		computer.setName(name);
+		service.update(computer);
 	}
 
-	public void updateComputerCompany(Computer c, String sCompanyId) {
+	public void updateComputerCompany(ComputerDTO computerDTO, String sCompanyId) {
 		long companyId = Long.parseLong(sCompanyId);
 		Optional<Company> company = service.getCompanyById(companyId);
-		if(company.isPresent()) {
-			c.setCompany(company.get());
-			service.update(c);
+		
+		if(company.isPresent()) {	
+			Computer computer = getComputer(computerDTO);
+			computer.setCompany(company.get());
+			service.update(computer);
 		}else {
 			throw new BadCompanyIdException("Le nouvel company id ne correspond à aucune company dans la base");
 		}			
 	}
 
-	public void updateComputerIntroduced(Computer c, String date) {
+	public void updateComputerIntroduced(ComputerDTO computerDTO, String date) {
 		LocalDate introductionDate = checkAndCreateDate(date);
-		LocalDate discontDate = c.getLdDiscontinued();
+		LocalDate discontDate = computerDTO.getLdDiscontinued();
 		
-		if(discontDate != null) {
+		if(discontDate != null) 
 			if (discontDate.isBefore(introductionDate))
 				throw new DateFormatException("Discontinuation cannot be anterior to introduction date");
-		}
 		
-		c.setLdIntroduced(introductionDate);
-		service.update(c);
+		Computer computer = getComputer(computerDTO);
+		computer.setLdIntroduced(introductionDate);
+		service.update(computer);
 	}
 
-	public void updateComputerDiscontinued(Computer c, String date) {
-		LocalDate introductionDate = c.getLdIntroduced();
+	public void updateComputerDiscontinued(ComputerDTO computerDTO, String date) {
+		LocalDate introductionDate = computerDTO.getLdIntroduced();
 		LocalDate discontDate = checkAndCreateDate(date);
 
-		if(introductionDate != null) {
+		if(introductionDate != null) 
 			if (discontDate.isBefore(introductionDate))
 				throw new DateFormatException("Discontinuation cannot be anterior to introduction date");
-		}
 	
-		c.setLdDiscontinued(discontDate);
-		service.update(c);
+		Computer computer = getComputer(computerDTO);
+		computer.setLdDiscontinued(discontDate);
+		service.update(computer);
 	}
 
 	// Check if a string can be used to create a LocalDate
@@ -176,16 +210,8 @@ public class Controller {
 		service.deleteComputerById(idL);
 	}
 
-	public static Service getService() {
-		return service;
-	}
-
-	public static void setService(Service service) {
-		Controller.service = service;
-	}
-
-
-	
-	
+	// Getter Setter
+	public static Service getService() {return service;}
+	public static void setService(Service service) {Controller.service = service;}
 
 }

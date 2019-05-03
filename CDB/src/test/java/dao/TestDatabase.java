@@ -17,8 +17,9 @@ import java.util.StringTokenizer;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
 
-import model.Company;
-import model.Computer;
+import back.model.Company;
+import back.model.Computer;
+import back.model.ComputerBuilder;
 
 public class TestDatabase {
 
@@ -114,12 +115,13 @@ public class TestDatabase {
     }
 
     private void addComputer(long id, String name, LocalDate introduced, LocalDate discontinued, Long companyId) {
-        final Computer computer = new Computer(id,name);
-        Company c = findCompanyById(companyId);
-        
-        computer.setCompany(c);
-        computer.setLdIntroduced(introduced);
-        computer.setLdDiscontinued(discontinued);
+        Company company = findCompanyById(companyId);
+
+    	
+        final Computer computer = new ComputerBuilder(id,name)
+        		.withIntroductionDate(introduced)
+        		.withdiscontinuationDate(discontinued)
+        		.withCompany(company).build();
         
         computers.put(id, computer);
     }

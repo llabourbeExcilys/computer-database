@@ -1,9 +1,10 @@
-package model;
+package back.model;
 
 import java.time.LocalDate;
 
 public class Computer {
 	
+	//REQUIRED
 	private long id;
 	private String name;
 	
@@ -12,13 +13,16 @@ public class Computer {
 	private LocalDate ldDiscontinued = null;
 	private Company company=null;
 
-	public Computer(long id, String name) {
-		super();
-		this.id = id;
-		this.name = name;
+
+	protected Computer(ComputerBuilder computerBuilder) {
+		this.id = computerBuilder.getId();
+		this.name = computerBuilder.getName();
+		this.ldIntroduced = computerBuilder.getLdIntroduced();
+		this.ldDiscontinued = computerBuilder.getLdDiscontinued();
+		this.company = computerBuilder.getCompany();		
 	}
-	
-	
+
+
 
 	@Override
 	public String toString() {

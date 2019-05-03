@@ -11,10 +11,10 @@ import java.util.Optional;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-
-import model.Company;
-import model.dao.mapper.CompanyMapper;
 import org.mockito.junit.MockitoJUnitRunner;
+
+import back.mapper.CompanyMapper;
+import back.model.Company;
 
 @RunWith(MockitoJUnitRunner.class)
 public class CompanyMapperTest {

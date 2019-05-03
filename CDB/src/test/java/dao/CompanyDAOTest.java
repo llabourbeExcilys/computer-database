@@ -9,8 +9,8 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import model.Company;
-import model.dao.CompanyDAO;
+import back.dao.CompanyDAO;
+import back.model.Company;
 
 public class CompanyDAOTest {
 	

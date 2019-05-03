@@ -4,9 +4,8 @@ package main;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import controller.Controller;
-import view.CLIview;
-import view.View;
+import back.controller.Controller;
+import front.cli.CLIview;
 
 
 
@@ -20,7 +19,7 @@ public class Main {
 		
 		logger.debug("test log debug");
 		
-		View view = new CLIview(controller);
+		CLIview view = new CLIview(controller);
 		view.start();
 		       
 	}

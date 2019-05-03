@@ -6,8 +6,9 @@ import org.junit.Assert;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 
-import model.Company;
-import model.Service;
+import back.controller.Controller;
+import back.model.Company;
+import back.service.Service;
 
 //@RunWith(MockitoJUnitRunner.class)
 public class ControllerTest {

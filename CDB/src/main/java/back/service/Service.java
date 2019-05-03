@@ -1,11 +1,13 @@
-package model;
+package back.service;
 
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
-import model.dao.CompanyDAO;
-import model.dao.ComputerDAO;
+import back.dao.CompanyDAO;
+import back.dao.ComputerDAO;
+import back.model.Company;
+import back.model.Computer;
 
 public class Service {
 	

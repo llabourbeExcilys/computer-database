@@ -1,4 +1,4 @@
-package model.dao;
+package back.dao;
 
 import java.sql.Connection;
 import java.sql.Date;
@@ -13,13 +13,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import com.sun.xml.internal.ws.wsdl.writer.document.Types;
-
-import exception.BadCompanyIdException;
-import exception.NotFoundException;
-import model.Company;
-import model.Computer;
-import model.dao.mapper.ComputerMapper;
+import back.exception.BadCompanyIdException;
+import back.exception.NotFoundException;
+import back.mapper.ComputerMapper;
+import back.model.Computer;
 
 public class ComputerDAO extends DAO{
 

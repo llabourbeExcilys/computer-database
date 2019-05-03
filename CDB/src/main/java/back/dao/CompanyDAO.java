@@ -1,4 +1,4 @@
-package model.dao;
+package back.dao;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -10,8 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import model.Company;
-import model.dao.mapper.CompanyMapper;
+import back.mapper.CompanyMapper;
+import back.model.Company;
 
 public class CompanyDAO extends DAO{
 

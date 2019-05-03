@@ -1,10 +1,11 @@
-package model.dao.mapper;
+package back.mapper;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Optional;
 
-import model.Company;
+import back.dto.CompanyDTO;
+import back.model.Company;
 
 public class CompanyMapper {
 	
@@ -38,6 +39,10 @@ public class CompanyMapper {
 			e.printStackTrace();
 		}
 		return Optional.empty();
+	}
+	
+	public CompanyDTO companyToDto(Company company) {
+		return new CompanyDTO(company.getId(), company.getName());
 	}
 
 }

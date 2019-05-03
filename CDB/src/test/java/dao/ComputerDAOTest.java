@@ -11,10 +11,11 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import exception.NotFoundException;
-import model.Company;
-import model.Computer;
-import model.dao.ComputerDAO;
+import back.dao.ComputerDAO;
+import back.exception.NotFoundException;
+import back.model.Company;
+import back.model.Computer;
+import back.model.ComputerBuilder;
 
 public class ComputerDAOTest {
 
@@ -39,10 +40,11 @@ public class ComputerDAOTest {
 		LocalDate disD = LocalDate.of(2000, 04, 24);
 		Company company = new Company(4,"Netronics");
 
-		Computer c = new Computer(id,name);
-		c.setLdIntroduced(intD);
-		c.setLdDiscontinued(disD);
-		c.setCompany(company);
+		
+		Computer c = new ComputerBuilder(id, name)
+				.withIntroductionDate(intD)
+				.withdiscontinuationDate(disD)
+				.withCompany(company).build();
 		
 		computerDAO.addComputer(name, intD, disD, Optional.ofNullable(company.getId()));
 		
@@ -176,7 +178,7 @@ public class ComputerDAOTest {
 	
 	@Test(expected = NotFoundException.class)
 	public void updateComputerIdNotFound() {
-		Computer computer = new Computer(50, "a computer");
+		Computer computer = new ComputerBuilder(50, "a computer").build();
 		computerDAO.update(computer);
 	}
 	

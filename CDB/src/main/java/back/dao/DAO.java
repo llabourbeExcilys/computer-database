@@ -1,4 +1,4 @@
-package model.dao;
+package back.dao;
 
 import java.util.ResourceBundle;
 

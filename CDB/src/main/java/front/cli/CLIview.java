@@ -1,4 +1,4 @@
-package view;
+package front.cli;
 
 import java.time.DateTimeException;
 import java.util.List;
@@ -9,15 +9,15 @@ import java.util.concurrent.TimeUnit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import controller.Controller;
-import exception.BadCompanyIdException;
-import exception.BadInputException;
-import exception.NotFoundException;
-import exception.RequestedPageException;
+import back.controller.Controller;
+import back.dto.ComputerDTO;
+import back.exception.BadCompanyIdException;
+import back.exception.BadInputException;
+import back.exception.NotFoundException;
+import back.exception.RequestedPageException;
 import main.Main;
-import model.Computer;
 
-public class CLIview implements View {
+public class CLIview {
 	
 	private static Logger logger = LoggerFactory.getLogger( Main.class );
 
@@ -68,7 +68,7 @@ public class CLIview implements View {
 	
 	private boolean readSwitchAction(String s) {
 		String id;
-		Optional<Computer> c;
+		Optional<ComputerDTO> c;
 		try {
 			switch(s) {
 			case "1": //Show Company list
@@ -164,7 +164,7 @@ public class CLIview implements View {
 		
 	}
 	
-	private void updateComputer(Computer c){
+	private void updateComputer(ComputerDTO c){
 		boolean ok = true;
 		do {		
 			System.out.println("Updating computer:\n"
