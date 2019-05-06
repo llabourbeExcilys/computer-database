@@ -85,7 +85,7 @@
 	                            <input type="checkbox" name="deleteComputer" class="cb" value="${computer.id}">
 	                        </td>
 	                        <td>
-	                            <a href="editComputer.jsp" onclick="">${computer.name}</a>
+	                            <a href="editComputer?idToEdit=${computer.id}" onclick="">${computer.name}</a>
 	                        </td>
 	                        <td>${computer.ldIntroduced}</td>
 	                        <td>${computer.ldDiscontinued}</td>

@@ -45,4 +45,10 @@ public class CompanyMapper {
 		return new CompanyDTO(company.getId(), company.getName());
 	}
 
+	public Optional<CompanyDTO> companyToDto(Optional<Company> cOptional) {
+		if (cOptional.isPresent())
+			return Optional.ofNullable(companyToDto(cOptional.get()));
+		return Optional.empty();
+	}
+
 }

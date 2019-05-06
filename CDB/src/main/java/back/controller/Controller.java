@@ -70,6 +70,17 @@ public class Controller {
 				.collect(Collectors.toList());
 	}
 	
+	
+	public Optional<CompanyDTO> getCompanyById(String id){
+		long idL = Long.parseLong(id);
+		return getCompanyById(idL);
+	}
+	
+	public Optional<CompanyDTO> getCompanyById(long id){
+		Optional<Company> cOptional = service.getCompanyById(id);
+		return companyMapper.companyToDto(cOptional);
+	}
+	
 	public List<ComputerDTO> getComputerList() {		
 		
 		return service.getComputerList()
