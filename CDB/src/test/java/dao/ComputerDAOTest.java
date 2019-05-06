@@ -12,10 +12,13 @@ import org.junit.Before;
 import org.junit.Test;
 
 import back.dao.ComputerDAO;
+import back.dto.ComputerDTO;
 import back.exception.NotFoundException;
+import back.mapper.ComputerMapper;
 import back.model.Company;
 import back.model.Computer;
 import back.model.ComputerBuilder;
+import back.validator.ComputerValidator;
 
 public class ComputerDAOTest {
 
@@ -35,18 +38,24 @@ public class ComputerDAOTest {
 	@Test
 	public void addComputerTest() {
 		long id = 21;
-		String name = "My Netronics computer";
+		String name = "My Netronics computer2";
 		LocalDate intD = LocalDate.of(1990, 12, 12);
 		LocalDate disD = LocalDate.of(2000, 04, 24);
 		Company company = new Company(4,"Netronics");
-
 		
 		Computer c = new ComputerBuilder(id, name)
 				.withIntroductionDate(intD)
 				.withdiscontinuationDate(disD)
 				.withCompany(company).build();
 		
-		computerDAO.addComputer(name, intD, disD, Optional.ofNullable(company.getId()));
+		ComputerDTO computerDTO = new ComputerDTO();
+		computerDTO.setName(name);
+		computerDTO.setLdIntroduced(intD);
+		computerDTO.setLdDiscontinued(disD);
+		computerDTO.setCompanyName(company.getName());
+		computerDTO.setCompanyID(company.getId());
+		
+		computerDAO.addComputer(computerDTO);
 		
 		Optional<Computer> cReturned = computerDAO.getComputerById(id);
 		
@@ -159,8 +168,8 @@ public class ComputerDAOTest {
 				optComputer.isPresent());
 		Computer c = optComputer.get();
 		
-		Assert.assertTrue("La date d'introduction ne devrait pas etre null"
-				,c.getLdIntroduced()!=null);
+		Assert.assertTrue("La date d'introduction ne devrait pas etre null",
+				c.getLdIntroduced()!=null);
 		 
 		LocalDate dateModified= c.getLdIntroduced().plusYears(1);
 		c.setLdIntroduced(dateModified);

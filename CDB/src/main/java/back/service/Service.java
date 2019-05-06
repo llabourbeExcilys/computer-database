@@ -6,6 +6,7 @@ import java.util.Optional;
 
 import back.dao.CompanyDAO;
 import back.dao.ComputerDAO;
+import back.dto.ComputerDTO;
 import back.model.Company;
 import back.model.Computer;
 
@@ -35,8 +36,8 @@ public class Service {
 	
 	// Create
 	
-	public long addComputer(String name, LocalDate ldateIntroduction, LocalDate ldateDiscontinuation, Optional<Long> idL) {
-		return computerDAO.addComputer(name,ldateIntroduction,ldateDiscontinuation,idL);
+	public long addComputer(ComputerDTO computerDTO) {
+		return computerDAO.addComputer(computerDTO);
 	}
 	
 	// Read

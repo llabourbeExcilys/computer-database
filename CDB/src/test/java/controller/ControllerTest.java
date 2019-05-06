@@ -7,6 +7,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 
 import back.controller.Controller;
+import back.dto.ComputerDTO;
 import back.model.Company;
 import back.service.Service;
 
@@ -24,7 +25,8 @@ public class ControllerTest {
 		LocalDate disD = LocalDate.of(2000, 04, 24);
 		Company company = new Company(4,"Netronics");
 		
-		Mockito.when(service.addComputer(name, intD, disD, Optional.ofNullable(company.getId()))).thenReturn(21L);
+		
+		Mockito.when(service.addComputer(new ComputerDTO())).thenReturn(21L);
 		
 		Controller.setService(service);
 		

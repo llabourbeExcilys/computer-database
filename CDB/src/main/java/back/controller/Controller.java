@@ -16,6 +16,7 @@ import back.mapper.ComputerMapper;
 import back.model.Company;
 import back.model.Computer;
 import back.service.Service;
+import back.validator.ComputerValidator;
 
 public class Controller {
 	
@@ -45,26 +46,20 @@ public class Controller {
 
 	// Create
 
-	public long addComputer(String name, Optional<String> dateIntroduction, Optional<String> dateDiscontinued, Optional<String> companyID) {
-		LocalDate ldateIntroduction = null, ldateDiscontinuation = null;
-		Optional<Long> idL = Optional.empty();
+	public long addComputer(String name, 
+							Optional<String> dateIntroduction,
+							Optional<String> dateDiscontinued,
+							Optional<String> companyID) {
 		
 		
-		if (dateIntroduction.isPresent())
-			ldateIntroduction = checkAndCreateDate(dateIntroduction.get());
-		if (dateDiscontinued.isPresent())
-			ldateDiscontinuation = checkAndCreateDate(dateDiscontinued.get());
-		if (companyID.isPresent())
-			idL = Optional.ofNullable(checkCompanyIdFormat(companyID.get()));
-		return service.addComputer(name, ldateIntroduction, ldateDiscontinuation, idL);
+		
+		ComputerDTO computerDTO = ComputerValidator.validate(name, dateIntroduction, dateDiscontinued, companyID);
+		
+		
+	
+		return service.addComputer(computerDTO);
 	}
 
-	private long checkCompanyIdFormat(String companyId) {
-		long idL = Long.parseLong(companyId);
-		if (idL < 0)
-			throw new BadCompanyIdException("L'id ne peut pas être <= 0");
-		return idL;
-	}
 
 	// Read
 
@@ -146,62 +141,29 @@ public class Controller {
 	}
 
 	public void updateComputerIntroduced(ComputerDTO computerDTO, String date) {
-		LocalDate introductionDate = checkAndCreateDate(date);
-		LocalDate discontDate = computerDTO.getLdDiscontinued();
+		LocalDate introductionDate = ComputerValidator.checkAndCreateDate(date);		
 		
-		if(discontDate != null) 
-			if (discontDate.isBefore(introductionDate))
-				throw new DateFormatException("Discontinuation cannot be anterior to introduction date");
+		
+		computerDTO.setLdIntroduced(introductionDate);
+		
+		ComputerValidator.validate(computerDTO);
+		
 		
 		Computer computer = getComputer(computerDTO);
-		computer.setLdIntroduced(introductionDate);
 		service.update(computer);
 	}
 
 	public void updateComputerDiscontinued(ComputerDTO computerDTO, String date) {
-		LocalDate introductionDate = computerDTO.getLdIntroduced();
-		LocalDate discontDate = checkAndCreateDate(date);
+		LocalDate discontDate = ComputerValidator.checkAndCreateDate(date);
+		computerDTO.setLdDiscontinued(discontDate);
 
-		if(introductionDate != null) 
-			if (discontDate.isBefore(introductionDate))
-				throw new DateFormatException("Discontinuation cannot be anterior to introduction date");
+		ComputerValidator.validate(computerDTO);
 	
 		Computer computer = getComputer(computerDTO);
-		computer.setLdDiscontinued(discontDate);
 		service.update(computer);
 	}
 
-	// Check if a string can be used to create a LocalDate
-	// Expected string format:yyyy-mm-dd
-	// Return the LocalDate if ok
-	// Throw DateFormatException exception if not ok
-	private LocalDate checkAndCreateDate(String date) {
-		String[] datePart = date.split("-");
-
-		if (datePart.length != 3)
-			throw new DateFormatException("invalide date format");
-
-		String year = datePart[0];
-		String month = datePart[1];
-		String day = datePart[2];
-
-		
-		if (year.length() != 4 ) 
-			throw new DateFormatException("invalide year length");
-		else if(month.length() != 2) 
-			throw new DateFormatException("invalide month length");
-		else if(day.length() != 2) 
-			throw new DateFormatException("invalide day length");
 	
-		
-		int yearI = Integer.parseInt(year);
-		int monthI = Integer.parseInt(month);
-		int dayI = Integer.parseInt(day);
-		
-		//logger.debug(yearI+" "+monthI+" "+dayI);
-
-		return LocalDate.of(yearI, monthI, dayI);
-	}
 
 	// Delete
 

@@ -15,6 +15,7 @@ import java.util.Optional;
 
 import org.slf4j.LoggerFactory;
 
+import back.dto.ComputerDTO;
 import back.exception.BadCompanyIdException;
 import back.exception.NotFoundException;
 import back.mapper.ComputerMapper;
@@ -106,22 +107,15 @@ public class ComputerDAO extends DAO{
 	// Create
 	
 
-	public long addComputer(String name, LocalDate ldateIntroduction, LocalDate ldateDiscontinuation, Optional<Long> idL) {
+	public long addComputer(ComputerDTO computerDTO) {
 		try (Connection conn = DriverManager.getConnection(url, user, passwd);
 			 PreparedStatement state = conn.prepareStatement(SQL_CREATE_COMPUTER, 
 					 										 Statement.RETURN_GENERATED_KEYS);) {	
 			
-
-			logger.debug(ldateIntroduction != null ? Date.valueOf(ldateIntroduction).toString() : "pas de date");
-			System.out.println(ldateIntroduction != null ? Date.valueOf(ldateIntroduction).toString() : "pas de date");
-			
-			state.setString(1, name);
-			state.setDate(2, ldateIntroduction != null ? Date.valueOf(ldateIntroduction) : null);
-			state.setDate(3, ldateDiscontinuation != null ? Date.valueOf(ldateDiscontinuation) : null);
-			state.setObject(4,
-					idL.isPresent() ?
-					idL.get() : 
-					null);
+			state.setString(1, computerDTO.getName());
+			state.setDate(2, computerDTO.getLdIntroduced() != null ? Date.valueOf(computerDTO.getLdIntroduced()) : null);
+			state.setDate(3, computerDTO.getLdDiscontinued() != null ? Date.valueOf(computerDTO.getLdDiscontinued()) : null);
+			state.setObject(4, computerDTO.getCompanyID());
 
 
 			state.executeUpdate();
@@ -134,6 +128,7 @@ public class ComputerDAO extends DAO{
 		}
 		return -1;
 	}
+
 
 	// Read
 	
@@ -277,6 +272,8 @@ public class ComputerDAO extends DAO{
 			e.printStackTrace();
 		}
 	}
+
+	
 
 
 	

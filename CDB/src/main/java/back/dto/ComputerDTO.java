@@ -15,7 +15,9 @@ public class ComputerDTO {
 		private Long companyID;
 		private String companyName;
 		
-		
+		public ComputerDTO() {
+			
+		}
 		
 		public ComputerDTO(long id, String name, LocalDate ldIntroduced, LocalDate ldDiscontinued, Long companyID,
 				String companyName) {
@@ -93,7 +95,7 @@ public class ComputerDTO {
 		public void setLdIntroduced(LocalDate ldIntroduced) {this.ldIntroduced = ldIntroduced;}
 		public LocalDate getLdDiscontinued() {return ldDiscontinued;}
 		public void setLdDiscontinued(LocalDate ldDiscontinued) {this.ldDiscontinued = ldDiscontinued;}
-		public long getCompanyID() {return companyID;}
+		public Long getCompanyID() {return companyID;}
 		public void setCompanyID(Long companyID) {this.companyID = companyID;}
 		public String getCompanyName() {return companyName;}
 		public void setCompanyName(String companyName) {this.companyName = companyName;}

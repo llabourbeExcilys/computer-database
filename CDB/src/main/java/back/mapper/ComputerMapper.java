@@ -51,7 +51,7 @@ public class ComputerMapper {
 			String introduced = result.getString("computer_introduced");
 			if(introduced != null) {
 				Timestamp t = Timestamp.valueOf(introduced);
-				LocalDate locald = t.toLocalDateTime().plusDays(1).toLocalDate();
+				LocalDate locald = t.toLocalDateTime().toLocalDate();
 				computer.setLdIntroduced(locald);
 			}
 			
