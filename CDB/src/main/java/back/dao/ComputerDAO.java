@@ -113,8 +113,8 @@ public class ComputerDAO extends DAO{
 					 										 Statement.RETURN_GENERATED_KEYS);) {	
 			
 			state.setString(1, computerDTO.getName());
-			state.setDate(2, computerDTO.getLdIntroduced() != null ? Date.valueOf(computerDTO.getLdIntroduced()) : null);
-			state.setDate(3, computerDTO.getLdDiscontinued() != null ? Date.valueOf(computerDTO.getLdDiscontinued()) : null);
+			state.setDate(2, computerDTO.getLdIntroduced() != null ? Date.valueOf(computerDTO.getLdIntroduced().plusDays(1)) : null);
+			state.setDate(3, computerDTO.getLdDiscontinued() != null ? Date.valueOf(computerDTO.getLdDiscontinued().plusDays(1)) : null);
 			state.setObject(4, computerDTO.getCompanyID());
 
 

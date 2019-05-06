@@ -5,8 +5,8 @@ import java.util.Optional;
 
 import back.dto.ComputerDTO;
 import back.exception.BadCompanyIdException;
+import back.exception.BadInputException;
 import back.exception.DateFormatException;
-import back.model.Computer;
 
 public class ComputerValidator {
 	
@@ -17,6 +17,10 @@ public class ComputerValidator {
 		
 		ComputerDTO computerDTO = new ComputerDTO();
 		
+		name = name.trim();
+		if(name.equals(""))
+			throw new BadInputException("Le nom ne peut etre vide");
+		computerDTO.setName(name);
 		
 		if (dateIntroduction.isPresent())
 			computerDTO.setLdIntroduced(checkAndCreateDate(dateIntroduction.get()));
@@ -75,7 +79,7 @@ public class ComputerValidator {
 			LocalDate ldDisc = computerDTO.getLdDiscontinued();
 			
 			if(ldIntr != null && ldDisc != null)
-				if (ldIntr.isBefore(ldDisc))
+				if (ldDisc.isBefore(ldIntr))
 					throw new DateFormatException("Discontinuation cannot be anterior to introduction date");
 		}
 		

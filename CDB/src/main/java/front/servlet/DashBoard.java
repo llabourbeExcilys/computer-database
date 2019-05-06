@@ -37,7 +37,7 @@ public class DashBoard extends HttpServlet {
 			page = Integer.parseInt(pageString);
 
 		int nbComputerFound = controller.getNumberOfComputer();
-		int lastPage = nbComputerFound/nbByPage;
+		int lastPage = (int) Math.ceil(nbComputerFound/(double)nbByPage) ;
 		
 		
 		List<ComputerDTO> computers = new ArrayList<>();

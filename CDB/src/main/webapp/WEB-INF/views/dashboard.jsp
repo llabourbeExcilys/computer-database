@@ -15,7 +15,7 @@
 <body>
     <header class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
-            <a class="navbar-brand" href="dashboard.html"> Application - Computer Database </a>
+            <a class="navbar-brand" href="dashboard"> Application - Computer Database </a>
         </div>
     </header>
 
@@ -26,7 +26,7 @@
             </h1>
             <div id="actions" class="form-horizontal">
                 <div class="pull-left">
-                    <form id="searchForm" action="#" method="GET" class="form-inline">
+                    <form id="searchForm" action="dashboard" method="GET" class="form-inline">
 
                         <input type="search" id="searchbox" name="search" class="form-control" placeholder="Search name" />
                         <input type="submit" id="searchsubmit" value="Filter by name"
@@ -34,7 +34,7 @@
                     </form>
                 </div>
                 <div class="pull-right">
-                    <a class="btn btn-success" id="addComputer" href="addComputer.html">Add Computer</a> 
+                    <a class="btn btn-success" id="addComputer" href="addComputer">Add Computer</a> 
                     <a class="btn btn-default" id="editComputer" href="#" onclick="$.fn.toggleEditMode();">Edit</a>
                 </div>
             </div>
@@ -85,11 +85,11 @@
 	                            <input type="checkbox" name="cb" class="cb" value="0">
 	                        </td>
 	                        <td>
-	                            <a href="editComputer.html" onclick="">${computer.name}</a>
+	                            <a href="editComputer.jsp" onclick="">${computer.name}</a>
 	                        </td>
 	                        <td>${computer.ldIntroduced}</td>
 	                        <td>${computer.ldDiscontinued}</td>
-	                        <td>${computer.company.name}</td>
+	                        <td>${computer.companyName}</td>
 	                    </tr>
                     </c:forEach>
                 
@@ -109,10 +109,10 @@
              	 </li>
               </c:if>
               <li><a href="?page=${page}">${page}</a></li>
-              <c:if test="${page+1<=lastPage}"><li><a href="?page=${page+1}">${page+1}</a></li></c:if>
-              <c:if test="${page+2<=lastPage}"><li><a href="?page=${page+2}">${page+2}</a></li></c:if>
-              <c:if test="${page+3<=lastPage}"><li><a href="?page=${page+3}">${page+3}</a></li></c:if>
-              <c:if test="${page+4<=lastPage}"><li><a href="?page=${page+4}">${page+4}</a></li></c:if>
+              <c:if test="${page+1<=lastPage}"><li><a href="dashboard?page=${page+1}">${page+1}</a></li></c:if>
+              <c:if test="${page+2<=lastPage}"><li><a href="dashboard?page=${page+2}">${page+2}</a></li></c:if>
+              <c:if test="${page+3<=lastPage}"><li><a href="dashboard?page=${page+3}">${page+3}</a></li></c:if>
+              <c:if test="${page+4<=lastPage}"><li><a href="dashboard?page=${page+4}">${page+4}</a></li></c:if>
               <c:if test="${page+1<=lastPage}">
               	<li>
 	                <a href="?page=${page+1}" aria-label="Next">
@@ -124,9 +124,9 @@
         </ul>
         
         <ul class="pagination pull-right">
-        	<li><a href="?nbByPage=10">10</a></li>
-        	<li><a href="?nbByPage=50">50</a></li>
-        	<li><a href="?nbByPage=100">100</a></li>
+        	<li><a href="dashboard?nbByPage=10">10</a></li>
+        	<li><a href="dashboard?nbByPage=50">50</a></li>
+        	<li><a href="dashboard?nbByPage=100">100</a></li>
         </ul>
         
         

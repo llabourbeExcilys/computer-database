@@ -14,11 +14,9 @@ import org.junit.Test;
 import back.dao.ComputerDAO;
 import back.dto.ComputerDTO;
 import back.exception.NotFoundException;
-import back.mapper.ComputerMapper;
 import back.model.Company;
 import back.model.Computer;
 import back.model.ComputerBuilder;
-import back.validator.ComputerValidator;
 
 public class ComputerDAOTest {
 

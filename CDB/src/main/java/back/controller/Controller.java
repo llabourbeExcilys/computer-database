@@ -9,7 +9,6 @@ import back.dto.CompanyDTO;
 import back.dto.ComputerDTO;
 import back.exception.BadCompanyIdException;
 import back.exception.ComputerDtoNotMatchingException;
-import back.exception.DateFormatException;
 import back.exception.RequestedPageException;
 import back.mapper.CompanyMapper;
 import back.mapper.ComputerMapper;
@@ -51,11 +50,12 @@ public class Controller {
 							Optional<String> dateDiscontinued,
 							Optional<String> companyID) {
 		
+		ComputerDTO computerDTO;
 		
-		
-		ComputerDTO computerDTO = ComputerValidator.validate(name, dateIntroduction, dateDiscontinued, companyID);
-		
-		
+		computerDTO = ComputerValidator.validate(name,
+					dateIntroduction,
+					dateDiscontinued,
+					companyID);
 	
 		return service.addComputer(computerDTO);
 	}
