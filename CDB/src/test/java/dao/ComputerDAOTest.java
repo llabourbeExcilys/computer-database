@@ -12,6 +12,8 @@ import org.junit.Before;
 import org.junit.Test;
 
 import back.dao.ComputerDAO;
+import back.dao.SortingField;
+import back.dao.SortingOrder;
 import back.dto.ComputerDTO;
 import back.exception.NotFoundException;
 import back.model.Company;
@@ -122,13 +124,13 @@ public class ComputerDAOTest {
 	public void getComputerPageTest() {
 		int page = 2;
 		int nbByPage = 5;
-		List<Computer> computers = computerDAO.getComputerPage(page, nbByPage);
+		List<Computer> computers = computerDAO.getComputerPage(page, nbByPage,SortingField.ID,SortingOrder.ASC);
 		
 		List<Computer> expectedComputers = testDataBase.findAllComputers()
 				.stream().skip(((page-1)*nbByPage)).limit(nbByPage)
 				.collect(Collectors.toList());
 		Assert.assertEquals("Les computers de la page ne correspondent pas."
-				,computers, expectedComputers);
+				,expectedComputers,computers);
 	}
 	
 	

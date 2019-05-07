@@ -10,6 +10,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import back.controller.Controller;
+import back.dao.SortingField;
+import back.dao.SortingOrder;
 import back.dto.ComputerDTO;
 import back.exception.BadCompanyIdException;
 import back.exception.BadInputException;
@@ -110,7 +112,7 @@ public class CLIview {
 				System.out.print("Show page number ?\n->");
 				String sNumPage = sc.nextLine();
 				int iNumPage = Integer.parseInt(sNumPage);
-				showList(controller.getComputerPage(iNumPage, 10));
+				showList(controller.getComputerPage(iNumPage, 10,SortingField.NAME,SortingOrder.ASC));
 				break;
 			case "exit": 
 				System.out.println("Goodbye !\n");

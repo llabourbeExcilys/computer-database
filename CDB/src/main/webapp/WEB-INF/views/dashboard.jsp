@@ -61,6 +61,9 @@
                         </th>
                         <th>
                             Computer name
+                            <a href="dashboard?order=asc">&#9650;</a>
+                            <a href="dashboard?order=desc">&#9660;</a>
+                        
                         </th>
                         <th>
                             Introduced date
@@ -124,9 +127,9 @@
         </ul>
         
         <ul class="pagination pull-right">
-        	<li><a href="dashboard?nbByPage=10">10</a></li>
-        	<li><a href="dashboard?nbByPage=50">50</a></li>
-        	<li><a href="dashboard?nbByPage=100">100</a></li>
+        	<li><a href="dashboard?nbByPage=10&page=1">10</a></li>
+        	<li><a href="dashboard?nbByPage=50&page=1">50</a></li>
+        	<li><a href="dashboard?nbByPage=100&page=1">100</a></li>
         </ul>
         
         

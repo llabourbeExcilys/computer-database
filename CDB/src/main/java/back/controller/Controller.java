@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import back.dao.SortingField;
+import back.dao.SortingOrder;
 import back.dto.CompanyDTO;
 import back.dto.ComputerDTO;
 import back.exception.BadCompanyIdException;
@@ -113,16 +115,21 @@ public class Controller {
 		return computerMapper.computerToDTO(cOptional);		
 	}
 	
-	public List<ComputerDTO> getComputerPage(int page, int nbByPage){
+	public List<ComputerDTO> getComputerPage(int page, int nbByPage, SortingField field, SortingOrder order) {
+		checkPage(page, nbByPage);
+		
+		List<Computer> computers = service.getComputerPage(page,nbByPage, field, order);
+		return computers.stream()
+				.map(p -> computerMapper.computerToDTO(p))
+				.collect(Collectors.toList());
+	}
+
+	
+	private void checkPage(int page, int nbByPage) {
 		if(page<=0)
 			throw new RequestedPageException("La page demandé ne peut pas etre negative ou egal a 0.");
 		if(nbByPage<0)
 			throw new RequestedPageException("Le nombre d'ordinateur par page ne peut etre negatif.");
-		
-		List<Computer> computers = service.getComputerPage(page,nbByPage);
-		return computers.stream()
-				.map(p -> computerMapper.computerToDTO(p))
-				.collect(Collectors.toList());
 	}
 	
 	public int getNumberOfComputer() {
@@ -217,5 +224,11 @@ public class Controller {
 	// Getter Setter
 	public static Service getService() {return service;}
 	public static void setService(Service service) {Controller.service = service;}
+
+
+
+
+
+
 
 }

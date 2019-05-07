@@ -5,6 +5,8 @@ import java.util.Optional;
 
 import back.dao.CompanyDAO;
 import back.dao.ComputerDAO;
+import back.dao.SortingField;
+import back.dao.SortingOrder;
 import back.dto.ComputerDTO;
 import back.model.Company;
 import back.model.Computer;
@@ -56,10 +58,12 @@ public class Service {
 	public Optional<Company> getCompanyById(long idL) {
 		return companyDAO.getCompanyByID(idL);
 	}
-	
-	public List<Computer> getComputerPage(int page, int nbByPage) {
-		return computerDAO.getComputerPage(page,nbByPage);
+		
+	public List<Computer> getComputerPage(int page, int nbByPage, SortingField field, SortingOrder order) {
+		return computerDAO.getComputerPage(page,nbByPage,field,order);
 	}
+	
+
 
 	// Update
 	
@@ -80,6 +84,11 @@ public class Service {
 	public Optional<Computer> getComputerByName(String computerSearch) {
 		return computerDAO.getComputerByName(computerSearch);
 	}
+
+
+
+
+
 
 	
 

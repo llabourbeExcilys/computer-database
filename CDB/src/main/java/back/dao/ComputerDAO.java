@@ -78,15 +78,18 @@ public class ComputerDAO {
 	private static final String SQL_SELECT_COMPUTER_PAGE = 
 			SQL_SELECT_ALL_COMPUTER
 			+"ORDER BY "
-			+	"C.id "
-			+"ASC LIMIT "
+			+	"C."+"fieldToReplace"+" "+"OrderToReplace "
+			+"LIMIT "
 			+	"? "
 			+"OFFSET "
 			+	"? ";
 
+	
 	private static final String SQL_SELECT_COMPUTER_BY_NAME = 
 			SQL_SELECT_ALL_COMPUTER+
 			"WHERE C.name = ?";
+
+
 
 
 	
@@ -120,6 +123,8 @@ public class ComputerDAO {
 		try (Connection conn = dataSource.getConnection();
 			 PreparedStatement state = conn.prepareStatement(SQL_CREATE_COMPUTER, 
 					 										 Statement.RETURN_GENERATED_KEYS);) {	
+			
+			
 			
 			state.setString(1, computerDTO.getName());
 			state.setDate(2, computerDTO.getLdIntroduced() != null ? Date.valueOf(computerDTO.getLdIntroduced()) : null);
@@ -207,15 +212,27 @@ public class ComputerDAO {
 	}
 
 	
-	public List<Computer> getComputerPage(int page, int nbByPage) {
+	public List<Computer> getComputerPage(int page, int nbByPage, SortingField field, SortingOrder order) {
+		String requestString = SQL_SELECT_COMPUTER_PAGE.
+				replace("fieldToReplace", field.name()).
+				replace("OrderToReplace", order.name());
+		 return getComputerPage(page, nbByPage, requestString);
+	}
+	
+	private List<Computer> getComputerPage(int page, int nbByPage, String SQL_REQUEST){
 		List<Computer> resultList = new ArrayList<Computer>();
 		try (Connection conn = dataSource.getConnection();
-				 PreparedStatement state = conn.prepareStatement(SQL_SELECT_COMPUTER_PAGE,
+				 PreparedStatement state = conn.prepareStatement(SQL_REQUEST,
 						 										 ResultSet.TYPE_SCROLL_INSENSITIVE,
 						 										ResultSet.CONCUR_UPDATABLE);){	
 
+				System.out.println("request:"+SQL_REQUEST);
+			
 				state.setInt(1, nbByPage);
 				state.setInt(2, (page-1)*nbByPage);
+				
+				
+				//System.out.println("page:"+page+",nbByPage:"+nbByPage+",offset:"+(page-1)*nbByPage);
 
 				ResultSet result = state.executeQuery();
 				
@@ -230,6 +247,8 @@ public class ComputerDAO {
 			}
 		return resultList;
 	}
+	
+
 	
 	// Update
 	
@@ -284,6 +303,10 @@ public class ComputerDAO {
 			e.printStackTrace();
 		}
 	}
+
+
+
+
 
 	
 
