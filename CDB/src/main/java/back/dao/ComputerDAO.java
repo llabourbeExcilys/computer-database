@@ -2,19 +2,21 @@ package back.dao;
 
 import java.sql.Connection;
 import java.sql.Date;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.sql.Statement;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.TimeZone;
+
+import javax.sql.DataSource;
 
 import org.slf4j.LoggerFactory;
 
+import back.connection.ConnexionManager;
 import back.dto.ComputerDTO;
 import back.exception.BadCompanyIdException;
 import back.exception.NotFoundException;
@@ -22,9 +24,11 @@ import back.mapper.ComputerMapper;
 import back.model.Computer;
 import ch.qos.logback.classic.Logger;
 
-public class ComputerDAO extends DAO{
+public class ComputerDAO {
 
 	private static Logger logger = (Logger) LoggerFactory.getLogger( ComputerDAO.class );
+
+	static {TimeZone.setDefault(TimeZone.getTimeZone("UTC"));};
 
 	
 	private final static String SQL_SELECT_ALL_COMPUTER = 
@@ -87,6 +91,10 @@ public class ComputerDAO extends DAO{
 
 	
 	private static ComputerMapper computerMapper;
+	private static DataSource dataSource;
+	static {TimeZone.setDefault(TimeZone.getTimeZone("UTC"));};
+
+	
 	
 	/** Constructeur privé */
     private ComputerDAO(){}
@@ -97,6 +105,7 @@ public class ComputerDAO extends DAO{
     /** Point d'accès pour l'instance unique du singleton */
     public static synchronized ComputerDAO getInstance(){
     	computerMapper = ComputerMapper.getInstance();
+    	dataSource = ConnexionManager.getDataSource();
 
         if (INSTANCE == null)
         	INSTANCE = new ComputerDAO(); 
@@ -108,7 +117,7 @@ public class ComputerDAO extends DAO{
 	
 
 	public long addComputer(ComputerDTO computerDTO) {
-		try (Connection conn = DriverManager.getConnection(url, user, passwd);
+		try (Connection conn = dataSource.getConnection();
 			 PreparedStatement state = conn.prepareStatement(SQL_CREATE_COMPUTER, 
 					 										 Statement.RETURN_GENERATED_KEYS);) {	
 			
@@ -134,7 +143,7 @@ public class ComputerDAO extends DAO{
 	
 	public int getNumberOfComputer() {
 		int size = 0;
-		try (Connection conn = DriverManager.getConnection(url, user, passwd);
+		try (Connection conn = dataSource.getConnection();
 				 Statement state = conn.createStatement();) {	
 						
 				ResultSet result = state.executeQuery(SQL_COUNT_ALL_COMPUTER);
@@ -147,7 +156,7 @@ public class ComputerDAO extends DAO{
 	
 	public List<Computer> getComputerList() {
 		List<Computer> resultList = new ArrayList<Computer>();
-		try (Connection conn = DriverManager.getConnection(url, user, passwd);
+		try (Connection conn = dataSource.getConnection();
 			 Statement state = conn.createStatement(
 					 							ResultSet.TYPE_SCROLL_INSENSITIVE,
 					 							ResultSet.CONCUR_UPDATABLE);) {	
@@ -169,7 +178,7 @@ public class ComputerDAO extends DAO{
 
 	public Optional<Computer> getComputerById(long idL) {
 
-		try (Connection conn = DriverManager.getConnection(url, user, passwd);
+		try (Connection conn = dataSource.getConnection();
 			 PreparedStatement state = conn.prepareStatement(SQL_SELECT_COMPUTER_BY_ID);){	
 
 			state.setLong(1, idL);
@@ -185,7 +194,7 @@ public class ComputerDAO extends DAO{
 	}
 	
 	public Optional<Computer> getComputerByName(String computerSearch) {
-		try (Connection conn = DriverManager.getConnection(url, user, passwd);
+		try (Connection conn = dataSource.getConnection();
 				 PreparedStatement state = conn.prepareStatement(SQL_SELECT_COMPUTER_BY_NAME);){	
 
 				state.setString(1, computerSearch);
@@ -200,7 +209,7 @@ public class ComputerDAO extends DAO{
 	
 	public List<Computer> getComputerPage(int page, int nbByPage) {
 		List<Computer> resultList = new ArrayList<Computer>();
-		try (Connection conn = DriverManager.getConnection(url, user, passwd);
+		try (Connection conn = dataSource.getConnection();
 				 PreparedStatement state = conn.prepareStatement(SQL_SELECT_COMPUTER_PAGE,
 						 										 ResultSet.TYPE_SCROLL_INSENSITIVE,
 						 										ResultSet.CONCUR_UPDATABLE);){	
@@ -231,7 +240,7 @@ public class ComputerDAO extends DAO{
 //		System.out.println("in dao,date intro:"+(ldateIntroduction!=null ? ldateIntroduction.toString() : "null"));
 //		System.out.println("in dao,date disco:"+(ldateDiscontinuation!=null ? ldateDiscontinuation.toString() : "null"));
 		
-		try (Connection conn = DriverManager.getConnection(url, user, passwd);
+		try (Connection conn = dataSource.getConnection();
 			PreparedStatement state = conn.prepareStatement(SQL_UPDATE_COMPUTER);){	
 
 			state.setString(1, c.getName());
@@ -261,7 +270,7 @@ public class ComputerDAO extends DAO{
 	// Delete
 	
 	public void deleteComputerById(long id) {
-		try (Connection conn = DriverManager.getConnection(url, user, passwd);
+		try (Connection conn = dataSource.getConnection();
 			 PreparedStatement state = conn.prepareStatement(SQL_DELETE_COMPUTER_BY_ID);){
 
 			//Création d'un objet prepared statement

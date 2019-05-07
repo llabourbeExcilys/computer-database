@@ -1,7 +1,6 @@
 package back.dao;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -9,11 +8,15 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.TimeZone;
 
+import javax.sql.DataSource;
+
+import back.connection.ConnexionManager;
 import back.mapper.CompanyMapper;
 import back.model.Company;
 
-public class CompanyDAO extends DAO{
+public class CompanyDAO{
 
 	private final static String SQL_SELECT_ALL_COMPANY = 
 			"SELECT "
@@ -29,11 +32,16 @@ public class CompanyDAO extends DAO{
 			+	"company.id = ?";
 
 	private static CompanyMapper companyMapper;
-
     private static CompanyDAO INSTANCE = null;
-	
+	private static DataSource dataSource;
+
+    static {TimeZone.setDefault(TimeZone.getTimeZone("UTC"));};
+
+    
+    
     private CompanyDAO(){
 		companyMapper = CompanyMapper.getInstance();
+		dataSource = ConnexionManager.getDataSource();
     }
      
     public static synchronized CompanyDAO getInstance(){
@@ -48,7 +56,7 @@ public class CompanyDAO extends DAO{
 	public List<Company> getCompanyList() {
 		List<Company> resultList = new ArrayList<Company>();
 		
-		try (Connection conn = DriverManager.getConnection(url, user, passwd);
+		try (Connection conn = dataSource.getConnection();
 			 Statement state = conn.createStatement(
 								ResultSet.TYPE_SCROLL_INSENSITIVE,
 								ResultSet.CONCUR_UPDATABLE);){
@@ -68,7 +76,7 @@ public class CompanyDAO extends DAO{
 	}
 
 	public Optional<Company> getCompanyByID(long idL) {
-		try (Connection conn = DriverManager.getConnection(url, user, passwd);
+		try (Connection conn = dataSource.getConnection();
 			 PreparedStatement state = conn.prepareStatement(SQL_SELECT_COMPANY_BY_ID); ){	
 
 			state.setLong(1, idL);
