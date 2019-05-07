@@ -12,7 +12,6 @@ import javax.servlet.http.HttpServletResponse;
 import back.controller.Controller;
 import back.dto.CompanyDTO;
 import back.dto.ComputerDTO;
-import back.model.Computer;
 
 @WebServlet(urlPatterns = { "/editComputer" })
 public class EditComputer extends HttpServlet {
@@ -45,13 +44,18 @@ public class EditComputer extends HttpServlet {
 
 		String id = request.getParameter("id");
 		String name = request.getParameter("computerName");
-		String introduced = request.getParameter("introduced");
-		
-		System.out.println("introduced:"+introduced);
 		
 		// les dates marchent pas
+		String introduced = request.getParameter("introduced").trim();
+		String discontinued = request.getParameter("discontinued").trim();
 		
-		String discontinued = request.getParameter("discontinued");
+		Optional<String> intrOptional = Optional.ofNullable(introduced.equals("") ? null : introduced);
+		Optional<String> discOptional = Optional.ofNullable(discontinued.equals("") ? null : discontinued);
+
+		
+//		System.out.println("introduced:"+introduced);
+//		System.out.println("discontinued:"+discontinued);
+
 		String companyIdString = request.getParameter("companyId");
 		
 		Optional<ComputerDTO> optComputerDTO = controller.getComputerById(id);
@@ -59,8 +63,14 @@ public class EditComputer extends HttpServlet {
 		if(optComputerDTO.isPresent()) {
 			ComputerDTO computerDTO = optComputerDTO.get();
 			controller.updateName(computerDTO, name);
-			controller.updateComputerIntroduced(computerDTO, introduced);
-			controller.updateComputerDiscontinued(computerDTO, discontinued);
+			
+			
+			if(intrOptional.isPresent() && discOptional.isPresent()) 
+				controller.updateComputerIntroDiscon(computerDTO, intrOptional.get(), discOptional.get());
+			else if (intrOptional.isPresent())
+				controller.updateComputerIntroduced(computerDTO, intrOptional.get());
+			else if (discOptional.isPresent())
+				controller.updateComputerDiscontinued(computerDTO, discOptional.get());
 			
 			Optional<CompanyDTO> cOptional = controller.getCompanyById(companyIdString);
 			if(cOptional.isPresent())

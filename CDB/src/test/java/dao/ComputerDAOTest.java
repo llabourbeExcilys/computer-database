@@ -60,7 +60,7 @@ public class ComputerDAOTest {
 		if(!cReturned.isPresent())
 			Assert.fail();
 		
-		Assert.assertEquals("Test de l'ajout d'un computer",cReturned.get(), c);
+		Assert.assertEquals("Test de l'ajout d'un computer",c,cReturned.get());
 		
 	}
 	

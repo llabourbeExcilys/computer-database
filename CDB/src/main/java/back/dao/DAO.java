@@ -1,6 +1,7 @@
 package back.dao;
 
 import java.util.ResourceBundle;
+import java.util.TimeZone;
 
 public abstract class DAO{
 	
@@ -8,6 +9,8 @@ public abstract class DAO{
 	protected String url;
 	protected String user;
 	protected String passwd;
+	
+	static {TimeZone.setDefault(TimeZone.getTimeZone("UTC"));};
 	
 	public DAO() {
 		super();

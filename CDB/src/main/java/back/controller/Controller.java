@@ -72,8 +72,12 @@ public class Controller {
 	
 	
 	public Optional<CompanyDTO> getCompanyById(String id){
-		long idL = Long.parseLong(id);
-		return getCompanyById(idL);
+		try {
+			long idL = Long.parseLong(id);
+			return getCompanyById(idL);
+		} catch (NumberFormatException e) {
+			return Optional.empty();
+		}
 	}
 	
 	public Optional<CompanyDTO> getCompanyById(long id){
@@ -90,7 +94,12 @@ public class Controller {
 	}
 
 	public Optional<ComputerDTO> getComputerById(String id) {
-		long idL = Long.parseLong(id);
+		long idL;
+		try {
+			idL = Long.parseLong(id);
+		} catch (NumberFormatException e) {
+			return Optional.empty();
+		}
 		return getComputerById(idL);
 	}
 
@@ -121,7 +130,6 @@ public class Controller {
 	}
 
 	// Update
-	
 	private Computer getComputer(ComputerDTO computerDTO) {
 		Optional<Computer> cOptional = service.getComputerById(computerDTO.getId());
 		
@@ -158,9 +166,11 @@ public class Controller {
 		computerDTO.setLdIntroduced(introductionDate);
 		
 		ComputerValidator.validate(computerDTO);
-		
-		
+	
 		Computer computer = getComputer(computerDTO);
+		
+		computer.setLdIntroduced(introductionDate);
+		
 		service.update(computer);
 	}
 
@@ -171,6 +181,27 @@ public class Controller {
 		ComputerValidator.validate(computerDTO);
 	
 		Computer computer = getComputer(computerDTO);
+		
+		computer.setLdDiscontinued(discontDate);
+
+		service.update(computer);
+	}
+	
+	public void updateComputerIntroDiscon(ComputerDTO computerDTO, String intro, String discon) {
+		LocalDate introductionDate = ComputerValidator.checkAndCreateDate(intro);
+		LocalDate discontDate = ComputerValidator.checkAndCreateDate(discon);
+
+		
+		computerDTO.setLdIntroduced(introductionDate);
+		computerDTO.setLdDiscontinued(discontDate);
+
+		ComputerValidator.validate(computerDTO);
+	
+		Computer computer = getComputer(computerDTO);
+		
+		computer.setLdIntroduced(introductionDate);
+		computer.setLdDiscontinued(discontDate);
+
 		service.update(computer);
 	}
 

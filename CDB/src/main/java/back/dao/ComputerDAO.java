@@ -113,8 +113,8 @@ public class ComputerDAO extends DAO{
 					 										 Statement.RETURN_GENERATED_KEYS);) {	
 			
 			state.setString(1, computerDTO.getName());
-			state.setDate(2, computerDTO.getLdIntroduced() != null ? Date.valueOf(computerDTO.getLdIntroduced().plusDays(1)) : null);
-			state.setDate(3, computerDTO.getLdDiscontinued() != null ? Date.valueOf(computerDTO.getLdDiscontinued().plusDays(1)) : null);
+			state.setDate(2, computerDTO.getLdIntroduced() != null ? Date.valueOf(computerDTO.getLdIntroduced()) : null);
+			state.setDate(3, computerDTO.getLdDiscontinued() != null ? Date.valueOf(computerDTO.getLdDiscontinued()) : null);
 			state.setObject(4, computerDTO.getCompanyID());
 
 
@@ -227,6 +227,9 @@ public class ComputerDAO extends DAO{
 	public void update(Computer c) {
 		Date ldateIntroduction = c.getLdIntroduced() != null ? Date.valueOf(c.getLdIntroduced()) : null;
 		Date ldateDiscontinuation = c.getLdDiscontinued() != null ? Date.valueOf(c.getLdDiscontinued()) : null;
+		
+//		System.out.println("in dao,date intro:"+(ldateIntroduction!=null ? ldateIntroduction.toString() : "null"));
+//		System.out.println("in dao,date disco:"+(ldateDiscontinuation!=null ? ldateDiscontinuation.toString() : "null"));
 		
 		try (Connection conn = DriverManager.getConnection(url, user, passwd);
 			PreparedStatement state = conn.prepareStatement(SQL_UPDATE_COMPUTER);){	
