@@ -24,18 +24,10 @@ public class DeleteComputer extends HttpServlet{
 	}
 	
 	public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
 		String computerId = request.getParameter("selection");
-		
 		String[] reString = computerId.split(",");
-		
-		
 		Arrays.stream(reString).forEach(controller::deleteComputerById);
-		
-		//controller.deleteComputerById(computerId);
 		getServletContext().getRequestDispatcher("/dashboard").forward(request, response);
-
-		
 	}
 	
 }
