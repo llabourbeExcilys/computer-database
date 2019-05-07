@@ -226,7 +226,7 @@ public class ComputerDAO {
 						 										 ResultSet.TYPE_SCROLL_INSENSITIVE,
 						 										ResultSet.CONCUR_UPDATABLE);){	
 
-				System.out.println("request:"+SQL_REQUEST);
+				//System.out.println("request:"+SQL_REQUEST);
 			
 				state.setInt(1, nbByPage);
 				state.setInt(2, (page-1)*nbByPage);

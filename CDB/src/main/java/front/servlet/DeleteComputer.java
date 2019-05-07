@@ -1,6 +1,7 @@
 package front.servlet;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -24,10 +25,14 @@ public class DeleteComputer extends HttpServlet{
 	
 	public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		String computerId = request.getParameter("selection");	
+		String computerId = request.getParameter("selection");
 		
-		controller.deleteComputerById(computerId);
+		String[] reString = computerId.split(",");
 		
+		
+		Arrays.stream(reString).forEach(controller::deleteComputerById);
+		
+		//controller.deleteComputerById(computerId);
 		getServletContext().getRequestDispatcher("/dashboard").forward(request, response);
 
 		
