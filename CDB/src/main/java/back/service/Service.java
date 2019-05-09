@@ -17,18 +17,13 @@ public class Service {
 	private static ComputerDAO computerDAO;
 	
 
-	
-	
-	/** Constructeur privé */
     private Service(){
     	companyDAO = CompanyDAO.getInstance();
     	computerDAO = ComputerDAO.getInstance();
     }
      
-    /** Instance unique non préinitialisée */
     private static Service INSTANCE = null;
      
-    /** Point d'accès pour l'instance unique du singleton */
     public static synchronized Service getInstance(){
         if (INSTANCE == null)
         	INSTANCE = new Service(); 
@@ -71,8 +66,6 @@ public class Service {
 		return computerDAO.getComputerPage(page,nbByPage,field,order);
 	}
 	
-
-
 	// Update
 	
 	public void update(Computer c){

@@ -31,14 +31,14 @@ public class DashBoard extends HttpServlet {
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
 		String orderString = request.getParameter("order");
+		String nbByPageString = request.getParameter("nbByPage");
+		String pageString = request.getParameter("page");
+		String computerSearch =  request.getParameter("search");
+
 		if(orderString!=null)
 			order = orderString;
-		
-		String nbByPageString = request.getParameter("nbByPage");
 		if(nbByPageString!=null)
 			nbByPage = Integer.parseInt(nbByPageString);
-		
-		String pageString = request.getParameter("page");
 		if(pageString!=null)
 			page = Integer.parseInt(pageString);
 
@@ -46,11 +46,10 @@ public class DashBoard extends HttpServlet {
 		int lastPage = (int) Math.ceil(nbComputerFound/(double)nbByPage) ;
 		
 		
-		List<ComputerDTO> computers = new ArrayList<>();
-		String computerSearch =  request.getParameter("search");
+		List<ComputerDTO> computers	= new ArrayList<>();
 		if(computerSearch!=null) {
 			Optional<ComputerDTO> optComputer = controller.getComputerByName(computerSearch);
-			if (optComputer.isPresent()) 
+			if (optComputer.isPresent())
 				computers.add(optComputer.get());
 		}else {
 			if(order == null)
@@ -60,8 +59,6 @@ public class DashBoard extends HttpServlet {
 			else if(order.equals("desc"))
 				computers = controller.getComputerPage(page, nbByPage,SortingField.NAME, SortingOrder.DESC);
 		}
-		
-		//System.out.println(computers.toString());
 		
 		request.setAttribute("nbComputerFound", nbComputerFound);
 		request.setAttribute("lastPage",lastPage);

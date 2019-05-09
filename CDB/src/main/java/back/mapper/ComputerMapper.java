@@ -71,8 +71,8 @@ public class ComputerMapper {
 			if(computer.getId() != 0L && computer.getName() !=null)
 				return Optional.ofNullable(computer);
 		} catch (SQLException e) {
-			e.printStackTrace();
-			logger.error("An exception occured",e);
+			logger.debug(e.getMessage());
+			logger.error(e.getMessage());
 		}
 		return Optional.empty();
 	}

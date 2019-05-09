@@ -25,11 +25,6 @@ import back.model.Computer;
 import ch.qos.logback.classic.Logger;
 
 public class ComputerDAO {
-
-	private static Logger logger = (Logger) LoggerFactory.getLogger( ComputerDAO.class );
-
-	static {TimeZone.setDefault(TimeZone.getTimeZone("UTC"));};
-
 	
 	private final static String SQL_SELECT_ALL_COMPUTER = 
 			"SELECT "
@@ -62,7 +57,8 @@ public class ComputerDAO {
 	private final static String SQL_UPDATE_COMPUTER = 
 			"UPDATE "
 			+ 	"computer " 
-		    +"SET name = ?, "
+		    +"SET "
+		    +	"name = ?, "
 			+	"introduced = ?, "
 			+	"discontinued = ?, "
 			+	"company_id = ? "
@@ -87,26 +83,24 @@ public class ComputerDAO {
 	
 	private static final String SQL_SELECT_COMPUTER_BY_NAME = 
 			SQL_SELECT_ALL_COMPUTER+
-			"WHERE C.name = ?";
+			"WHERE "
+			+	"C.name = ?";
 
 	
+
 	private static ComputerMapper computerMapper;
 	private static DataSource dataSource;
+    private static ComputerDAO INSTANCE = null;
+	private static Logger logger = (Logger) LoggerFactory.getLogger( ComputerDAO.class );
+
 	static {TimeZone.setDefault(TimeZone.getTimeZone("UTC"));};
 
 	
-	
-	/** Constructeur privé */
-    private ComputerDAO(){}
+	private ComputerDAO(){}
      
-    /** Instance unique non préinitialisée */
-    private static ComputerDAO INSTANCE = null;
-     
-    /** Point d'accès pour l'instance unique du singleton */
     public static synchronized ComputerDAO getInstance(){
     	computerMapper = ComputerMapper.getInstance();
     	dataSource = ConnexionManager.getDataSource();
-
         if (INSTANCE == null)
         	INSTANCE = new ComputerDAO(); 
         
@@ -121,13 +115,10 @@ public class ComputerDAO {
 			 PreparedStatement state = conn.prepareStatement(SQL_CREATE_COMPUTER, 
 					 										 Statement.RETURN_GENERATED_KEYS);) {	
 			
-			
-			
 			state.setString(1, computerDTO.getName());
 			state.setDate(2, computerDTO.getLdIntroduced() != null ? Date.valueOf(computerDTO.getLdIntroduced()) : null);
 			state.setDate(3, computerDTO.getLdDiscontinued() != null ? Date.valueOf(computerDTO.getLdDiscontinued()) : null);
 			state.setObject(4, computerDTO.getCompanyID());
-
 
 			state.executeUpdate();
 			ResultSet generatedKeys = state.getGeneratedKeys();
@@ -135,7 +126,8 @@ public class ComputerDAO {
 			long id = generatedKeys.getLong(1);
 			return id;
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.debug(e.getMessage());
+			logger.error(e.getMessage());
 		}
 		return -1;
 	}
@@ -146,10 +138,10 @@ public class ComputerDAO {
 	public int getNumberOfComputer() {
 		int size = 0;
 		try (Connection conn = dataSource.getConnection();
-				 Statement state = conn.createStatement();) {	
+			 Statement state = conn.createStatement();) {	
 						
-				ResultSet result = state.executeQuery(SQL_COUNT_ALL_COMPUTER);
-				return result.next() ? result.getInt("count") : 0;
+			ResultSet result = state.executeQuery(SQL_COUNT_ALL_COMPUTER);
+			return result.next() ? result.getInt("count") : 0;
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -172,26 +164,25 @@ public class ComputerDAO {
 					resultList.add(computer.get());				
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.debug(e.getMessage());
+			logger.error(e.getMessage());
 		} 
 		return resultList;
 	}
 
 
 	public Optional<Computer> getComputerById(long idL) {
-
 		try (Connection conn = dataSource.getConnection();
 			 PreparedStatement state = conn.prepareStatement(SQL_SELECT_COMPUTER_BY_ID);){	
 
 			state.setLong(1, idL);
 			ResultSet result = state.executeQuery();
-			
-			return computerMapper.getComputer(result);
 
+			return computerMapper.getComputer(result);
 		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		
+			logger.debug(e.getMessage());
+			logger.error(e.getMessage());
+		}		
 		return Optional.empty();
 	}
 	
@@ -203,16 +194,17 @@ public class ComputerDAO {
 				ResultSet result = state.executeQuery();
 				return computerMapper.getComputer(result);
 			} catch (SQLException e) {
-				e.printStackTrace();
+				logger.debug(e.getMessage());
+				logger.error(e.getMessage());
 			}
 			return Optional.empty();
 	}
 
 	
 	public List<Computer> getComputerPage(int page, int nbByPage, SortingField field, SortingOrder order) {
-		String requestString = SQL_SELECT_COMPUTER_PAGE.
-				replace("fieldToReplace", field.name()).
-				replace("OrderToReplace", order.name());
+		String requestString = SQL_SELECT_COMPUTER_PAGE
+				.replace("fieldToReplace", field.getIdentifier())
+				.replace("OrderToReplace", order.name());
 		 return getComputerPage(page, nbByPage, requestString);
 	}
 	
@@ -222,17 +214,11 @@ public class ComputerDAO {
 				 PreparedStatement state = conn.prepareStatement(SQL_REQUEST,
 						 										 ResultSet.TYPE_SCROLL_INSENSITIVE,
 						 										ResultSet.CONCUR_UPDATABLE);){	
-
-				//System.out.println("request:"+SQL_REQUEST);
 			
 				state.setInt(1, nbByPage);
 				state.setInt(2, (page-1)*nbByPage);
-				
-				
-				//System.out.println("page:"+page+",nbByPage:"+nbByPage+",offset:"+(page-1)*nbByPage);
-
 				ResultSet result = state.executeQuery();
-				
+		
 				while(result.next()){
 					result.previous();
 					Optional<Computer> computer = computerMapper.getComputer(result);
@@ -240,7 +226,8 @@ public class ComputerDAO {
 						resultList.add(computer.get());				
 				}
 			} catch (SQLException e) {
-				e.printStackTrace();
+				logger.debug(e.getMessage());
+				logger.error(e.getMessage());
 			}
 		return resultList;
 	}
@@ -252,9 +239,6 @@ public class ComputerDAO {
 	public void update(Computer c) {
 		Date ldateIntroduction = c.getLdIntroduced() != null ? Date.valueOf(c.getLdIntroduced()) : null;
 		Date ldateDiscontinuation = c.getLdDiscontinued() != null ? Date.valueOf(c.getLdDiscontinued()) : null;
-		
-//		System.out.println("in dao,date intro:"+(ldateIntroduction!=null ? ldateIntroduction.toString() : "null"));
-//		System.out.println("in dao,date disco:"+(ldateDiscontinuation!=null ? ldateDiscontinuation.toString() : "null"));
 		
 		try (Connection conn = dataSource.getConnection();
 			PreparedStatement state = conn.prepareStatement(SQL_UPDATE_COMPUTER);){	
@@ -269,48 +253,32 @@ public class ComputerDAO {
 				state.setNull(4, java.sql.Types.BIGINT);
 
 			state.setLong(5, c.getId());
+			
 			int resultCode = state.executeUpdate();
 			if(resultCode == 0) 
 				throw new NotFoundException("Id not found");
-			
 		}catch ( SQLIntegrityConstraintViolationException e) {
 				throw new BadCompanyIdException("There is no company with id "+c.getCompany().getId());
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.debug(e.getMessage());
+			logger.error(e.getMessage());
 		}
-		
 	}
-	
-
 
 	// Delete
 	
 	public void deleteComputerById(long id) {
 		try (Connection conn = dataSource.getConnection();
 			 PreparedStatement state = conn.prepareStatement(SQL_DELETE_COMPUTER_BY_ID);){
-
-			//Création d'un objet prepared statement
-			//On renseigne le paremetre
+			
 			state.setLong(1, id);
 			int resultCode = state.executeUpdate();			
 			if(resultCode == 0) 
 				throw new NotFoundException("There is no computer with id "+id);
-			
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.debug(e.getMessage());
+			logger.error(e.getMessage());
 		}
 	}
-
-
-
-
-
-	
-
-
-	
-
-
-
 
 }

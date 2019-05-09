@@ -12,30 +12,26 @@ public class ComputerValidator {
 	public static ComputerDTO validate(String name, Optional<String> dateIntroduction,
 			Optional<String> dateDiscontinued, Optional<String> companyID) {
 
-		ComputerDTO computerDTO = new ComputerDTO();
-
 		name = name.trim();
 		if (name.equals(""))
 			throw new BadInputException("Le nom ne peut etre vide");
+		
+		ComputerDTO computerDTO = new ComputerDTO();
 		computerDTO.setName(name);
 
 		if (dateIntroduction.isPresent())
 			computerDTO.setLdIntroduced(checkAndCreateDate(dateIntroduction.get()));
-
 		if (dateDiscontinued.isPresent())
 			computerDTO.setLdDiscontinued(checkAndCreateDate(dateDiscontinued.get()));
-
 		if (companyID.isPresent())
 			computerDTO.setCompanyID(checkCompanyIdFormat(companyID.get()));
 
 		checkDateOrder(computerDTO);
-
 		return computerDTO;
 	}
 
 	public static void validate(ComputerDTO computerDTO) {
 		checkDateOrder(computerDTO);
-
 		if (computerDTO.getCompanyID() != null)
 			checkCompanyIdFormat(computerDTO.getCompanyID());
 	}

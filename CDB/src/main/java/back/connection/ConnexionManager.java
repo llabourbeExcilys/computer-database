@@ -9,7 +9,6 @@ import com.zaxxer.hikari.HikariDataSource;
 
 public class ConnexionManager {
 	
-	
 	private static DataSource dataDource;
 	
 	public static DataSource getDataSource() {

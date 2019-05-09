@@ -12,9 +12,12 @@ import java.util.TimeZone;
 
 import javax.sql.DataSource;
 
+import org.slf4j.LoggerFactory;
+
 import back.connection.ConnexionManager;
 import back.mapper.CompanyMapper;
 import back.model.Company;
+import ch.qos.logback.classic.Logger;
 
 public class CompanyDAO{
 
@@ -49,6 +52,8 @@ public class CompanyDAO{
 	private static CompanyMapper companyMapper;
     private static CompanyDAO INSTANCE = null;
 	private static DataSource dataSource;
+	private static Logger logger = (Logger) LoggerFactory.getLogger(CompanyDAO.class );
+
 
     static {TimeZone.setDefault(TimeZone.getTimeZone("UTC"));};
 
@@ -84,7 +89,8 @@ public class CompanyDAO{
 					resultList.add(company.get());				
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.debug(e.getMessage());
+			logger.error(e.getMessage());
 		}
 		return resultList;
 	}
@@ -98,7 +104,8 @@ public class CompanyDAO{
 			
 			return companyMapper.getCompany(result);
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.debug(e.getMessage());
+			logger.error(e.getMessage());
 		}
 		return Optional.empty();
 	}
@@ -119,7 +126,8 @@ public class CompanyDAO{
 			conn.commit();
 			conn.setAutoCommit(true);	
 			} catch (SQLException e) {
-				e.printStackTrace();
+				logger.debug(e.getMessage());
+				logger.error(e.getMessage());
 			}
 	}
 	

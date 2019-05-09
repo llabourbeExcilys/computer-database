@@ -7,9 +7,12 @@ public enum SortingField {
 	DATE_DISCONTINUATION("discontinued"),
 	COMPANY("company_name");
 	
-	private final String name;
+	private final String identifier;
 	
-	private SortingField(String name) {
-		this.name=name;
+	private SortingField(String identifier) {
+		this.identifier=identifier;
 	}
+
+	public String getIdentifier() {return identifier;}
+	
 }

@@ -5,6 +5,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import back.dao.SortingField;
 import back.dao.SortingOrder;
 import back.dto.CompanyDTO;
@@ -18,10 +21,11 @@ import back.model.Company;
 import back.model.Computer;
 import back.service.Service;
 import back.validator.ComputerValidator;
+import main.Main;
 
 public class Controller {
 	
-	//private static Logger logger = LoggerFactory.getLogger( Main.class );
+	private static Logger logger = LoggerFactory.getLogger( Controller.class );
 
 
 	private static Service service;
@@ -78,6 +82,8 @@ public class Controller {
 			long idL = Long.parseLong(id);
 			return getCompanyById(idL);
 		} catch (NumberFormatException e) {
+			logger.debug(e.getMessage());
+			logger.warn(e.getMessage());
 			return Optional.empty();
 		}
 	}
@@ -88,9 +94,7 @@ public class Controller {
 	}
 	
 	public List<ComputerDTO> getComputerList() {		
-		
-		return service.getComputerList()
-				.stream()
+		return service.getComputerList().stream()
 				.map(computerMapper::computerToDTO)
 				.collect(Collectors.toList());
 	}
@@ -99,10 +103,10 @@ public class Controller {
 		long idL;
 		try {
 			idL = Long.parseLong(id);
+			return getComputerById(idL);
 		} catch (NumberFormatException e) {
 			return Optional.empty();
-		}
-		return getComputerById(idL);
+		}		
 	}
 
 	public Optional<ComputerDTO> getComputerById(long idL) {
@@ -117,7 +121,6 @@ public class Controller {
 	
 	public List<ComputerDTO> getComputerPage(int page, int nbByPage, SortingField field, SortingOrder order) {
 		checkPage(page, nbByPage);
-		
 		List<Computer> computers = service.getComputerPage(page,nbByPage, field, order);
 		return computers.stream()
 				.map(p -> computerMapper.computerToDTO(p))
@@ -139,15 +142,12 @@ public class Controller {
 	// Update
 	private Computer getComputer(ComputerDTO computerDTO) {
 		Optional<Computer> cOptional = service.getComputerById(computerDTO.getId());
-		
 		if(!cOptional.isPresent())
 			throw new ComputerDtoNotMatchingException("The computer DTO has no match in database");
-		
 		return cOptional.get();
 	}
 	
 	public void updateName(ComputerDTO computerDTO, String name) {
-		
 		Computer computer = getComputer(computerDTO);
 		computer.setName(name);
 		service.update(computer);
@@ -168,29 +168,21 @@ public class Controller {
 
 	public void updateComputerIntroduced(ComputerDTO computerDTO, String date) {
 		LocalDate introductionDate = ComputerValidator.checkAndCreateDate(date);		
-		
-		
 		computerDTO.setLdIntroduced(introductionDate);
-		
 		ComputerValidator.validate(computerDTO);
 	
 		Computer computer = getComputer(computerDTO);
-		
 		computer.setLdIntroduced(introductionDate);
-		
 		service.update(computer);
 	}
 
 	public void updateComputerDiscontinued(ComputerDTO computerDTO, String date) {
 		LocalDate discontDate = ComputerValidator.checkAndCreateDate(date);
 		computerDTO.setLdDiscontinued(discontDate);
-
 		ComputerValidator.validate(computerDTO);
 	
 		Computer computer = getComputer(computerDTO);
-		
 		computer.setLdDiscontinued(discontDate);
-
 		service.update(computer);
 	}
 	
@@ -198,21 +190,16 @@ public class Controller {
 		LocalDate introductionDate = ComputerValidator.checkAndCreateDate(intro);
 		LocalDate discontDate = ComputerValidator.checkAndCreateDate(discon);
 
-		
 		computerDTO.setLdIntroduced(introductionDate);
 		computerDTO.setLdDiscontinued(discontDate);
 
 		ComputerValidator.validate(computerDTO);
 	
 		Computer computer = getComputer(computerDTO);
-		
 		computer.setLdIntroduced(introductionDate);
 		computer.setLdDiscontinued(discontDate);
-
 		service.update(computer);
 	}
-
-	
 
 	// Delete
 
@@ -230,11 +217,6 @@ public class Controller {
 	// Getter Setter
 	public static Service getService() {return service;}
 	public static void setService(Service service) {Controller.service = service;}
-
-
-
-
-
 
 
 }

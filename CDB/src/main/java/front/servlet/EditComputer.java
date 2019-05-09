@@ -21,18 +21,13 @@ public class EditComputer extends HttpServlet {
 	private Controller controller = Controller.getInstance();
 
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
 		String idToEdit = request.getParameter("idToEdit");
-		
 		Optional<ComputerDTO> computerOptional = controller.getComputerById(idToEdit);
-		
-		ComputerDTO computer;
-		
+			
 		if(computerOptional.isPresent()) {
-			computer = computerOptional.get();
+			ComputerDTO computer = computerOptional.get();
 			request.setAttribute("computer", computer);
 			request.setAttribute("companies", controller.getCompanyList());
-			
 			
 			getServletContext().getRequestDispatcher("/WEB-INF/views/editComputer.jsp").forward(request, response);
 		}else {
@@ -41,29 +36,19 @@ public class EditComputer extends HttpServlet {
 	}
 
 	public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
 		String id = request.getParameter("id");
 		String name = request.getParameter("computerName");
-		
-		// les dates marchent pas
 		String introduced = request.getParameter("introduced").trim();
 		String discontinued = request.getParameter("discontinued").trim();
-		
-		Optional<String> intrOptional = Optional.ofNullable(introduced.equals("") ? null : introduced);
-		Optional<String> discOptional = Optional.ofNullable(discontinued.equals("") ? null : discontinued);
-
-		
-//		System.out.println("introduced:"+introduced);
-//		System.out.println("discontinued:"+discontinued);
-
 		String companyIdString = request.getParameter("companyId");
-		
+
+		Optional<String> intrOptional = Optional.ofNullable(introduced.equals("") ? null : introduced);
+		Optional<String> discOptional = Optional.ofNullable(discontinued.equals("") ? null : discontinued);		
 		Optional<ComputerDTO> optComputerDTO = controller.getComputerById(id);
 		
 		if(optComputerDTO.isPresent()) {
 			ComputerDTO computerDTO = optComputerDTO.get();
 			controller.updateName(computerDTO, name);
-			
 			
 			if(intrOptional.isPresent() && discOptional.isPresent()) 
 				controller.updateComputerIntroDiscon(computerDTO, intrOptional.get(), discOptional.get());
@@ -76,10 +61,7 @@ public class EditComputer extends HttpServlet {
 			if(cOptional.isPresent())
 				controller.updateComputerCompany(computerDTO, companyIdString);
 		}
-		
-		
 		getServletContext().getRequestDispatcher("/dashboard").forward(request, response);
-
 	}
 
 }

@@ -22,8 +22,6 @@ public class Computer {
 		this.company = computerBuilder.getCompany();		
 	}
 
-
-
 	@Override
 	public String toString() {
 		return "{\n"+
@@ -34,8 +32,6 @@ public class Computer {
 				(company!=null?"\t\tcomputer:"+company+"\n":"")+
 				"}";
 	}
-	
-	
 	
 	@Override
 	public int hashCode() {
@@ -48,8 +44,6 @@ public class Computer {
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
 		return result;
 	}
-
-
 
 	@Override
 	public boolean equals(Object obj) {
@@ -84,8 +78,6 @@ public class Computer {
 			return false;
 		return true;
 	}
-
-
 
 	// GETTER AND SETTER
 	public long getId() {return id;}
