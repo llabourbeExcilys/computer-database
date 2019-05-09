@@ -23,13 +23,15 @@ public class CompanyDAO{
 
 	private final static String SQL_SELECT_ALL_COMPANY = 
 			"SELECT "
-			+	"* "
+			+	"id, "
+			+	"name "
 			+"FROM "
 			+	"company";
 	
 	private final static String SQL_SELECT_COMPANY_BY_ID = 
 			"SELECT "
-			+	"* "
+			+	"id, "
+			+	"name "
 			+"FROM "
 			+	"company "
 			+"WHERE "
