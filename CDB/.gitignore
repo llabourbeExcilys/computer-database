@@ -7,3 +7,5 @@ resources.config.properties
 .project
 
 /log_files
+
+logFile.2019-05-02.log
