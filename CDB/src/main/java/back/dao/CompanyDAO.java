@@ -23,6 +23,7 @@ public class CompanyDAO{
 			+	"* "
 			+"FROM "
 			+	"company";
+	
 	private final static String SQL_SELECT_COMPANY_BY_ID = 
 			"SELECT "
 			+	"* "
@@ -30,6 +31,20 @@ public class CompanyDAO{
 			+	"company "
 			+"WHERE "
 			+	"company.id = ?";
+	
+	private static final String SQL_DELETE_COMPUTER_BY_ID = 
+			"DELETE FROM "
+			+	"computer "
+			+"WHERE "
+			+	"company_id = ?";
+	
+	
+	private static final String SQL_DELETE_COMPANY_BY_ID =
+			"DELETE FROM "
+			+	"company "
+			+"WHERE "
+			+	"id = ?";
+
 
 	private static CompanyMapper companyMapper;
     private static CompanyDAO INSTANCE = null;
@@ -37,7 +52,6 @@ public class CompanyDAO{
 
     static {TimeZone.setDefault(TimeZone.getTimeZone("UTC"));};
 
-    
     
     private CompanyDAO(){
 		companyMapper = CompanyMapper.getInstance();
@@ -75,7 +89,7 @@ public class CompanyDAO{
 		return resultList;
 	}
 
-	public Optional<Company> getCompanyByID(long idL) {
+	public Optional<Company> getCompanyById(long idL) {
 		try (Connection conn = dataSource.getConnection();
 			 PreparedStatement state = conn.prepareStatement(SQL_SELECT_COMPANY_BY_ID); ){	
 
@@ -83,13 +97,31 @@ public class CompanyDAO{
 			ResultSet result = state.executeQuery();
 			
 			return companyMapper.getCompany(result);
-			
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		return Optional.empty();
 	}
-
-
+	
+	public void deleteCompanyById(long idL) {
+		try (Connection conn = dataSource.getConnection();
+			 PreparedStatement deleteComputerPreparedStatement = conn.prepareStatement(SQL_DELETE_COMPUTER_BY_ID);
+			 PreparedStatement deleteCompanyPreparedStatement = conn.prepareStatement(SQL_DELETE_COMPANY_BY_ID)){	
+			
+			conn.setAutoCommit(false);
+			
+			deleteComputerPreparedStatement.setLong(1, idL);
+			deleteComputerPreparedStatement.executeUpdate();
+				
+			deleteCompanyPreparedStatement.setLong(1, idL);
+			deleteCompanyPreparedStatement.executeUpdate();
+			
+			conn.commit();
+			conn.setAutoCommit(true);	
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+	}
 	
 }
+

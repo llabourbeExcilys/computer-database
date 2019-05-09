@@ -220,6 +220,12 @@ public class Controller {
 		long idL = Long.parseLong(id);
 		service.deleteComputerById(idL);
 	}
+	
+	
+	public void deleteCompanyById(String id) {
+		long idL = Long.parseLong(id);
+		service.deleteCompanyById(idL);
+	}
 
 	// Getter Setter
 	public static Service getService() {return service;}

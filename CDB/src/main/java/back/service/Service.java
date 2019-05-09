@@ -50,13 +50,21 @@ public class Service {
 	public List<Company> getCompanyList() {
 		return companyDAO.getCompanyList();
 	}
+	
+	public int getNumberOfComputer() {
+		return computerDAO.getNumberOfComputer();
+	}
 
 	public Optional<Computer> getComputerById(long idL) {
 		return computerDAO.getComputerById(idL);
 	}
 	
+	public Optional<Computer> getComputerByName(String computerSearch) {
+		return computerDAO.getComputerByName(computerSearch);
+	}
+	
 	public Optional<Company> getCompanyById(long idL) {
-		return companyDAO.getCompanyByID(idL);
+		return companyDAO.getCompanyById(idL);
 	}
 		
 	public List<Computer> getComputerPage(int page, int nbByPage, SortingField field, SortingOrder order) {
@@ -73,23 +81,12 @@ public class Service {
 	
 	// Delete
 
-	public void deleteComputerById(long idL2) {
-		computerDAO.deleteComputerById(idL2);
+	public void deleteComputerById(long id) {
+		computerDAO.deleteComputerById(id);
 	}
 
-	public int getNumberOfComputer() {
-		return computerDAO.getNumberOfComputer();
+	public void deleteCompanyById(Long id) {
+		companyDAO.deleteCompanyById(id);
 	}
-
-	public Optional<Computer> getComputerByName(String computerSearch) {
-		return computerDAO.getComputerByName(computerSearch);
-	}
-
-
-
-
-
-
-	
 
 }

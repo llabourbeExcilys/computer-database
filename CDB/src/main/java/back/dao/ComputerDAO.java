@@ -89,9 +89,6 @@ public class ComputerDAO {
 			SQL_SELECT_ALL_COMPUTER+
 			"WHERE C.name = ?";
 
-
-
-
 	
 	private static ComputerMapper computerMapper;
 	private static DataSource dataSource;

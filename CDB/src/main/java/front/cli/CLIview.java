@@ -65,6 +65,7 @@ public class CLIview {
 						+  "5.......Delete a computer\n"
 						+  "6.......Update a computer\n"
 						+  "7.......Show a page of computer\n"
+						+  "8.......Delete a company\n"
 						+  "exit....Exit\n");
 	}
 	
@@ -113,6 +114,12 @@ public class CLIview {
 				String sNumPage = sc.nextLine();
 				int iNumPage = Integer.parseInt(sNumPage);
 				showList(controller.getComputerPage(iNumPage, 10,SortingField.NAME,SortingOrder.ASC));
+				break;
+				
+			case "8":
+				System.out.print("id of company to delete ?\n->");
+				id = sc.nextLine(); 
+				controller.deleteCompanyById(id);
 				break;
 			case "exit": 
 				System.out.println("Goodbye !\n");
