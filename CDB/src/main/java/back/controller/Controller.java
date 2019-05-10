@@ -14,6 +14,7 @@ import back.dto.CompanyDTO;
 import back.dto.ComputerDTO;
 import back.exception.BadCompanyIdException;
 import back.exception.ComputerDtoNotMatchingException;
+import back.exception.DateFormatException;
 import back.exception.RequestedPageException;
 import back.mapper.CompanyMapper;
 import back.mapper.ComputerMapper;
@@ -31,7 +32,8 @@ public class Controller {
 	private static Service service;
 	private static CompanyMapper companyMapper;
 	private static ComputerMapper computerMapper;
-
+	private static ComputerValidator computerValidator;
+	
 	/** Constructeur privé */
     private Controller(){}
      
@@ -43,6 +45,8 @@ public class Controller {
     	service = Service.getInstance();
     	companyMapper = CompanyMapper.getInstance();
     	computerMapper = ComputerMapper.getInstance();
+    	computerValidator = ComputerValidator.getInstance();
+
         if (INSTANCE == null)
         	INSTANCE = new Controller(); 
         
@@ -56,13 +60,32 @@ public class Controller {
 							Optional<String> dateDiscontinued,
 							Optional<String> companyID) {
 		
-		ComputerDTO computerDTO;
+		ComputerDTO computerDTO = new ComputerDTO();
 		
-		computerDTO = ComputerValidator.validate(name,
-					dateIntroduction,
-					dateDiscontinued,
-					companyID);
-	
+		//Set name
+		computerDTO.setName(name);
+		//Set date of introduction
+		if(dateIntroduction.isPresent()) {
+			LocalDate ldIntro = checkAndCreateDate(dateIntroduction.get());
+			computerDTO.setLdIntroduced(ldIntro);
+		}
+		//Set date of discontinuation
+		if(dateDiscontinued.isPresent()) {
+			LocalDate ldDisco = checkAndCreateDate(dateDiscontinued.get());
+			computerDTO.setLdDiscontinued(ldDisco);
+		}
+		//Set company id and name
+		if(companyID.isPresent()) {
+			String companyIdString = companyID.get();
+			long idL = Long.parseLong(companyIdString);
+			Optional<Company> companyById = service.getCompanyById(idL);
+			if(companyById.isPresent()) {
+				computerDTO.setCompanyID(idL);
+				computerDTO.setCompanyName(companyById.get().getName());
+			}
+		}
+		computerValidator.validate(computerDTO);
+		
 		return service.addComputer(computerDTO);
 	}
 
@@ -166,10 +189,10 @@ public class Controller {
 		}			
 	}
 
-	public void updateComputerIntroduced(ComputerDTO computerDTO, String date) {
-		LocalDate introductionDate = ComputerValidator.checkAndCreateDate(date);		
+	public void updateComputerIntroduced(ComputerDTO computerDTO, String date) {		
+		LocalDate introductionDate = checkAndCreateDate(date);		
 		computerDTO.setLdIntroduced(introductionDate);
-		ComputerValidator.validate(computerDTO);
+		computerValidator.validate(computerDTO);
 	
 		Computer computer = getComputer(computerDTO);
 		computer.setLdIntroduced(introductionDate);
@@ -177,9 +200,9 @@ public class Controller {
 	}
 
 	public void updateComputerDiscontinued(ComputerDTO computerDTO, String date) {
-		LocalDate discontDate = ComputerValidator.checkAndCreateDate(date);
+		LocalDate discontDate = checkAndCreateDate(date);
 		computerDTO.setLdDiscontinued(discontDate);
-		ComputerValidator.validate(computerDTO);
+		computerValidator.validate(computerDTO);
 	
 		Computer computer = getComputer(computerDTO);
 		computer.setLdDiscontinued(discontDate);
@@ -187,13 +210,13 @@ public class Controller {
 	}
 	
 	public void updateComputerIntroDiscon(ComputerDTO computerDTO, String intro, String discon) {
-		LocalDate introductionDate = ComputerValidator.checkAndCreateDate(intro);
-		LocalDate discontDate = ComputerValidator.checkAndCreateDate(discon);
+		LocalDate introductionDate = checkAndCreateDate(intro);
+		LocalDate discontDate = checkAndCreateDate(discon);
 
 		computerDTO.setLdIntroduced(introductionDate);
 		computerDTO.setLdDiscontinued(discontDate);
 
-		ComputerValidator.validate(computerDTO);
+		computerValidator.validate(computerDTO);
 	
 		Computer computer = getComputer(computerDTO);
 		computer.setLdIntroduced(introductionDate);
@@ -212,6 +235,34 @@ public class Controller {
 	public void deleteCompanyById(String id) {
 		long idL = Long.parseLong(id);
 		service.deleteCompanyById(idL);
+	}
+	
+	// Check if a string can be used to create a LocalDate
+	// Expected string format:yyyy-mm-dd
+	// Return the LocalDate if ok
+	// Throw DateFormatException exception if not ok
+	private LocalDate checkAndCreateDate(String date) {
+		String[] datePart = date.split("-");
+
+		if (datePart.length != 3)
+			throw new DateFormatException("invalide date format");
+
+		String year = datePart[0];
+		String month = datePart[1];
+		String day = datePart[2];
+
+		if (year.length() != 4)
+			throw new DateFormatException("invalide year length");
+		else if (month.length() != 2)
+			throw new DateFormatException("invalide month length");
+		else if (day.length() != 2)
+			throw new DateFormatException("invalide day length");
+
+		int yearI = Integer.parseInt(year);
+		int monthI = Integer.parseInt(month);
+		int dayI = Integer.parseInt(day);
+
+		return LocalDate.of(yearI, monthI, dayI);
 	}
 
 	// Getter Setter
