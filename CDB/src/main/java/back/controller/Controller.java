@@ -20,6 +20,7 @@ import back.mapper.CompanyMapper;
 import back.mapper.ComputerMapper;
 import back.model.Company;
 import back.model.Computer;
+import back.model.ComputerBuilder;
 import back.service.Service;
 import back.validator.ComputerValidator;
 
@@ -85,7 +86,16 @@ public class Controller {
 		}
 		computerValidator.validate(computerDTO);
 		
-		return service.addComputer(computerDTO);
+		Computer computer = new ComputerBuilder(computerDTO.getId(), computerDTO.getName())
+				.withIntroductionDate(computerDTO.getLdIntroduced())
+				.withdiscontinuationDate(computerDTO.getLdIntroduced())
+				.build();
+		
+		Optional<Company> companyOptional = service.getCompanyById(computer.getId());
+		if(companyOptional.isPresent())
+			computer.setCompany(companyOptional.get());
+		
+		return service.addComputer(computer);
 	}
 
 

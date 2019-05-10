@@ -38,24 +38,14 @@ public class ComputerDAOTest {
 	@Test
 	public void addComputerTest() {
 		long id = 21;
-		String name = "My Netronics computer2";
-		LocalDate intD = LocalDate.of(1990, 12, 12);
-		LocalDate disD = LocalDate.of(2000, 04, 24);
-		Company company = new Company(4,"Netronics");
 		
-		Computer c = new ComputerBuilder(id, name)
-				.withIntroductionDate(intD)
-				.withdiscontinuationDate(disD)
-				.withCompany(company).build();
+		Computer c = new ComputerBuilder(21, "My Netronics computer2")
+				.withIntroductionDate(LocalDate.of(1990, 12, 12))
+				.withdiscontinuationDate(LocalDate.of(2000, 04, 24))
+				.withCompany(new Company(4,"Netronics"))
+				.build();
 		
-		ComputerDTO computerDTO = new ComputerDTO();
-		computerDTO.setName(name);
-		computerDTO.setLdIntroduced(intD);
-		computerDTO.setLdDiscontinued(disD);
-		computerDTO.setCompanyName(company.getName());
-		computerDTO.setCompanyID(company.getId());
-		
-		computerDAO.addComputer(computerDTO);
+		computerDAO.addComputer(c);
 		
 		Optional<Computer> cReturned = computerDAO.getComputerById(id);
 		
@@ -63,7 +53,6 @@ public class ComputerDAOTest {
 			Assert.fail();
 		
 		Assert.assertEquals("Test de l'ajout d'un computer",c,cReturned.get());
-		
 	}
 	
 	@Test

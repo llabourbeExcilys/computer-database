@@ -17,7 +17,6 @@ import javax.sql.DataSource;
 import org.slf4j.LoggerFactory;
 
 import back.connection.ConnexionManager;
-import back.dto.ComputerDTO;
 import back.exception.BadCompanyIdException;
 import back.exception.NotFoundException;
 import back.mapper.ComputerMapper;
@@ -110,15 +109,15 @@ public class ComputerDAO {
 	// Create
 	
 
-	public long addComputer(ComputerDTO computerDTO) {
+	public long addComputer(Computer computer) {
 		try (Connection conn = dataSource.getConnection();
 			 PreparedStatement state = conn.prepareStatement(SQL_CREATE_COMPUTER, 
 					 										 Statement.RETURN_GENERATED_KEYS);) {	
 			
-			state.setString(1, computerDTO.getName());
-			state.setDate(2, computerDTO.getLdIntroduced() != null ? Date.valueOf(computerDTO.getLdIntroduced()) : null);
-			state.setDate(3, computerDTO.getLdDiscontinued() != null ? Date.valueOf(computerDTO.getLdDiscontinued()) : null);
-			state.setObject(4, computerDTO.getCompanyID());
+			state.setString(1, computer.getName());
+			state.setDate(2, computer.getLdIntroduced() != null ? Date.valueOf(computer.getLdIntroduced()) : null);
+			state.setDate(3, computer.getLdDiscontinued() != null ? Date.valueOf(computer.getLdDiscontinued()) : null);
+			state.setObject(4, computer.getCompany() != null ? computer.getCompany().getId() : null);
 
 			state.executeUpdate();
 			ResultSet generatedKeys = state.getGeneratedKeys();

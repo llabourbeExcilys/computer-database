@@ -9,6 +9,8 @@ import org.mockito.Mockito;
 import back.controller.Controller;
 import back.dto.ComputerDTO;
 import back.model.Company;
+import back.model.Computer;
+import back.model.ComputerBuilder;
 import back.service.Service;
 
 //@RunWith(MockitoJUnitRunner.class)
@@ -26,7 +28,7 @@ public class ControllerTest {
 		Company company = new Company(4,"Netronics");
 		
 		
-		Mockito.when(service.addComputer(new ComputerDTO())).thenReturn(21L);
+		Mockito.when(service.addComputer(new ComputerBuilder(-1L,"name").build())).thenReturn(21L);
 		
 		Controller.setService(service);
 		

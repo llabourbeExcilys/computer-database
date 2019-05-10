@@ -7,7 +7,6 @@ import back.dao.CompanyDAO;
 import back.dao.ComputerDAO;
 import back.dao.SortingField;
 import back.dao.SortingOrder;
-import back.dto.ComputerDTO;
 import back.model.Company;
 import back.model.Computer;
 
@@ -32,8 +31,8 @@ public class Service {
 	
 	// Create
 	
-	public long addComputer(ComputerDTO computerDTO) {
-		return computerDAO.addComputer(computerDTO);
+	public long addComputer(Computer computer) {
+		return computerDAO.addComputer(computer);
 	}
 	
 	// Read
