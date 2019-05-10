@@ -3,16 +3,10 @@ package back.validator;
 import java.time.LocalDate;
 import java.util.Optional;
 
-import org.eclipse.jdt.internal.compiler.ast.ThisReference;
-
-import back.controller.Controller;
-import back.dto.CompanyDTO;
 import back.dto.ComputerDTO;
 import back.exception.BadCompanyIdException;
 import back.exception.BadInputException;
 import back.exception.DateFormatException;
-import back.mapper.CompanyMapper;
-import back.mapper.ComputerMapper;
 import back.model.Company;
 import back.service.Service;
 

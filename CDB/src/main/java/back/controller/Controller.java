@@ -22,7 +22,6 @@ import back.model.Company;
 import back.model.Computer;
 import back.service.Service;
 import back.validator.ComputerValidator;
-import main.Main;
 
 public class Controller {
 	
@@ -143,19 +142,15 @@ public class Controller {
 	}
 	
 	public List<ComputerDTO> getComputerPage(int page, int nbByPage, SortingField field, SortingOrder order) {
-		checkPage(page, nbByPage);
-		List<Computer> computers = service.getComputerPage(page,nbByPage, field, order);
-		return computers.stream()
-				.map(p -> computerMapper.computerToDTO(p))
-				.collect(Collectors.toList());
-	}
-
-	
-	private void checkPage(int page, int nbByPage) {
 		if(page<=0)
 			throw new RequestedPageException("La page demandé ne peut pas etre negative ou egal a 0.");
 		if(nbByPage<0)
 			throw new RequestedPageException("Le nombre d'ordinateur par page ne peut etre negatif.");
+
+		List<Computer> computers = service.getComputerPage(page,nbByPage, field, order);
+		return computers.stream()
+				.map(p -> computerMapper.computerToDTO(p))
+				.collect(Collectors.toList());
 	}
 	
 	public int getNumberOfComputer() {
