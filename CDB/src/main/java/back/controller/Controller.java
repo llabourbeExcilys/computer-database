@@ -88,7 +88,7 @@ public class Controller {
 		
 		Computer computer = new ComputerBuilder(computerDTO.getId(), computerDTO.getName())
 				.withIntroductionDate(computerDTO.getLdIntroduced())
-				.withdiscontinuationDate(computerDTO.getLdIntroduced())
+				.withdiscontinuationDate(computerDTO.getLdDiscontinued())
 				.build();
 		
 		Optional<Company> companyOptional = service.getCompanyById(computer.getId());

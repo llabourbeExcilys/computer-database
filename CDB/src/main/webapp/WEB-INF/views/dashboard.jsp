@@ -15,7 +15,7 @@
 <body>
     <header class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
-            <a class="navbar-brand" href="dashboard?page=1"> Application - Computer Database </a>
+            <a class="navbar-brand" href="dashboard?page=1&field=default&order=default"> Application - Computer Database </a>
         </div>
     </header>
 
@@ -61,20 +61,25 @@
                         </th>
                         <th>
                             Computer name
-                            <a href="dashboard?order=asc">&#9650;</a>
-                            <a href="dashboard?order=desc">&#9660;</a>
-                        
+                            <a href="dashboard?field=name&order=asc">&#9650;</a>
+                            <a href="dashboard?field=name&order=desc">&#9660;</a>
                         </th>
                         <th>
                             Introduced date
+                            <a href="dashboard?field=introDate&order=asc">&#9650;</a>
+                            <a href="dashboard?field=introDate&order=desc">&#9660;</a>
                         </th>
                         <!-- Table header for Discontinued Date -->
                         <th>
                             Discontinued date
+                            <a href="dashboard?field=disconDate&order=asc">&#9650;</a>
+                            <a href="dashboard?field=disconDate&order=desc">&#9660;</a>
                         </th>
                         <!-- Table header for Company -->
                         <th>
                             Company
+                            <a href="dashboard?field=company&order=asc">&#9650;</a>
+                            <a href="dashboard?field=company&order=desc">&#9660;</a>
                         </th>
 
                     </tr>

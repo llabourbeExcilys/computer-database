@@ -26,17 +26,28 @@ public class DashBoard extends HttpServlet {
 	
 	private int nbByPage = 10;
 	private int page = 1;
-	private String order = null;
+	
+	
+	private String field = "";
+	private String order = "";
+
+	private SortingField sortingField;
+	private SortingOrder sortingOrder;
 	
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
+		String fieldString = request.getParameter("field");
 		String orderString = request.getParameter("order");
 		String nbByPageString = request.getParameter("nbByPage");
 		String pageString = request.getParameter("page");
 		String computerSearch =  request.getParameter("search");
 
-		if(orderString!=null)
+		if(fieldString!=null && !fieldString.equals(""))
+			field = fieldString;
+		
+		if(orderString!=null && !orderString.equals(""))
 			order = orderString;
+		
 		if(nbByPageString!=null)
 			nbByPage = Integer.parseInt(nbByPageString);
 		if(pageString!=null)
@@ -45,6 +56,18 @@ public class DashBoard extends HttpServlet {
 		int nbComputerFound = controller.getNumberOfComputer();
 		int lastPage = (int) Math.ceil(nbComputerFound/(double)nbByPage) ;
 		
+		switch (field) {
+			case "name": 		sortingField = SortingField.NAME; break;
+			case "introDate": 	sortingField = SortingField.DATE_INTRODUCTION; break;
+			case "disconDate":	sortingField = SortingField.DATE_DISCONTINUATION; break;
+			case "company":	  	sortingField = SortingField.COMPANY; break;
+			default: 			sortingField = SortingField.ID; break;
+		}
+		switch (order) {
+			case "asc": 	sortingOrder = SortingOrder.ASC; break;
+			case "desc":	sortingOrder = SortingOrder.DESC; break;
+			default: 		sortingOrder = SortingOrder.ASC; break;
+		}	
 		
 		List<ComputerDTO> computers	= new ArrayList<>();
 		if(computerSearch!=null) {
@@ -52,12 +75,7 @@ public class DashBoard extends HttpServlet {
 			if (optComputer.isPresent())
 				computers.add(optComputer.get());
 		}else {
-			if(order == null)
-				computers = controller.getComputerPage(page, nbByPage,SortingField.ID, SortingOrder.ASC);
-			else if(order.equals("asc"))
-				computers = controller.getComputerPage(page, nbByPage,SortingField.NAME, SortingOrder.ASC);
-			else if(order.equals("desc"))
-				computers = controller.getComputerPage(page, nbByPage,SortingField.NAME, SortingOrder.DESC);
+			computers = controller.getComputerPage(page, nbByPage,sortingField, sortingOrder);
 		}
 		
 		request.setAttribute("nbComputerFound", nbComputerFound);
