@@ -50,7 +50,8 @@ public class CLIview {
 			try {
 				TimeUnit.MILLISECONDS.sleep(700);
 			} catch (InterruptedException e) {
-				e.printStackTrace();
+				logger.debug("Exception occured",e);
+				logger.error("Exception occured",e);
 			}
 		}while(!exit);
 		sc.close();

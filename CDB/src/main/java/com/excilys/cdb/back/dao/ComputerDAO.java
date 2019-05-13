@@ -27,7 +27,7 @@ import ch.qos.logback.classic.Logger;
 @Component
 public class ComputerDAO {
 	
-	private final static String SQL_SELECT_ALL_COMPUTER = 
+	private static final String SQL_SELECT_ALL_COMPUTER = 
 			"SELECT "
 			+	"C.id AS computer_id, "
 			+	"C.name AS computer_name, "
@@ -44,18 +44,18 @@ public class ComputerDAO {
 			"SELECT COUNT(*) AS count from computer";
 
 	
-	private final static String SQL_SELECT_COMPUTER_BY_ID =  
+	private static final String SQL_SELECT_COMPUTER_BY_ID =  
 			SQL_SELECT_ALL_COMPUTER
 			+"WHERE "
 			+ 	"C.id = ? ";
 	
-	private final static String SQL_CREATE_COMPUTER = 
+	private static final String SQL_CREATE_COMPUTER = 
 			"INSERT INTO "
 			+ 	"computer (name,introduced,discontinued,company_id) "
 			+"VALUES "
 			+ 	"(?,?,?,?) ";
 
-	private final static String SQL_UPDATE_COMPUTER = 
+	private static final String SQL_UPDATE_COMPUTER = 
 			"UPDATE "
 			+ 	"computer " 
 		    +"SET "
@@ -66,7 +66,7 @@ public class ComputerDAO {
 			+"WHERE "
 			+	"id = ? ";
 	
-	private final static String SQL_DELETE_COMPUTER_BY_ID = 
+	private static final String SQL_DELETE_COMPUTER_BY_ID = 
 			"DELETE FROM "
 			+	"computer "
 			+"WHERE "
@@ -80,21 +80,18 @@ public class ComputerDAO {
 			+	"? "
 			+"OFFSET "
 			+	"? ";
-
 	
 	private static final String SQL_SELECT_COMPUTER_BY_NAME = 
 			SQL_SELECT_ALL_COMPUTER+
 			"WHERE "
 			+	"C.name = ?";
 
-	
-
 	private final ComputerMapper computerMapper;
 	private final DataSource dataSource;
 
 	private static Logger logger = (Logger) LoggerFactory.getLogger( ComputerDAO.class );
 
-	static {TimeZone.setDefault(TimeZone.getTimeZone("UTC"));};
+	static {TimeZone.setDefault(TimeZone.getTimeZone("UTC"));}
 
 	
 	private ComputerDAO(ComputerMapper computerMapper, DataSource dataSource){
@@ -107,7 +104,8 @@ public class ComputerDAO {
 	public long addComputer(Computer computer) {
 		try (Connection conn = dataSource.getConnection();
 			 PreparedStatement state = conn.prepareStatement(SQL_CREATE_COMPUTER, 
-					 										 Statement.RETURN_GENERATED_KEYS);) {	
+					 										 Statement.RETURN_GENERATED_KEYS);
+				ResultSet generatedKeys = state.getGeneratedKeys();) {	
 			
 			state.setString(1, computer.getName());
 			state.setDate(2, computer.getLdIntroduced() != null ? Date.valueOf(computer.getLdIntroduced()) : null);
@@ -115,7 +113,6 @@ public class ComputerDAO {
 			state.setObject(4, computer.getCompany() != null ? computer.getCompany().getId() : null);
 
 			state.executeUpdate();
-			ResultSet generatedKeys = state.getGeneratedKeys();
 			generatedKeys.first();
 			long id = generatedKeys.getLong(1);
 			return id;
@@ -132,9 +129,9 @@ public class ComputerDAO {
 	public int getNumberOfComputer() {
 		int size = 0;
 		try (Connection conn = dataSource.getConnection();
-			 Statement state = conn.createStatement();) {	
+			 Statement state = conn.createStatement();
+			 ResultSet result = state.executeQuery(SQL_COUNT_ALL_COMPUTER);){	
 						
-			ResultSet result = state.executeQuery(SQL_COUNT_ALL_COMPUTER);
 			return result.next() ? result.getInt("count") : 0;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -147,10 +144,9 @@ public class ComputerDAO {
 		try (Connection conn = dataSource.getConnection();
 			 Statement state = conn.createStatement(
 					 							ResultSet.TYPE_SCROLL_INSENSITIVE,
-					 							ResultSet.CONCUR_UPDATABLE);) {	
+					 							ResultSet.CONCUR_UPDATABLE);
+			 ResultSet result = state.executeQuery(SQL_SELECT_ALL_COMPUTER);) {	
 							
-			ResultSet result = state.executeQuery(SQL_SELECT_ALL_COMPUTER);
-			
 			while(result.next()){
 				result.previous();
 				Optional<Computer> computer = computerMapper.getComputer(result);
@@ -204,6 +200,7 @@ public class ComputerDAO {
 	
 	private List<Computer> getComputerPage(int page, int nbByPage, String SQL_REQUEST){
 		List<Computer> resultList = new ArrayList<Computer>();
+		ResultSet result=null;
 		try (Connection conn = dataSource.getConnection();
 				 PreparedStatement state = conn.prepareStatement(SQL_REQUEST,
 						 										 ResultSet.TYPE_SCROLL_INSENSITIVE,
@@ -211,7 +208,7 @@ public class ComputerDAO {
 			
 				state.setInt(1, nbByPage);
 				state.setInt(2, (page-1)*nbByPage);
-				ResultSet result = state.executeQuery();
+				result = state.executeQuery();
 		
 				while(result.next()){
 					result.previous();
@@ -219,6 +216,7 @@ public class ComputerDAO {
 					if(computer.isPresent())
 						resultList.add(computer.get());				
 				}
+				result.close();
 			} catch (SQLException e) {
 				logger.debug(e.getMessage());
 				logger.error(e.getMessage());

@@ -102,7 +102,7 @@ public class Controller {
 	public List<CompanyDTO> getCompanyList() {
 		return service.getCompanyList()
 				.stream()
-				.map(p -> companyMapper.companyToDto(p))
+				.map(companyMapper::companyToDto)
 				.collect(Collectors.toList());
 	}
 	
@@ -157,7 +157,7 @@ public class Controller {
 
 		List<Computer> computers = service.getComputerPage(page,nbByPage, field, order);
 		return computers.stream()
-				.map(p -> computerMapper.computerToDTO(p))
+				.map(computerMapper::computerToDTO)
 				.collect(Collectors.toList());
 	}
 	

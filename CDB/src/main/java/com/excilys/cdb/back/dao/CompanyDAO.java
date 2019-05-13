@@ -23,14 +23,14 @@ import ch.qos.logback.classic.Logger;
 @Component
 public class CompanyDAO{
 
-	private final static String SQL_SELECT_ALL_COMPANY = 
+	private static final String SQL_SELECT_ALL_COMPANY = 
 			"SELECT "
 			+	"id, "
 			+	"name "
 			+"FROM "
 			+	"company";
 	
-	private final static String SQL_SELECT_COMPANY_BY_ID = 
+	private static final String SQL_SELECT_COMPANY_BY_ID = 
 			"SELECT "
 			+	"id, "
 			+	"name "
@@ -69,14 +69,14 @@ public class CompanyDAO{
 	// Read
 	
 	public List<Company> getCompanyList() {
-		List<Company> resultList = new ArrayList<Company>();
+		List<Company> resultList = new ArrayList<>();
 		
 		try (Connection conn = dataSource.getConnection();
 			 Statement state = conn.createStatement(
 								ResultSet.TYPE_SCROLL_INSENSITIVE,
-								ResultSet.CONCUR_UPDATABLE);){
+								ResultSet.CONCUR_UPDATABLE);
+			 ResultSet result = state.executeQuery(SQL_SELECT_ALL_COMPANY);){
 			
-			ResultSet result = state.executeQuery(SQL_SELECT_ALL_COMPANY);
 			
 			while(result.next()){
 				result.previous();
