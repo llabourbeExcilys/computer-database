@@ -17,9 +17,9 @@ import java.util.StringTokenizer;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
 
-import back.model.Company;
-import back.model.Computer;
-import back.model.ComputerBuilder;
+import com.excilys.cdb.back.model.Company;
+import com.excilys.cdb.back.model.Computer;
+import com.excilys.cdb.back.model.ComputerBuilder;
 
 public class TestDatabase {
 

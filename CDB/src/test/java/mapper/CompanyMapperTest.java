@@ -12,14 +12,16 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.beans.factory.annotation.Autowired;
 
-import back.mapper.CompanyMapper;
-import back.model.Company;
+import com.excilys.cdb.back.mapper.CompanyMapper;
+import com.excilys.cdb.back.model.Company;
 
 @RunWith(MockitoJUnitRunner.class)
 public class CompanyMapperTest {
 	
-	private CompanyMapper companyMapper = CompanyMapper.getInstance();
+	@Autowired
+	private CompanyMapper companyMapper;
 	
 	@Mock
     private ResultSet resultSet;

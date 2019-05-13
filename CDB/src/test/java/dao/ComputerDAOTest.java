@@ -10,19 +10,20 @@ import java.util.stream.Collectors;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 
-import back.dao.ComputerDAO;
-import back.dao.SortingField;
-import back.dao.SortingOrder;
-import back.dto.ComputerDTO;
-import back.exception.NotFoundException;
-import back.model.Company;
-import back.model.Computer;
-import back.model.ComputerBuilder;
+import com.excilys.cdb.back.dao.ComputerDAO;
+import com.excilys.cdb.back.dao.SortingField;
+import com.excilys.cdb.back.dao.SortingOrder;
+import com.excilys.cdb.back.exception.NotFoundException;
+import com.excilys.cdb.back.model.Company;
+import com.excilys.cdb.back.model.Computer;
+import com.excilys.cdb.back.model.ComputerBuilder;
 
 public class ComputerDAOTest {
 
-	private ComputerDAO computerDAO = ComputerDAO.getInstance();
+	@Autowired
+	private ComputerDAO computerDAO;// = ComputerDAO.getInstance();
 	private TestDatabase testDataBase;
 	
 	@Before

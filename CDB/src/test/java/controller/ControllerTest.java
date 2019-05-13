@@ -5,13 +5,14 @@ import java.util.Optional;
 import org.junit.Assert;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.springframework.beans.factory.annotation.Autowired;
 
-import back.controller.Controller;
-import back.dto.ComputerDTO;
-import back.model.Company;
-import back.model.Computer;
-import back.model.ComputerBuilder;
-import back.service.Service;
+import com.excilys.cdb.back.controller.Controller;
+import com.excilys.cdb.back.dto.ComputerDTO;
+import com.excilys.cdb.back.model.Company;
+import com.excilys.cdb.back.model.Computer;
+import com.excilys.cdb.back.model.ComputerBuilder;
+import com.excilys.cdb.back.service.Service;
 
 //@RunWith(MockitoJUnitRunner.class)
 public class ControllerTest {
@@ -19,7 +20,8 @@ public class ControllerTest {
 	@Mock
 	private Service service;
 	
-	private Controller controller = Controller.getInstance();
+	@Autowired
+	private Controller controller;// = Controller.getInstance();
 	
 	public void testAddComputer() {
 		String name = "My Netronics computer";
@@ -30,7 +32,7 @@ public class ControllerTest {
 		
 		Mockito.when(service.addComputer(new ComputerBuilder(-1L,"name").build())).thenReturn(21L);
 		
-		Controller.setService(service);
+		controller.setService(service);
 		
 		long id = controller.addComputer(name, 
 										Optional.ofNullable(intD.toString()),

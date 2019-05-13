@@ -9,16 +9,19 @@ import java.util.stream.Collectors;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 
-import back.dao.CompanyDAO;
-import back.dao.ComputerDAO;
-import back.model.Company;
-import back.model.Computer;
+import com.excilys.cdb.back.dao.CompanyDAO;
+import com.excilys.cdb.back.dao.ComputerDAO;
+import com.excilys.cdb.back.model.Company;
+import com.excilys.cdb.back.model.Computer;
 
 public class CompanyDAOTest {
 	
-	private CompanyDAO companyDAO = CompanyDAO.getInstance();
-	private ComputerDAO computerDAO = ComputerDAO.getInstance();
+	@Autowired
+	private CompanyDAO companyDAO;// = CompanyDAO.getInstance();
+	@Autowired
+	private ComputerDAO computerDAO;//= ComputerDAO.getInstance();
 	private TestDatabase testDataBase;
 	
 	@Before

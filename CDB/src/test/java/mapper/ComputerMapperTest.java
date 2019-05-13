@@ -11,16 +11,18 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.beans.factory.annotation.Autowired;
 
-import back.mapper.ComputerMapper;
-import back.model.Company;
-import back.model.Computer;
-import back.model.ComputerBuilder;
+import com.excilys.cdb.back.mapper.ComputerMapper;
+import com.excilys.cdb.back.model.Company;
+import com.excilys.cdb.back.model.Computer;
+import com.excilys.cdb.back.model.ComputerBuilder;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ComputerMapperTest {
 
-	private ComputerMapper computerMapper = ComputerMapper.getInstance();
+	@Autowired
+	private ComputerMapper computerMapper;
 	
 	@Mock
     private ResultSet resultSet;
