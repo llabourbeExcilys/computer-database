@@ -1,4 +1,4 @@
-package mapper;
+package com.excilys.cdb.mapper;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -6,19 +6,25 @@ import java.time.LocalDate;
 import java.util.Optional;
 
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.excilys.cdb.back.mapper.ComputerMapper;
 import com.excilys.cdb.back.model.Company;
 import com.excilys.cdb.back.model.Computer;
 import com.excilys.cdb.back.model.ComputerBuilder;
+import com.excilys.cdb.config.AppConfig;
 
-@RunWith(MockitoJUnitRunner.class)
+//@RunWith(MockitoJUnitRunner.class)
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(classes = AppConfig.class)
 public class ComputerMapperTest {
 
 	@Autowired
@@ -26,6 +32,11 @@ public class ComputerMapperTest {
 	
 	@Mock
     private ResultSet resultSet;
+	
+	@Before
+	public void setup() {
+	        MockitoAnnotations.initMocks(this);
+	}
 	
 	@Test
 	public void testGetComputerOk() {
@@ -38,9 +49,6 @@ public class ComputerMapperTest {
 			Mockito.when(resultSet.getLong("company_id")).thenReturn(5L);
 			Mockito.when(resultSet.getString("company_name")).thenReturn("Asus");
 			Mockito.when(resultSet.next()).thenReturn(true);
-
-			
-
 
 			Optional<Computer> optComputer = computerMapper.getComputer(resultSet);
 			Computer computer = optComputer.get();

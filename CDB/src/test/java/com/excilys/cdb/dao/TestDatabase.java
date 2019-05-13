@@ -1,9 +1,8 @@
-package dao;
+package com.excilys.cdb.dao;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalDate;
@@ -11,52 +10,42 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.ResourceBundle;
 import java.util.Scanner;
 import java.util.StringTokenizer;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
 
+import javax.sql.DataSource;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import com.excilys.cdb.back.model.Company;
 import com.excilys.cdb.back.model.Computer;
 import com.excilys.cdb.back.model.ComputerBuilder;
 
+@Component
 public class TestDatabase {
-
-    private static TestDatabase instance = new TestDatabase();
-
 
     private Map<Long, Company> companies = new TreeMap<>();
     private Map<Long, Computer> computers = new TreeMap<>();
     
-    static Connection connection;
+    @Autowired
+    private DataSource dataSource;
 
-    private TestDatabase() {
-    	
-    	ResourceBundle bundle = ResourceBundle.getBundle("config");
-    			
-		String url = bundle.getString("sgbd.url");
-		String user = bundle.getString("sgbd.login");
-		String passwd = bundle.getString("sgbd.pwd");
-    	
-    	try {
-			connection = DriverManager.getConnection(url, user, passwd);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+    public TestDatabase() {   	
         addCompanies();
         addComputers();
     }
 
-    public static TestDatabase getInstance() {
-        return instance;
-    }
 
-    private static void executeScript(String filename) throws SQLException, IOException {
+    private void executeScript(String filename) throws SQLException, IOException {
         try (
-        	final Statement statement = connection.createStatement();
-             final InputStream resourceAsStream = TestDatabase.class.getClassLoader().getResourceAsStream(filename);
-             final Scanner scanner = new Scanner(resourceAsStream)) {
+        	Connection connection = dataSource.getConnection();
+        		
+           	final Statement statement = connection.createStatement();
+            final InputStream resourceAsStream = TestDatabase.class.getClassLoader().getResourceAsStream(filename);
+            final Scanner scanner = new Scanner(resourceAsStream)) {
 
             StringBuilder sb = new StringBuilder();
             while (scanner.hasNextLine()) {

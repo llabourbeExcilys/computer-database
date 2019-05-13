@@ -1,23 +1,28 @@
-package mapper;
+package com.excilys.cdb.mapper;
 
-
-import  org.junit.Assert;
-import org.junit.Test;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Optional;
 
+import  org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.excilys.cdb.back.mapper.CompanyMapper;
 import com.excilys.cdb.back.model.Company;
+import com.excilys.cdb.config.AppConfig;
 
-@RunWith(MockitoJUnitRunner.class)
+//@RunWith(MockitoJUnitRunner.class)
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(classes = AppConfig.class)
 public class CompanyMapperTest {
 	
 	@Autowired
@@ -25,6 +30,11 @@ public class CompanyMapperTest {
 	
 	@Mock
     private ResultSet resultSet;
+	
+	@Before
+	public void setup() {
+	        MockitoAnnotations.initMocks(this);
+	}
 	
 	@Test
 	public void testGetCompanyOK() {

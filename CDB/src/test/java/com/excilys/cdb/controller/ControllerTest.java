@@ -1,4 +1,4 @@
-package controller;
+package com.excilys.cdb.controller;
 import java.time.LocalDate;
 import java.util.Optional;
 
@@ -8,9 +8,7 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.excilys.cdb.back.controller.Controller;
-import com.excilys.cdb.back.dto.ComputerDTO;
 import com.excilys.cdb.back.model.Company;
-import com.excilys.cdb.back.model.Computer;
 import com.excilys.cdb.back.model.ComputerBuilder;
 import com.excilys.cdb.back.service.Service;
 

@@ -75,7 +75,7 @@ public class ComputerDAO {
 	private static final String SQL_SELECT_COMPUTER_PAGE = 
 			SQL_SELECT_ALL_COMPUTER
 			+"ORDER BY "
-			+	"ISNULL(fieldToReplace),"+" "+"fieldToReplace"+" "+"OrderToReplace"+" "
+			+	"fieldToReplace "+"IS NULL, "+"fieldToReplace"+" "+"OrderToReplace"+" "
 			+"LIMIT "
 			+	"? "
 			+"OFFSET "

@@ -1,4 +1,4 @@
-package dao;
+package com.excilys.cdb.dao;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -10,7 +10,10 @@ import java.util.stream.Collectors;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.excilys.cdb.back.dao.ComputerDAO;
 import com.excilys.cdb.back.dao.SortingField;
@@ -19,16 +22,21 @@ import com.excilys.cdb.back.exception.NotFoundException;
 import com.excilys.cdb.back.model.Company;
 import com.excilys.cdb.back.model.Computer;
 import com.excilys.cdb.back.model.ComputerBuilder;
+import com.excilys.cdb.config.AppConfig;
 
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(classes = AppConfig.class)
 public class ComputerDAOTest {
 
 	@Autowired
-	private ComputerDAO computerDAO;// = ComputerDAO.getInstance();
+	private ComputerDAO computerDAO;
+	
+	@Autowired
 	private TestDatabase testDataBase;
 	
+
 	@Before
 	public void setUp() { 
-		testDataBase = TestDatabase.getInstance();	
 		try {
 			testDataBase.reload();
 		} catch (IOException | SQLException e) {
