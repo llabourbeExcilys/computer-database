@@ -30,17 +30,14 @@ public class ComputerValidator {
 	private void validateName(String name) {
 		String trimedName = name.trim();		
 		if(!trimedName.equals(name))
-			throw new BadInputException("Il ne peut y avoir d'espace ou de tabulation au début ou à la fin.");
+			throw new BadInputException("Le nom ne peut débuter ou terminer par un espace ou une tabulation.");
 		if (name.equals(""))
-			throw new BadInputException("Le nom ne peut etre vide");
+			throw new BadInputException("Le nom ne peut être vide");
 	}
 	
-	private void validateDateOrder(LocalDate ldIntroduced, LocalDate ldDiscontinued) {
-		LocalDate ldIntr = ldIntroduced;
-		LocalDate ldDisc = ldDiscontinued;
-
+	private void validateDateOrder(LocalDate ldIntr, LocalDate ldDisc) {
 		if (ldIntr != null && ldDisc != null && ldDisc.isBefore(ldIntr))
-			throw new DateFormatException("Discontinuation cannot be anterior to introduction date");
+			throw new DateFormatException("La date d'arrêt ne peut être antérieur à la date d'introduction.");
 	}
 	
 	private void validateCompany(Long id, String name) {
@@ -49,9 +46,9 @@ public class ComputerValidator {
 				throw new BadCompanyIdException("L'id ne peut pas être <= 0");
 			Optional<Company> cOptional = service.getCompanyById(id);
 			if(!cOptional.isPresent())
-				throw new BadCompanyIdException("L'id de la company ne correspond à aucune company existante");
+				throw new BadCompanyIdException("L'id de la company ne correspond à aucune company existante.");
 			if(!cOptional.get().getName().equals(name))
-				throw new BadInputException("Le nom de la company n'a aucune correspondance dans la base.");
+				throw new BadInputException("Il n'existe aucune company portant ce nom.");
 		}
 	}
 

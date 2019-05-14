@@ -18,7 +18,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import com.excilys.cdb.back.exception.BadCompanyIdException;
-import com.excilys.cdb.back.exception.NotFoundException;
+import com.excilys.cdb.back.exception.ComputerNotFoundException;
 import com.excilys.cdb.back.mapper.ComputerMapper;
 import com.excilys.cdb.back.model.Computer;
 
@@ -115,7 +115,7 @@ public class ComputerDAO {
 			state.executeUpdate();
 			generatedKeys.first();
 			return generatedKeys.getLong(1);
-		} catch (Exception e) {
+		} catch (SQLException e) {
 			logger.debug(e.getMessage());
 			logger.error(e.getMessage());
 		}
@@ -132,7 +132,7 @@ public class ComputerDAO {
 			 ResultSet result = state.executeQuery(SQL_COUNT_ALL_COMPUTER);){	
 						
 			return result.next() ? result.getInt("count") : 0;
-		} catch (Exception e) {
+		} catch (SQLException e) {
 			logger.debug(e.getMessage());
 			logger.error(e.getMessage());
 		}
@@ -213,7 +213,7 @@ public class ComputerDAO {
 						if(computer.isPresent())
 							resultList.add(computer.get());				
 					}
-				} catch (Exception e) {
+				} catch (SQLException e) {
 					logger.debug(e.getMessage());
 					logger.error(e.getMessage());
 				}
@@ -246,7 +246,7 @@ public class ComputerDAO {
 			
 			int resultCode = state.executeUpdate();
 			if(resultCode == 0) 
-				throw new NotFoundException("Id not found");
+				throw new ComputerNotFoundException("Id not found");
 		}catch ( SQLIntegrityConstraintViolationException e) {
 				throw new BadCompanyIdException("There is no company with id "+c.getCompany().getId());
 		} catch (SQLException e) {
@@ -264,7 +264,7 @@ public class ComputerDAO {
 			state.setLong(1, id);
 			int resultCode = state.executeUpdate();			
 			if(resultCode == 0) 
-				throw new NotFoundException("There is no computer with id "+id);
+				throw new ComputerNotFoundException("There is no computer with id "+id);
 		} catch (SQLException e) {
 			logger.debug(e.getMessage());
 			logger.error(e.getMessage());

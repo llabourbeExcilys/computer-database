@@ -18,7 +18,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import com.excilys.cdb.back.dao.ComputerDAO;
 import com.excilys.cdb.back.dao.SortingField;
 import com.excilys.cdb.back.dao.SortingOrder;
-import com.excilys.cdb.back.exception.NotFoundException;
+import com.excilys.cdb.back.exception.ComputerNotFoundException;
 import com.excilys.cdb.back.model.Company;
 import com.excilys.cdb.back.model.Computer;
 import com.excilys.cdb.back.model.ComputerBuilder;
@@ -183,7 +183,7 @@ public class ComputerDAOTest {
 
 	}
 	
-	@Test(expected = NotFoundException.class)
+	@Test(expected = ComputerNotFoundException.class)
 	public void updateComputerIdNotFound() {
 		Computer computer = new ComputerBuilder(50, "a computer").build();
 		computerDAO.update(computer);

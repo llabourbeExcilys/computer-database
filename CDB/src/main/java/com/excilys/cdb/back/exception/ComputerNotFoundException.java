@@ -1,10 +1,10 @@
 package com.excilys.cdb.back.exception;
 
-public class NotFoundException extends RuntimeException{
+public class ComputerNotFoundException extends RuntimeException{
 
 	private static final long serialVersionUID = 1L;
 
-	public NotFoundException(String message) {
+	public ComputerNotFoundException(String message) {
 		super(message);
 	}
 

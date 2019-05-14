@@ -5,8 +5,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import com.excilys.cdb.back.dao.SortingField;
@@ -27,9 +25,6 @@ import com.excilys.cdb.back.validator.ComputerValidator;
 
 @Component
 public class Controller {
-	
-	private static Logger logger = LoggerFactory.getLogger( Controller.class );
-
 
 	private Service service;
 	private final CompanyMapper companyMapper;
@@ -108,14 +103,8 @@ public class Controller {
 	
 	
 	public Optional<CompanyDTO> getCompanyById(String id){
-		try {
-			long idL = Long.parseLong(id);
-			return getCompanyById(idL);
-		} catch (NumberFormatException e) {
-			logger.debug(e.getMessage());
-			logger.warn(e.getMessage());
-			return Optional.empty();
-		}
+		long idL = Long.parseLong(id);
+		return getCompanyById(idL);
 	}
 	
 	public Optional<CompanyDTO> getCompanyById(long id){
@@ -130,13 +119,8 @@ public class Controller {
 	}
 
 	public Optional<ComputerDTO> getComputerById(String id) {
-		long idL;
-		try {
-			idL = Long.parseLong(id);
-			return getComputerById(idL);
-		} catch (NumberFormatException e) {
-			return Optional.empty();
-		}		
+		long idL = Long.parseLong(id);
+		return getComputerById(idL);		
 	}
 
 	public Optional<ComputerDTO> getComputerById(long idL) {
@@ -242,8 +226,7 @@ public class Controller {
 	
 	// Check if a string can be used to create a LocalDate
 	// Expected string format:yyyy-mm-dd
-	// Return the LocalDate if ok
-	// Throw DateFormatException exception if not ok
+	// Return the LocalDate or throw DateFormatException
 	private LocalDate checkAndCreateDate(String date) {
 		String[] datePart = date.split("-");
 

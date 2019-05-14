@@ -16,7 +16,7 @@ import com.excilys.cdb.back.dao.SortingOrder;
 import com.excilys.cdb.back.dto.ComputerDTO;
 import com.excilys.cdb.back.exception.BadCompanyIdException;
 import com.excilys.cdb.back.exception.BadInputException;
-import com.excilys.cdb.back.exception.NotFoundException;
+import com.excilys.cdb.back.exception.ComputerNotFoundException;
 import com.excilys.cdb.back.exception.RequestedPageException;
 import com.excilys.cdb.main.Main;
 
@@ -109,8 +109,7 @@ public class CLIview {
 				
 				if(c.isPresent())
 					updateComputer(c.get());
-				else 
-					throw new NotFoundException("The computer with id:"+id+" cannot be found.");
+				
 				break; 
 			case "7": //Show page
 				System.out.print("Show page number ?\n->");
@@ -131,7 +130,7 @@ public class CLIview {
 				System.out.println("Unknown action, try again !\n");
 				break;
 			}
-		}catch(NotFoundException e) {
+		}catch(ComputerNotFoundException e) {
 			logger.debug("An exception occured.",e);
 			logger.error("An exception occured.",e);
 			System.out.println(e.getMessage()+"\n");

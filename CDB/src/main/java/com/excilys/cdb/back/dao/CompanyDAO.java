@@ -84,10 +84,10 @@ public class CompanyDAO{
 				if(company.isPresent())
 					resultList.add(company.get());				
 			}
-		} catch (Exception e) {
+		} catch (SQLException e) {
 			logger.debug(e.getMessage());
 			logger.error(e.getMessage());
-		}
+		} 
 		return resultList;
 	}
 
@@ -121,10 +121,10 @@ public class CompanyDAO{
 			
 			conn.commit();
 			conn.setAutoCommit(true);	
-			} catch (SQLException e) {
-				logger.debug(e.getMessage());
-				logger.error(e.getMessage());
-			}
+		} catch (SQLException e) {
+			logger.debug(e.getMessage());
+			logger.error(e.getMessage());
+		}
 	}
 	
 }
