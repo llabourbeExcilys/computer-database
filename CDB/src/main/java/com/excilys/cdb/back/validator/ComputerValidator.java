@@ -39,9 +39,8 @@ public class ComputerValidator {
 		LocalDate ldIntr = ldIntroduced;
 		LocalDate ldDisc = ldDiscontinued;
 
-		if (ldIntr != null && ldDisc != null)
-			if (ldDisc.isBefore(ldIntr))
-				throw new DateFormatException("Discontinuation cannot be anterior to introduction date");
+		if (ldIntr != null && ldDisc != null && ldDisc.isBefore(ldIntr))
+			throw new DateFormatException("Discontinuation cannot be anterior to introduction date");
 	}
 	
 	private void validateCompany(Long id, String name) {

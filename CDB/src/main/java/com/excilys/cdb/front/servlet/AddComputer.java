@@ -20,7 +20,7 @@ public class AddComputer extends HttpServlet{
 
 	private static final long serialVersionUID = 2658501332987983872L;
 
-	private Controller controller;
+	private static Controller controller;
 
 	@Override
     public void init() throws ServletException {
@@ -30,12 +30,14 @@ public class AddComputer extends HttpServlet{
 					.getBean(Controller.class);
     }	
 	
+	@Override
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		List<CompanyDTO> companies = controller.getCompanyList();
 		request.setAttribute("companies", companies);
 		getServletContext().getRequestDispatcher("/WEB-INF/views/addComputer.jsp").forward(request, response);
 	}
 	
+	@Override
 	public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String computerName = request.getParameter("computerName");	
 		String introduced = request.getParameter("introduced");

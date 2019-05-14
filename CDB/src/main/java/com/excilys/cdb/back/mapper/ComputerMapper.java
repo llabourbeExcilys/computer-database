@@ -47,13 +47,13 @@ public class ComputerMapper {
 				computer.setLdDiscontinued(locald);
 			}
 			
-			long company_id = result.getLong("company_id");
-			String company_name = result.getString("company_name");
+			long companyId = result.getLong("company_id");
+			String companyName = result.getString("company_name");
 
 			// Check if company id and name was given
 			// Create company and set it to computer.company field
-			if(company_id!=0 && company_name!=null) {
-				Company company = new Company(company_id,company_name);
+			if(companyId!=0 && companyName!=null) {
+				Company company = new Company(companyId,companyName);
 				computer.setCompany(company);
 			}
 			if(computer.getId() != 0L && computer.getName() !=null)

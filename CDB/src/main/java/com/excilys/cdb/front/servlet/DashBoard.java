@@ -26,15 +26,15 @@ public class DashBoard extends HttpServlet {
 
 	private static final long serialVersionUID = 5700829257941123519L;
 
-	private Controller controller;
+	private static Controller controller;
 	
-	private int nbByPage = 10;
-	private int page = 1;
-	private String field = "";
-	private String order = "";
+	private static int nbByPage = 10;
+	private static int page = 1;
+	private static String field = "";
+	private static String order = "";
 	
-	private SortingField sortingField;
-	private SortingOrder sortingOrder;
+	private static SortingField sortingField;
+	private static SortingOrder sortingOrder;
 	
 	@Override
     public void init() throws ServletException {
@@ -44,6 +44,7 @@ public class DashBoard extends HttpServlet {
 		controller = ctx.getBean(Controller.class);
     }
 	
+	@Override
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String fieldString = request.getParameter("field");
 		String orderString = request.getParameter("order");
@@ -94,6 +95,7 @@ public class DashBoard extends HttpServlet {
 		getServletContext().getRequestDispatcher("/WEB-INF/views/dashboard.jsp").forward(request, response);
 	}
 	
+	@Override
 	public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		doGet(request, response);
 	}

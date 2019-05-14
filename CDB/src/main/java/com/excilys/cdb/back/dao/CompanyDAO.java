@@ -64,7 +64,7 @@ public class CompanyDAO{
 		this.dataSource = dataSource;
 	}
 
-	static {TimeZone.setDefault(TimeZone.getTimeZone("UTC"));};
+	static {TimeZone.setDefault(TimeZone.getTimeZone("UTC"));}
 
 	// Read
 	

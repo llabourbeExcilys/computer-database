@@ -18,7 +18,7 @@ public class DeleteComputer extends HttpServlet{
 
 	private static final long serialVersionUID = -3829110288355271044L;
 
-	private Controller controller;
+	private static Controller controller;
 	
 	@Override
     public void init() throws ServletException {
@@ -28,11 +28,12 @@ public class DeleteComputer extends HttpServlet{
 					.getBean(Controller.class);
     }
 	
-	
+	@Override
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		getServletContext().getRequestDispatcher("/WEB-INF/views/dashboard.jsp").forward(request, response);
 	}
 	
+	@Override
 	public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String computerId = request.getParameter("selection");
 		String[] reString = computerId.split(",");

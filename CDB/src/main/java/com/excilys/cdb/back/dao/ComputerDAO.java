@@ -94,7 +94,7 @@ public class ComputerDAO {
 	static {TimeZone.setDefault(TimeZone.getTimeZone("UTC"));}
 
 	
-	private ComputerDAO(ComputerMapper computerMapper, DataSource dataSource){
+	public ComputerDAO(ComputerMapper computerMapper, DataSource dataSource){
 		this.computerMapper=computerMapper;
 		this.dataSource=dataSource;
 	}
@@ -114,8 +114,7 @@ public class ComputerDAO {
 
 			state.executeUpdate();
 			generatedKeys.first();
-			long id = generatedKeys.getLong(1);
-			return id;
+			return generatedKeys.getLong(1);
 		} catch (Exception e) {
 			logger.debug(e.getMessage());
 			logger.error(e.getMessage());
@@ -134,13 +133,14 @@ public class ComputerDAO {
 						
 			return result.next() ? result.getInt("count") : 0;
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.debug(e.getMessage());
+			logger.error(e.getMessage());
 		}
 		return size;
 	}
 	
 	public List<Computer> getComputerList() {
-		List<Computer> resultList = new ArrayList<Computer>();
+		List<Computer> resultList = new ArrayList<>();
 		try (Connection conn = dataSource.getConnection();
 			 Statement state = conn.createStatement(
 					 							ResultSet.TYPE_SCROLL_INSENSITIVE,
@@ -198,33 +198,31 @@ public class ComputerDAO {
 		 return getComputerPage(page, nbByPage, requestString);
 	}
 	
-	private List<Computer> getComputerPage(int page, int nbByPage, String SQL_REQUEST){
-		List<Computer> resultList = new ArrayList<Computer>();
-		ResultSet result=null;
+	private List<Computer> getComputerPage(int page, int nbByPage, String sqlRequest){
+		List<Computer> resultList = new ArrayList<>();
 		try (Connection conn = dataSource.getConnection();
-				 PreparedStatement state = conn.prepareStatement(SQL_REQUEST,
+				 PreparedStatement state = conn.prepareStatement(sqlRequest,
 						 										 ResultSet.TYPE_SCROLL_INSENSITIVE,
-						 										ResultSet.CONCUR_UPDATABLE);){	
-			
+						 										ResultSet.CONCUR_UPDATABLE);) {
 				state.setInt(1, nbByPage);
-				state.setInt(2, (page-1)*nbByPage);
-				result = state.executeQuery();
-		
-				while(result.next()){
-					result.previous();
-					Optional<Computer> computer = computerMapper.getComputer(result);
-					if(computer.isPresent())
-						resultList.add(computer.get());				
+				state.setInt(2, (page-1)*nbByPage);	
+				try (ResultSet result = state.executeQuery();){		
+					while(result.next()){
+						result.previous();
+						Optional<Computer> computer = computerMapper.getComputer(result);
+						if(computer.isPresent())
+							resultList.add(computer.get());				
+					}
+				} catch (Exception e) {
+					logger.debug(e.getMessage());
+					logger.error(e.getMessage());
 				}
-				result.close();
 			} catch (SQLException e) {
 				logger.debug(e.getMessage());
 				logger.error(e.getMessage());
 			}
 		return resultList;
 	}
-	
-
 	
 	// Update
 	

@@ -28,7 +28,7 @@ public class CLIview {
 	private Controller controller;
 	private Scanner sc;
 	
-	private final String dateFormat = "yyyy-mm-dd";
+	private static final String DATE_FORMAT = "yyyy-mm-dd";
 	
 	public CLIview(Controller controller) {
 		super();
@@ -52,6 +52,7 @@ public class CLIview {
 			} catch (InterruptedException e) {
 				logger.debug("Exception occured",e);
 				logger.error("Exception occured",e);
+				Thread.currentThread().interrupt();
 			}
 		}while(!exit);
 		sc.close();
@@ -199,12 +200,12 @@ public class CLIview {
 					controller.updateComputerCompany(c,company.get());
 				break;
 			case "3": 
-				Optional<String> date = obtainInformation("date of introduction",dateFormat);
+				Optional<String> date = obtainInformation("date of introduction",DATE_FORMAT);
 				if(date.isPresent())
 					controller.updateComputerIntroduced(c,date.get());
 				break;
 			case "4": 
-				date = obtainInformation("date of discontinuation",dateFormat);
+				date = obtainInformation("date of discontinuation",DATE_FORMAT);
 				if(date.isPresent())
 					controller.updateComputerDiscontinued(c,date.get());
 				break;

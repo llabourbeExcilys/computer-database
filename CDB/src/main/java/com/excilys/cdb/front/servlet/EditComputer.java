@@ -20,7 +20,7 @@ public class EditComputer extends HttpServlet {
 
 	private static final long serialVersionUID = -2982660020993022701L;
 	
-	private Controller controller;
+	private static Controller controller;
 	
 	@Override
     public void init() throws ServletException {
@@ -30,6 +30,7 @@ public class EditComputer extends HttpServlet {
 					.getBean(Controller.class);
     }
 	
+	@Override
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String idToEdit = request.getParameter("idToEdit");
 		Optional<ComputerDTO> computerOptional = controller.getComputerById(idToEdit);
@@ -45,6 +46,7 @@ public class EditComputer extends HttpServlet {
 		}
 	}
 
+	@Override
 	public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String id = request.getParameter("id");
 		String name = request.getParameter("computerName");
