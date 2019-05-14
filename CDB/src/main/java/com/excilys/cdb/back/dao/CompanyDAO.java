@@ -109,7 +109,8 @@ public class CompanyDAO{
 	public void deleteCompanyById(long idL) {
 		try (Connection conn = dataSource.getConnection();
 			 PreparedStatement deleteComputerPreparedStatement = conn.prepareStatement(SQL_DELETE_COMPUTER_BY_ID);
-			 PreparedStatement deleteCompanyPreparedStatement = conn.prepareStatement(SQL_DELETE_COMPANY_BY_ID)){	
+			 PreparedStatement deleteCompanyPreparedStatement = conn.prepareStatement(SQL_DELETE_COMPANY_BY_ID);
+				AutoCloseable finish = conn::rollback){	
 			
 			conn.setAutoCommit(false);
 			
@@ -124,6 +125,9 @@ public class CompanyDAO{
 		} catch (SQLException e) {
 			logger.debug(e.getMessage());
 			logger.error(e.getMessage());
+		} catch (Exception e1) {
+			logger.debug(e1.getMessage());
+			logger.error(e1.getMessage());
 		}
 	}
 	
