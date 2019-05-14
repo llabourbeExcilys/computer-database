@@ -157,8 +157,7 @@ public class CLIview {
 	
 	//Perform system.out.println on a list of T
 	private <T> void showList(List<T> list) {
-		for(T t : list)
-			System.out.println(t);
+		list.stream().forEach(System.out::println);
 	}
 	 
 	private void registerComputer() {
