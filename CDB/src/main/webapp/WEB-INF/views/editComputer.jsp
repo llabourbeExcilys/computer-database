@@ -30,7 +30,7 @@
                         <fieldset>
                             <div class="form-group">
                                 <label for="computerName">Computer name</label>
-                                <input type="text" class="form-control" id="computerName" name="computerName" placeholder="Computer name" value="${computer.name}">
+                                <input type="text" class="form-control" id="computerName" name="computerName" pattern="[A-Za-z0-9]{3,30}" required title="3 characters minimum, 30 maximum" placeholder="Computer name" value="${computer.name}">
                             </div>
                             <div class="form-group">
                                 <label for="introduced">Introduced date</label>
@@ -61,8 +61,6 @@
             </div>
         </div>
     </section>
-    <script src="static/js/jquery.min.js"></script>
-	<script src="static/js/jquery.validate.min.js"></script>
 </body>
 </html>
 
