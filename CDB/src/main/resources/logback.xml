@@ -15,8 +15,8 @@
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <!-- daily rollover -->
             <fileNamePattern>/home/excilys/git/repository/CDB/log_files/logFile.%d{yyyy-MM-dd}.log</fileNamePattern>
-            <!-- keep 1 days' worth of history -->
-            <maxHistory>1</maxHistory>
+            <!-- keep 3 days' worth of history -->
+            <maxHistory>3</maxHistory>
         </rollingPolicy>
 		<filter class="ch.qos.logback.classic.filter.ThresholdFilter">
       		<level>INFO</level>
