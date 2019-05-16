@@ -75,7 +75,7 @@ public class Controller {
 				computerDTO.setCompanyName(companyById.get().getName());
 			}
 		}
-		//Validate
+
 		computerValidator.validate(computerDTO);
 		
 		//Build computer
@@ -95,8 +95,7 @@ public class Controller {
 	// Read
 
 	public List<CompanyDTO> getCompanyList() {
-		return service.getCompanyList()
-				.stream()
+		return service.getCompanyList().stream()
 				.map(companyMapper::companyToDto)
 				.collect(Collectors.toList());
 	}

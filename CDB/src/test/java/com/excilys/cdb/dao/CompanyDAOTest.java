@@ -87,7 +87,7 @@ public class CompanyDAOTest {
 		
 		long id = 1;
 		
-		Optional<Company> cOptional = companyDAO.getCompanyById(1);
+		Optional<Company> cOptional = companyDAO.getCompanyById(id);
 		Assert.assertTrue("La company d'id "+id+" devrait etre présent",cOptional.isPresent());
 		Company company = cOptional.get();
 		
@@ -120,6 +120,13 @@ public class CompanyDAOTest {
 		 
 	}
 	
+	
+	@Test
+	public void deleteCompanyByIdWithIdNotFoundTest() {
+		long id = 11;
+		Optional<Company> cOptional = companyDAO.getCompanyById(id);
+		Assert.assertTrue("La company d'id "+id+" ne devrait etre présent",!cOptional.isPresent());
+	}
 	
 	
 }

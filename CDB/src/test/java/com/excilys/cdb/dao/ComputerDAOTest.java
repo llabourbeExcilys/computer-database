@@ -157,6 +157,12 @@ public class ComputerDAOTest {
 				,c.getName(),newName);
 	}
 	
+	@Test(expected = ComputerNotFoundException.class)
+	public void updateComputerIdNotFound() {
+		Computer computer = new ComputerBuilder(50, "a computer").build();
+		computerDAO.update(computer);
+	}
+	
 	@Test
 	public void updateComputerDateIntroductionTest() {
 		long id = 5L;
@@ -183,11 +189,7 @@ public class ComputerDAOTest {
 
 	}
 	
-	@Test(expected = ComputerNotFoundException.class)
-	public void updateComputerIdNotFound() {
-		Computer computer = new ComputerBuilder(50, "a computer").build();
-		computerDAO.update(computer);
-	}
+
 	
 	@Test
 	public void deleteComputerByIDTest() {
@@ -203,6 +205,15 @@ public class ComputerDAOTest {
 				!cOptional.isPresent());
 	}
 	
+	
+	@Test
+	public void deleteComputerByIdWithIdNotFoundTest() {
+		long id = 21;
+		
+		Optional<Computer> cOptional = computerDAO.getComputerById(id);
+		Assert.assertTrue("Le computer d'id "+id+" ne devrait etre présent",
+				!cOptional.isPresent());
+	}
 	
 	
 	
