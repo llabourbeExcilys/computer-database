@@ -97,8 +97,9 @@ public class ComputerDAOTest {
 	
 	@Test
 	public void getEmptyComputerByIdTest() {
-		Optional<Computer> computer = computerDAO.getComputerById(34L);
-		Assert.assertTrue("",!computer.isPresent());
+		long id = 34L;
+		Optional<Computer> computer = computerDAO.getComputerById(id);
+		Assert.assertTrue("Il ne devrait pas y a avoir de computer d'id "+id,!computer.isPresent());
 	}
 	
 	@Test
@@ -124,8 +125,9 @@ public class ComputerDAOTest {
 		int nbByPage = 5;
 		List<Computer> computers = computerDAO.getComputerPage(page, nbByPage,SortingField.ID,SortingOrder.ASC);
 		
-		List<Computer> expectedComputers = testDataBase.findAllComputers()
-				.stream().skip(((page-1)*nbByPage)).limit(nbByPage)
+		List<Computer> expectedComputers = testDataBase.findAllComputers().stream()
+				.skip(((page-1)*nbByPage))
+				.limit(nbByPage)
 				.collect(Collectors.toList());
 		Assert.assertEquals("Les computers de la page ne correspondent pas."
 				,expectedComputers,computers);
@@ -209,7 +211,6 @@ public class ComputerDAOTest {
 	@Test
 	public void deleteComputerByIdWithIdNotFoundTest() {
 		long id = 21;
-		
 		Optional<Computer> cOptional = computerDAO.getComputerById(id);
 		Assert.assertTrue("Le computer d'id "+id+" ne devrait etre présent",
 				!cOptional.isPresent());

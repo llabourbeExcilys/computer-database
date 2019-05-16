@@ -86,8 +86,6 @@ public class DashBoard extends HttpServlet {
 			computers = controller.getComputerPage(page, nbByPage,sortingField, sortingOrder);
 		}
 		
-		request.setAttribute("errorMessage", "This is a test error message");
-
 		request.setAttribute("nbComputerFound", nbComputerFound);
 		request.setAttribute("lastPage",lastPage);
 		request.setAttribute("page", page);

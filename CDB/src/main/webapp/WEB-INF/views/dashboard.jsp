@@ -14,11 +14,6 @@
 
 <body>
 
-	<c:if test="${not empty errorMessage}">
-	   <c:out value="${errorMessage}"/>
-	</c:if>
-
-
     <header class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
             <a class="navbar-brand" href="dashboard?page=1&field=default&order=default"> Application - Computer Database </a>
