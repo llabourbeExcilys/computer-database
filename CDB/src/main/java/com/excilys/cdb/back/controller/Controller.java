@@ -50,7 +50,6 @@ public class Controller {
 		
 		ComputerDTO computerDTO = new ComputerDTO();
 		
-		//Set name
 		computerDTO.setName(name);
 		
 		//Set date of introduction
@@ -78,15 +77,18 @@ public class Controller {
 
 		computerValidator.validate(computerDTO);
 		
-		//Build computer
+		Company company = null;
+		if(computerDTO.getCompanyID() != null) {
+			Optional<Company> companyOptional = service.getCompanyById(computerDTO.getCompanyID());
+			if(companyOptional.isPresent())
+				company=companyOptional.get();
+		}
+	
 		Computer computer = new ComputerBuilder(computerDTO.getId(), computerDTO.getName())
 				.withIntroductionDate(computerDTO.getLdIntroduced())
 				.withdiscontinuationDate(computerDTO.getLdDiscontinued())
+				.withCompany(company)
 				.build();
-		
-		Optional<Company> companyOptional = service.getCompanyById(computer.getId());
-		if(companyOptional.isPresent())
-			computer.setCompany(companyOptional.get());
 		
 		return service.addComputer(computer);
 	}

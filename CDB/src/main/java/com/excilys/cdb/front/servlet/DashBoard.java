@@ -1,58 +1,42 @@
 package com.excilys.cdb.front.servlet;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import org.springframework.web.context.WebApplicationContext;
-import org.springframework.web.context.support.WebApplicationContextUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.excilys.cdb.back.controller.Controller;
 import com.excilys.cdb.back.dao.SortingField;
 import com.excilys.cdb.back.dao.SortingOrder;
 import com.excilys.cdb.back.dto.ComputerDTO;
 
+@org.springframework.stereotype.Controller
+@RequestMapping("/dashboard")
+public class DashBoard {
 
-@WebServlet(urlPatterns = {"/dashboard"})
-public class DashBoard extends HttpServlet {
-
-	private static final long serialVersionUID = 5700829257941123519L;
-
-	private static Controller controller;
-	
+	@Autowired 
+	private Controller controller;
 	private static int nbByPage = 10;
 	private static int page = 1;
 	private static String field = "";
 	private static String order = "";
-	
 	private static SortingField sortingField;
 	private static SortingOrder sortingOrder;
 	
-	@Override
-    public void init() throws ServletException {
-		super.init();
-		ServletContext servletContext = getServletContext();
-		WebApplicationContext ctx = WebApplicationContextUtils.getRequiredWebApplicationContext(servletContext);
-		controller = ctx.getBean(Controller.class);
-    }
-	
-	@Override
-	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String fieldString = request.getParameter("field");
-		String orderString = request.getParameter("order");
-		String nbByPageString = request.getParameter("nbByPage");
-		String pageString = request.getParameter("page");
-		String computerSearch =  request.getParameter("search");
-
-		if(fieldString!=null && !fieldString.equals(""))
+   @GetMapping
+    public String handle(Model model,
+    		@RequestParam(name = "field", required = false) String fieldString,
+    		@RequestParam(name = "order", required = false) String orderString,
+    		@RequestParam(name = "nbByPage", required = false) String nbByPageString,
+    		@RequestParam(name = "page", required = false) String pageString,
+    		@RequestParam(name = "search", required = false) String computerSearch) {
+        
+	   if(fieldString!=null && !fieldString.equals(""))
 			field = fieldString;
 		if(orderString!=null && !orderString.equals(""))
 			order = orderString;
@@ -86,16 +70,12 @@ public class DashBoard extends HttpServlet {
 			computers = controller.getComputerPage(page, nbByPage,sortingField, sortingOrder);
 		}
 		
-		request.setAttribute("nbComputerFound", nbComputerFound);
-		request.setAttribute("lastPage",lastPage);
-		request.setAttribute("page", page);
-		request.setAttribute("computers", computers);
-		getServletContext().getRequestDispatcher("/WEB-INF/views/dashboard.jsp").forward(request, response);
-	}
-	
-	@Override
-	public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		doGet(request, response);
-	}
-
+		model.addAttribute("nbComputerFound", nbComputerFound);
+		model.addAttribute("lastPage", lastPage);
+		model.addAttribute("page", page);
+		model.addAttribute("computers", computers);
+		
+        return "dashboard";
+    }
+   
 }

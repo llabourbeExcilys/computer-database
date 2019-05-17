@@ -46,8 +46,7 @@ public class ComputerMapper implements RowMapper<Computer>{
 			computer.setLdDiscontinued(locald);
 		}
 
-		// Check if company id and name was given
-		// Create company and set it to computer.company field
+		// Check if company id and name was given and create it
 		if(companyId!=0 && companyName!=null) {
 			Company company = new Company(companyId,companyName);
 			computer.setCompany(company);
