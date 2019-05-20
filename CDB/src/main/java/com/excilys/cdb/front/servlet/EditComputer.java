@@ -1,67 +1,58 @@
 package com.excilys.cdb.front.servlet;
 
-import java.io.IOException;
 import java.util.Optional;
 
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import org.springframework.web.context.support.WebApplicationContextUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.excilys.cdb.back.controller.Controller;
 import com.excilys.cdb.back.dto.CompanyDTO;
 import com.excilys.cdb.back.dto.ComputerDTO;
 
-@WebServlet(urlPatterns = { "/editComputer" })
-public class EditComputer extends HttpServlet {
 
-	private static final long serialVersionUID = -2982660020993022701L;
-	
+@org.springframework.stereotype.Controller
+@RequestMapping("/editComputer")
+public class EditComputer {
+
+	@Autowired
 	private Controller controller;
 	
-	@Override
-    public void init() throws ServletException {
-		super.init();
-		controller = WebApplicationContextUtils
-					.getRequiredWebApplicationContext(getServletContext())
-					.getBean(Controller.class);
-    }
-	
-	@Override
-	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String idToEdit = request.getParameter("idToEdit");
+	@GetMapping
+	public ModelAndView doGet(Model model, @RequestParam(name = "idToEdit") String idToEdit){
 		Optional<ComputerDTO> computerOptional = controller.getComputerById(idToEdit);
-			
 		if(computerOptional.isPresent()) {
 			ComputerDTO computer = computerOptional.get();
-			request.setAttribute("computer", computer);
-			request.setAttribute("companies", controller.getCompanyList());
-			
-			getServletContext().getRequestDispatcher("/WEB-INF/views/editComputer.jsp").forward(request, response);
+			model.addAttribute("computer", computer);
+			model.addAttribute("companies", controller.getCompanyList());
+			return new ModelAndView("editComputer");
 		}else {
-			getServletContext().getRequestDispatcher("/dashboard").forward(request, response);
+			return new ModelAndView("redirect:/dashboard");
 		}
 	}
 
-	@Override
-	public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String id = request.getParameter("id");
-		String name = request.getParameter("computerName");
-		String introduced = request.getParameter("introduced").trim();
-		String discontinued = request.getParameter("discontinued").trim();
-		String companyIdString = request.getParameter("companyId");
+	
+	@PostMapping
+	public ModelAndView doPost(Model model,
+			@RequestParam(name = "id") String id,
+			@RequestParam(name = "computerName") String computerName,
+			@RequestParam(name = "introduced") String introduced,
+			@RequestParam(name = "discontinued") String discontinued,
+			@RequestParam(name = "companyId") String companyId){
 
 		Optional<String> intrOptional = Optional.ofNullable(introduced.equals("") ? null : introduced);
 		Optional<String> discOptional = Optional.ofNullable(discontinued.equals("") ? null : discontinued);		
 		Optional<ComputerDTO> optComputerDTO = controller.getComputerById(id);
+		Optional<CompanyDTO> cOptional = controller.getCompanyById(companyId);
 		
 		if(optComputerDTO.isPresent()) {
 			ComputerDTO computerDTO = optComputerDTO.get();
-			controller.updateName(computerDTO, name);
-			
+			controller.updateName(computerDTO, computerName);
+		
 			if(intrOptional.isPresent() && discOptional.isPresent()) 
 				controller.updateComputerIntroDiscon(computerDTO, intrOptional.get(), discOptional.get());
 			else if (intrOptional.isPresent())
@@ -69,11 +60,10 @@ public class EditComputer extends HttpServlet {
 			else if (discOptional.isPresent())
 				controller.updateComputerDiscontinued(computerDTO, discOptional.get());
 			
-			Optional<CompanyDTO> cOptional = controller.getCompanyById(companyIdString);
 			if(cOptional.isPresent())
-				controller.updateComputerCompany(computerDTO, companyIdString);
+				controller.updateComputerCompany(computerDTO, companyId);
 		}
-		getServletContext().getRequestDispatcher("/dashboard").forward(request, response);
+		return new ModelAndView("redirect:/dashboard");
 	}
 
 }
