@@ -1,44 +1,34 @@
 package com.excilys.cdb.front.servlet;
 
-import java.io.IOException;
 import java.util.Arrays;
 
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import org.springframework.web.context.support.WebApplicationContextUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.excilys.cdb.back.controller.Controller;
 
-@WebServlet(urlPatterns = {"/deleteComputer"})
-public class DeleteComputer extends HttpServlet{
+@org.springframework.stereotype.Controller
+@RequestMapping("/deleteComputer")
+public class DeleteComputer{
 
-	private static final long serialVersionUID = -3829110288355271044L;
-
+	@Autowired
 	private static Controller controller;
 	
-	@Override
-    public void init() throws ServletException {
-		super.init();
-		controller = WebApplicationContextUtils
-					.getRequiredWebApplicationContext(getServletContext())
-					.getBean(Controller.class);
-    }
-	
-	@Override
-	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		getServletContext().getRequestDispatcher("/WEB-INF/views/dashboard.jsp").forward(request, response);
+	@GetMapping
+	public String doGet(Model model) {
+		return "dashboard";
 	}
 	
-	@Override
-	public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String computerId = request.getParameter("selection");
-		String[] reString = computerId.split(",");
+	@PostMapping
+	public ModelAndView doPost(Model model, @RequestParam(name = "selection") String computerIds) {
+		String[] reString = computerIds.split(",");
 		Arrays.stream(reString).forEach(controller::deleteComputerById);
-		getServletContext().getRequestDispatcher("/dashboard").forward(request, response);
+		return new ModelAndView("redirect:/dashboard");
 	}
 	
 }
