@@ -43,9 +43,9 @@
                             <div class="form-group">
                                 <label for="companyId">Company</label>
                                 <select class="form-control" id="companyId" name="companyId">	
-                                   <option <c:if test="${computer.companyID == null}">selected="selected"</c:if>  value="">-</option>
+                                   <option <c:if test="${computer.companyId == null}">selected="selected"</c:if>  value="">-</option>
                                    <c:forEach  var="company" items="${companies}">
-                                   		<option <c:if test="${company.id==computer.companyID}">selected="selected"</c:if>  value="${company.id}">${company.name}</option>
+                                   		<option <c:if test="${company.id==computer.companyId}">selected="selected"</c:if>  value="${company.id}">${company.name}</option>
                                		</c:forEach>
                                 </select>
                              

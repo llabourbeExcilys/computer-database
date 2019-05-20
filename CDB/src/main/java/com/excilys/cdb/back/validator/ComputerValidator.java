@@ -24,7 +24,7 @@ public class ComputerValidator {
 	public void validate(ComputerDTO computerDTO) {
 		validateName(computerDTO.getName());
 		validateDateOrder(computerDTO.getLdIntroduced(),computerDTO.getLdDiscontinued());
-		validateCompany(computerDTO.getCompanyID(), computerDTO.getCompanyName());
+		validateCompany(computerDTO.getCompanyId(), computerDTO.getCompanyName());
 	}
 	
 	private void validateName(String name) {

@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -23,37 +24,33 @@
             <div class="row">
                 <div class="col-xs-8 col-xs-offset-2 box">
                     <h1>Add Computer</h1>
-                    <form id="addComputerForm" action="addComputer" method="POST">
-                        <fieldset>
+					<form:form method="POST" action="addComputer" modelAttribute="ComputerForm">
                             <div class="form-group">
-                                <label for="computerName">Computer name</label>
-                                <input type="text" class="form-control" id="computerName" name="computerName" pattern="[A-Za-z0-9\. ]{3,30}" required title="3 characters minimum, 30 maximum" placeholder="Computer name">
+								<form:label for="computerName" path="name">Name</form:label>
+								<form:input class="form-control" id="computerName" path="name" placeholder="${placeHolderName}"/>
                             </div>
                             <div class="form-group">
-                                <label for="introduced">Introduced date</label>
-                                <input type="date" class="form-control" id="introduced" name="introduced" placeholder="Introduced date">
+								<form:label for="introduced" path="ldIntroduced">Introduction date</form:label>
+								<form:input type="date" class="form-control" id="introduced" path="ldIntroduced"/>                            
                             </div>
                             <div class="form-group">
-                                <label for="discontinued">Discontinued date</label>
-                                <input type="date" class="form-control" id="discontinued" name="discontinued" placeholder="Discontinued date">
+								<form:label for="discontinued" path="ldDiscontinued">Discontinuation date</form:label>
+								<form:input type="date" class="form-control" id="discontinued" path="ldDiscontinued"/>
                             </div>
                             <div class="form-group">
                                 <label for="companyId">Company</label>
-                                <select class="form-control" id="companyId" name="companyId" >
-                                    <option value="-1">-</option>
-                                	<c:forEach var="company" items="${companies}">
-                                		<option value="${company.id}">${company.name}</option>
-                                	</c:forEach>
-                                </select>
-                            </div>                  
-                        </fieldset>
-                        <div class="actions pull-right">
-                            <input type="submit" value="Add" class="btn btn-primary">
-                            or
-                            <a href="dashboard" class="btn btn-default">Cancel</a>
-                        </div>
-                    </form>
-                </div>
+								<form:select class="form-control" id="companyId" path="companyId">
+									<form:option value="" label="--Select Company"/>
+	              						<form:options items="${companies}" itemValue="id" itemLabel="name"/>
+								</form:select>                            
+                            </div>
+							<div class="actions pull-right">
+                           		<input type="submit" value="Add" class="btn btn-primary">
+                          		or
+                          		<a href="dashboard" class="btn btn-default">Cancel</a>
+                        	</div>
+					</form:form>
+				</div>
             </div>
         </div>
     </section>

@@ -43,6 +43,25 @@ public class Controller {
 
 	// Create
 	
+	public void addComputer(ComputerDTO computerDTO) {
+		Optional<String> introducedOptional = computerDTO.getLdIntroduced() != null ?
+				Optional.ofNullable(computerDTO.getLdIntroduced().toString()) :
+				Optional.empty();
+				
+		Optional<String> discontinuedOptional = computerDTO.getLdDiscontinued()!= null ?
+				Optional.ofNullable(computerDTO.getLdDiscontinued().toString()) :
+				Optional.empty();
+				
+		Optional<String> companyIdOptional = computerDTO.getCompanyId() != null ? 
+				Optional.ofNullable(computerDTO.getCompanyId().toString()) :
+				Optional.empty();
+
+		
+		addComputer(computerDTO.getName(),introducedOptional,discontinuedOptional,companyIdOptional);
+			
+	}
+
+
 	public long addComputer(String name, 
 							Optional<String> dateIntroduction,
 							Optional<String> dateDiscontinued,
@@ -70,7 +89,7 @@ public class Controller {
 			long idL = Long.parseLong(companyIdString);
 			Optional<Company> companyById = service.getCompanyById(idL);
 			if(companyById.isPresent()) {
-				computerDTO.setCompanyID(idL);
+				computerDTO.setCompanyId(idL);
 				computerDTO.setCompanyName(companyById.get().getName());
 			}
 		}
@@ -78,8 +97,8 @@ public class Controller {
 		computerValidator.validate(computerDTO);
 		
 		Company company = null;
-		if(computerDTO.getCompanyID() != null) {
-			Optional<Company> companyOptional = service.getCompanyById(computerDTO.getCompanyID());
+		if(computerDTO.getCompanyId() != null) {
+			Optional<Company> companyOptional = service.getCompanyById(computerDTO.getCompanyId());
 			if(companyOptional.isPresent())
 				company=companyOptional.get();
 		}
@@ -255,6 +274,8 @@ public class Controller {
 	// Getter Setter
 	public Service getService() {return service;}
 	public void setService(Service service) {this.service = service;}
+
+
 
 
 }

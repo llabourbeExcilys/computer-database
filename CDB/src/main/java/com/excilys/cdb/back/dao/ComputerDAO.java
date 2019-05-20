@@ -97,7 +97,6 @@ public class ComputerDAO {
 		 parameters.put("introduced", computer.getLdIntroduced() != null ? Date.valueOf(computer.getLdIntroduced()) : null);
 		 parameters.put("discontinued", computer.getLdDiscontinued() != null ? Date.valueOf(computer.getLdDiscontinued()) : null);
 		 parameters.put("company_id", computer.getCompany() != null ? computer.getCompany().getId() : null);
-		 
 		return simpleJdbcInsert.executeAndReturnKey(parameters).longValue();
 	}
 
@@ -148,8 +147,7 @@ public class ComputerDAO {
 				.addValue("discontinued", c.getLdDiscontinued() != null ? Date.valueOf(c.getLdDiscontinued()) : null)
 				.addValue("company_id", c.getCompany() != null ? c.getCompany().getId() : null);
 		
-		int nbOfRowAffected = namedParameterJdbcTemplate.update(SQL_UPDATE_COMPUTER, namedParameters);
-		
+		int nbOfRowAffected = namedParameterJdbcTemplate.update(SQL_UPDATE_COMPUTER, namedParameters);	
 		if(nbOfRowAffected==0)
 			throw new ComputerNotFoundException("La requête n'a rien modifié dans la base de donnée.");
 	}
