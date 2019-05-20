@@ -17,11 +17,11 @@ import com.excilys.cdb.back.controller.Controller;
 public class DeleteComputer{
 
 	@Autowired
-	private static Controller controller;
+	private Controller controller;
 	
 	@GetMapping
-	public String doGet(Model model) {
-		return "dashboard";
+	public ModelAndView doGet() {
+		return new ModelAndView("redirect:/dashboard");
 	}
 	
 	@PostMapping

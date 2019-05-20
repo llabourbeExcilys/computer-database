@@ -20,7 +20,7 @@ public class EditComputer extends HttpServlet {
 
 	private static final long serialVersionUID = -2982660020993022701L;
 	
-	private static Controller controller;
+	private Controller controller;
 	
 	@Override
     public void init() throws ServletException {
