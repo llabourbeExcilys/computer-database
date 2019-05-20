@@ -41,7 +41,6 @@ public class ComputerMapperTest {
 	
 	@Test
 	public void mapRowTest() {
-		
 		try {
 			Mockito.when(resultSet.getLong("computer_id")).thenReturn(23L);
 			Mockito.when(resultSet.getString("computer_name")).thenReturn("Asus Computer");

@@ -3,7 +3,6 @@ package com.excilys.cdb.mapper;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Optional;
 
 import  org.junit.Assert;
 import org.junit.Before;
@@ -40,22 +39,16 @@ public class CompanyMapperTest {
 	
 	@Test
 	public void testGetCompanyOK() {
-		
 		try {
 			Mockito.when(resultSet.getLong("id")).thenReturn(5L);
 			Mockito.when(resultSet.getString("name")).thenReturn("Asus");
 			Mockito.when(resultSet.next()).thenReturn(true);
-
 			
-			Optional<Company> optCompany = companyMapper.getCompany(resultSet);
+			Company company = companyMapper.mapRow(resultSet,0);
+			Company companyTest = new Company(5L,"Asus");
 			
-			Company testCompany = new Company(5L,"Asus");
-			
-			if(!optCompany.isPresent())
-				Assert.fail();
-			
-			Assert.assertEquals(optCompany.get(), testCompany);
-							
+			Assert.assertNotNull("La company ne devrait pas être null.",company);			
+			Assert.assertEquals("Les deux companies devraient être égales.",companyTest,company);				
 		} catch (SQLException e) {
 			Assert.fail("SQL Exception");
 		}
@@ -63,19 +56,13 @@ public class CompanyMapperTest {
 	
 	@Test
 	public void testGetCompanyEmpty() {
-		
 		try {
 			Mockito.when(resultSet.next()).thenReturn(false);
-			
-			Optional<Company> company = companyMapper.getCompany(resultSet);
-						
-			Assert.assertTrue(!company.isPresent());
-							
+			Company company = companyMapper.mapRow(resultSet, 0);
+			Assert.assertNull(company);				
 		} catch (SQLException e) {
 			Assert.fail("SQL Exception");
 		}
 	}
-	
-	
 
 }

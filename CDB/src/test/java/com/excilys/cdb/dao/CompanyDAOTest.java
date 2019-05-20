@@ -22,7 +22,6 @@ import com.excilys.cdb.back.model.Computer;
 import com.excilys.cdb.config.AppConfig;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-//@ContextConfiguration(classes = AppConfig.class)
 @WebAppConfiguration
 @ContextConfiguration(classes = AppConfig.class)
 public class CompanyDAOTest {

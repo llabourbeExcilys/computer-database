@@ -1,24 +1,20 @@
 package com.excilys.cdb.back.dao;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.TimeZone;
 
 import javax.sql.DataSource;
 
-import org.slf4j.LoggerFactory;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.excilys.cdb.back.mapper.CompanyMapper;
 import com.excilys.cdb.back.model.Company;
-
-import ch.qos.logback.classic.Logger;
 
 @Component
 public class CompanyDAO{
@@ -37,99 +33,52 @@ public class CompanyDAO{
 			+"FROM "
 			+	"company "
 			+"WHERE "
-			+	"company.id = ?";
+			+	"company.id = :id";
 	
-	private static final String SQL_DELETE_COMPUTER_BY_ID = 
+	private static final String SQL_DELETE_COMPUTER_BY_COMPANY_ID = 
 			"DELETE FROM "
 			+	"computer "
 			+"WHERE "
-			+	"company_id = ?";
+			+	"company_id = :id";
 	
 	
 	private static final String SQL_DELETE_COMPANY_BY_ID =
 			"DELETE FROM "
 			+	"company "
 			+"WHERE "
-			+	"id = ?";
+			+	"id = :id";
 
-
-	
-	private final CompanyMapper companyMapper;
-	private final DataSource dataSource;
-	
-	private static Logger logger = (Logger) LoggerFactory.getLogger(CompanyDAO.class );
-
-    public CompanyDAO(CompanyMapper companyMapper, DataSource dataSource) {
-		this.companyMapper = companyMapper;
-		this.dataSource = dataSource;
-	}
 
 	static {TimeZone.setDefault(TimeZone.getTimeZone("UTC"));}
+	
+	private final CompanyMapper companyMapper;
+	private final JdbcTemplate jdbcTemplate;
+	private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
+	
+    public CompanyDAO(CompanyMapper companyMapper, DataSource dataSource) {
+		this.companyMapper = companyMapper;
+		this.jdbcTemplate =  new JdbcTemplate(dataSource);
+		this.namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
+	}
 
 	// Read
 	
 	public List<Company> getCompanyList() {
-		List<Company> resultList = new ArrayList<>();
-		
-		try (Connection conn = dataSource.getConnection();
-			 Statement state = conn.createStatement(
-								ResultSet.TYPE_SCROLL_INSENSITIVE,
-								ResultSet.CONCUR_UPDATABLE);
-			 ResultSet result = state.executeQuery(SQL_SELECT_ALL_COMPANY);){
-			
-			
-			while(result.next()){
-				result.previous();
-				Optional<Company> company = companyMapper.getCompany(result);
-				if(company.isPresent())
-					resultList.add(company.get());				
-			}
-		} catch (SQLException e) {
-			logger.debug(e.getMessage());
-			logger.error(e.getMessage());
-		} 
-		return resultList;
+		return jdbcTemplate.query(SQL_SELECT_ALL_COMPANY, companyMapper);
 	}
 
 	public Optional<Company> getCompanyById(long idL) {
-		try (Connection conn = dataSource.getConnection();
-			 PreparedStatement state = conn.prepareStatement(SQL_SELECT_COMPANY_BY_ID); ){	
-
-			state.setLong(1, idL);
-			ResultSet result = state.executeQuery();
-			
-			return companyMapper.getCompany(result);
-		} catch (SQLException e) {
-			logger.debug(e.getMessage());
-			logger.error(e.getMessage());
-		}
-		return Optional.empty();
+		SqlParameterSource namedParameters = new MapSqlParameterSource().addValue("id", idL);
+		List<Company> companyList = namedParameterJdbcTemplate
+				.query(SQL_SELECT_COMPANY_BY_ID, namedParameters, companyMapper);
+		return Optional.ofNullable(companyList.isEmpty() ? null : companyList.get(0));
 	}
 	
+	@Transactional
 	public void deleteCompanyById(long idL) {
-		try (Connection conn = dataSource.getConnection();
-			 PreparedStatement deleteComputerPreparedStatement = conn.prepareStatement(SQL_DELETE_COMPUTER_BY_ID);
-			 PreparedStatement deleteCompanyPreparedStatement = conn.prepareStatement(SQL_DELETE_COMPANY_BY_ID);
-				AutoCloseable finish = conn::rollback){	
-			
-			conn.setAutoCommit(false);
-			
-			deleteComputerPreparedStatement.setLong(1, idL);
-			deleteComputerPreparedStatement.executeUpdate();
-				
-			deleteCompanyPreparedStatement.setLong(1, idL);
-			deleteCompanyPreparedStatement.executeUpdate();
-			
-			conn.commit();
-			conn.setAutoCommit(true);	
-		} catch (SQLException e) {
-			logger.debug(e.getMessage());
-			logger.error(e.getMessage());
-		} catch (Exception e1) {
-			logger.debug(e1.getMessage());
-			logger.error(e1.getMessage());
-		}
+		SqlParameterSource namedParameters = new MapSqlParameterSource().addValue("id", idL);
+		namedParameterJdbcTemplate.update(SQL_DELETE_COMPUTER_BY_COMPANY_ID, namedParameters);
+		namedParameterJdbcTemplate.update(SQL_DELETE_COMPANY_BY_ID, namedParameters);
 	}
-	
 }
 

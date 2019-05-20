@@ -4,33 +4,24 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Optional;
 
-import org.slf4j.LoggerFactory;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 
 import com.excilys.cdb.back.dto.CompanyDTO;
 import com.excilys.cdb.back.model.Company;
 
-import ch.qos.logback.classic.Logger;
-
 @Component
-public class CompanyMapper {
+public class CompanyMapper implements RowMapper<Company> {
 
-	private static Logger logger = (Logger) LoggerFactory.getLogger(CompanyMapper.class);	
-
-	// Create a company from a ResultSet
-	public Optional<Company> getCompany(ResultSet result) {
-		try {
-			if (!result.next())
-				return Optional.empty();
-			long id = result.getLong("id");
-			String name = result.getString("name");
-			if (id != 0 && name != null)
-				return Optional.ofNullable(new Company(id, name));
-		} catch (SQLException e) {
-			logger.debug(e.getMessage());
-			logger.error(e.getMessage());
-		}
-		return Optional.empty();
+	
+	@Override
+	public Company mapRow(ResultSet result, int rowNum) throws SQLException {
+		Long id = result.getLong("id");
+		String name = result.getString("name");
+		if(id == 0 || name == null)
+			return null;
+		
+		return new Company(id, name);
 	}
 
 	public CompanyDTO companyToDto(Company company) {
@@ -42,5 +33,5 @@ public class CompanyMapper {
 			return Optional.ofNullable(companyToDto(cOptional.get()));
 		return Optional.empty();
 	}
-
+	
 }
