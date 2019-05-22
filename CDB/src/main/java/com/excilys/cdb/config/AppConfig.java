@@ -9,6 +9,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
@@ -17,24 +18,28 @@ import com.zaxxer.hikari.HikariDataSource;
 @ComponentScan("com.excilys.cdb")
 @EnableTransactionManagement
 public class AppConfig {
-	
+
 	@Bean(destroyMethod = "close")
 	public DataSource dataSource() {
-		
-		ResourceBundle bundle = ResourceBundle.getBundle("config");
-
+		ResourceBundle bundle = ResourceBundle.getBundle("db");
 		HikariConfig config = new HikariConfig();
+		
 		config.setJdbcUrl(bundle.getString("sgbd.url"));
 		config.setDriverClassName(bundle.getString("sgbd.driver"));
 		config.setUsername(bundle.getString("sgbd.login"));
 		config.setPassword(bundle.getString("sgbd.pwd"));
-
+		
 		return new HikariDataSource(config);
-	}	
-	
+	}
+
 	@Bean
 	public DataSourceTransactionManager getTransactionManager(DataSource dataSource) {
-		  return new DataSourceTransactionManager(dataSource);
+		return new DataSourceTransactionManager(dataSource);
+	}
+
+	@Bean
+	public LocalValidatorFactoryBean validator() {
+		return new LocalValidatorFactoryBean();
 	}
 
 }

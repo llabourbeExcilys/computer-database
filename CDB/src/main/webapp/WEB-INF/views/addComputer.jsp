@@ -24,18 +24,21 @@
             <div class="row">
                 <div class="col-xs-8 col-xs-offset-2 box">
                     <h1>Add Computer</h1>
-					<form:form method="POST" action="addComputer" modelAttribute="ComputerForm">
+					<form:form method="POST" action="addComputer" modelAttribute="computerDTO">
                             <div class="form-group">
 								<form:label for="computerName" path="name">Name</form:label>
 								<form:input class="form-control" id="computerName" path="name" placeholder="${placeHolderName}"/>
+                                <font color=red><form:errors path="name"/></font>
                             </div>
                             <div class="form-group">
 								<form:label for="introduced" path="ldIntroduced">Introduction date</form:label>
-								<form:input type="date" class="form-control" id="introduced" path="ldIntroduced"/>                            
+								<form:input type="date" class="form-control" id="introduced" path="ldIntroduced"/>        
+								<font color=red><form:errors path="ldIntroduced"/></font>								                    
                             </div>
                             <div class="form-group">
 								<form:label for="discontinued" path="ldDiscontinued">Discontinuation date</form:label>
 								<form:input type="date" class="form-control" id="discontinued" path="ldDiscontinued"/>
+								<font color=red><form:errors path="ldDiscontinued"/></font>								                                                
                             </div>
                             <div class="form-group">
                                 <label for="companyId">Company</label>

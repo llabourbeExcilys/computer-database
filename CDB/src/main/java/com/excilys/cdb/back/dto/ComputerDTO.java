@@ -2,15 +2,26 @@ package com.excilys.cdb.back.dto;
 
 import java.time.LocalDate;
 
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.PastOrPresent;
+import javax.validation.constraints.Size;
 
+import com.excilys.cdb.back.validator.DateConstraint;;
+
+@DateConstraint(ldIntroduced = "ldIntroduced", ldDiscontinued = "ldDiscontinued")
 public class ComputerDTO {
-	
+
 		//REQUIRED
 		private long id;
+		
+		@NotEmpty
+		@Size(min = 3, max = 30)
 		private String name;
 		
 		// OPTIONNAL
+		@PastOrPresent
 		private LocalDate ldIntroduced;
+		@PastOrPresent
 		private LocalDate ldDiscontinued;
 		private Long companyId;
 		private String companyName;
