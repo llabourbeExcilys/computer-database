@@ -22,10 +22,9 @@ public class DateConstraintValidator  implements ConstraintValidator<DateConstra
 		LocalDate ldIntro = computerDTO.getLdIntroduced();
 		LocalDate ldDiscon = computerDTO.getLdDiscontinued();
 		
-		if(!(ldIntro == null || ldDiscon == null || ldIntro.isBefore(ldDiscon))) {
+		if(ldIntro != null && ldDiscon != null && ldDiscon.isBefore(ldIntro)) {
 			Locale locale = LocaleContextHolder.getLocale();
-			String errogMessageString = messageSource.getMessage(
-					"computerDTO_dateIntro_before_dateDiscon.computerDTO.ldDiscontinued", null, locale);
+			String errogMessageString = messageSource.getMessage("DateConstraint.computerDTO.ldDiscontinued", null, locale);
 			context.buildConstraintViolationWithTemplate(errogMessageString)
         		.addPropertyNode("ldDiscontinued")
         		.addConstraintViolation();

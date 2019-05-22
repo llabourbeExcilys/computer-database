@@ -13,7 +13,7 @@ import javax.validation.Payload;
 @Target( { java.lang.annotation.ElementType.TYPE, java.lang.annotation.ElementType.ANNOTATION_TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface DateConstraint {
-    String message() default "computerDTO_dateIntro_before_dateDiscon.computerDTO.ldDiscontinued";
+    String message() default "DateConstraint.computerDTO.ldDiscontinued";
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};
      

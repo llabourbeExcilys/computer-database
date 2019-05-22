@@ -32,20 +32,24 @@ Current Locale : ${pageContext.response.locale}
     <section id="main">
         <div class="container">
             <h1 id="homeTitle">
-                ${nbComputerFound} Computers found
+                ${nbComputerFound} <spring:message code="dashboard.nbComputerFound"/>
             </h1>
             <div id="actions" class="form-horizontal">
                 <div class="pull-left">
                     <form id="searchForm" action="dashboard" method="GET" class="form-inline">
-
-                        <input type="search" id="searchbox" name="search" class="form-control" placeholder="Search name" />
-                        <input type="submit" id="searchsubmit" value="Filter by name"
+                    
+                    
+                    <spring:message code="dashboard.placeholder.searchName" var="searchNamePlaceholder"/>
+                    <spring:message code="dashboard.placeholder.filterByName" var="filterByNamePlaceholder"/>
+                    
+                        <input type="search" id="searchbox" name="search" class="form-control" placeholder="${searchNamePlaceholder}" />
+                        <input type="submit" id="searchsubmit" value="${filterByNamePlaceholder}"
                         class="btn btn-primary" />
                     </form>
                 </div>
                 <div class="pull-right">
-                    <a class="btn btn-success" id="addComputer" href="addComputer">Add Computer</a> 
-                    <a class="btn btn-default" id="editComputer" href="#" onclick="$.fn.toggleEditMode();">Edit</a>
+                    <a class="btn btn-success" id="addComputer" href="addComputer"><spring:message code="dashboard.button.addComputer"/></a> 
+                    <a class="btn btn-default" id="editComputer" href="#" onclick="$.fn.toggleEditMode();"><spring:message code="dashboard.button.editComputer"/></a>
                 </div>
             </div>
         </div>
@@ -70,24 +74,24 @@ Current Locale : ${pageContext.response.locale}
                             </span>
                         </th>
                         <th>
-                            Computer name
+                            <spring:message code="dashboard.column.computer.name" />
                             <a href="dashboard?field=name&order=asc">&#9650;</a>
                             <a href="dashboard?field=name&order=desc">&#9660;</a>
                         </th>
                         <th>
-                            Introduced date
+                            <spring:message code="dashboard.column.computer.introduction" />
                             <a href="dashboard?field=introDate&order=asc">&#9650;</a>
                             <a href="dashboard?field=introDate&order=desc">&#9660;</a>
                         </th>
                         <!-- Table header for Discontinued Date -->
                         <th>
-                            Discontinued date
+                            <spring:message code="dashboard.column.computer.discontinuation" />
                             <a href="dashboard?field=disconDate&order=asc">&#9650;</a>
                             <a href="dashboard?field=disconDate&order=desc">&#9660;</a>
                         </th>
                         <!-- Table header for Company -->
                         <th>
-                            Company
+                            <spring:message code="dashboard.column.computer.company" />
                             <a href="dashboard?field=company&order=asc">&#9650;</a>
                             <a href="dashboard?field=company&order=desc">&#9660;</a>
                         </th>

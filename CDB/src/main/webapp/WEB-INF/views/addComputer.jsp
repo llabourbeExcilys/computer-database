@@ -1,5 +1,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -23,34 +25,35 @@
         <div class="container">
             <div class="row">
                 <div class="col-xs-8 col-xs-offset-2 box">
-                    <h1>Add Computer</h1>
+                    <h1><spring:message code="addComputer.title"/></h1>
 					<form:form method="POST" action="addComputer" modelAttribute="computerDTO">
                             <div class="form-group">
-								<form:label for="computerName" path="name">Name</form:label>
+								<form:label for="computerName" path="name"><spring:message code="addComputer.name"/></form:label>
 								<form:input class="form-control" id="computerName" path="name" placeholder="${placeHolderName}"/>
                                 <font color=red><form:errors path="name"/></font>
                             </div>
                             <div class="form-group">
-								<form:label for="introduced" path="ldIntroduced">Introduction date</form:label>
+								<form:label for="introduced" path="ldIntroduced"><spring:message code="addComputer.introduction"/></form:label>
 								<form:input type="date" class="form-control" id="introduced" path="ldIntroduced"/>        
 								<font color=red><form:errors path="ldIntroduced"/></font>								                    
                             </div>
                             <div class="form-group">
-								<form:label for="discontinued" path="ldDiscontinued">Discontinuation date</form:label>
+								<form:label for="discontinued" path="ldDiscontinued"><spring:message code="addComputer.discontinuation"/></form:label>
 								<form:input type="date" class="form-control" id="discontinued" path="ldDiscontinued"/>
 								<font color=red><form:errors path="ldDiscontinued"/></font>								                                                
                             </div>
                             <div class="form-group">
-                                <label for="companyId">Company</label>
+                                <label for="companyId"><spring:message code="addComputer.company"/></label>
 								<form:select class="form-control" id="companyId" path="companyId">
-									<form:option value="" label="--Select Company"/>
-	              						<form:options items="${companies}" itemValue="id" itemLabel="name"/>
+								    <spring:message code="addComputer.placeholder.selectCompany" var="selectCompanyPlaceholder"/>
+									<form:option value="" label="-- ${selectCompanyPlaceholder}"/>
+	              					<form:options items="${companies}" itemValue="id" itemLabel="name"/>
 								</form:select>                            
                             </div>
 							<div class="actions pull-right">
-                           		<input type="submit" value="Add" class="btn btn-primary">
-                          		or
-                          		<a href="dashboard" class="btn btn-default">Cancel</a>
+                           		<input type="submit" value="<spring:message code="addComputer.button.add"/>" class="btn btn-primary">
+                        		<spring:message code="addComputer.or"/>
+                          		<a href="dashboard" class="btn btn-default"><spring:message code="addComputer.button.cancel"/></a>
                         	</div>
 					</form:form>
 				</div>
