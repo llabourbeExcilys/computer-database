@@ -15,7 +15,7 @@ import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 
 @Configuration
-@ComponentScan("com.excilys.cdb")
+@ComponentScan("com.excilys.cdb.back")
 @EnableTransactionManagement
 public class AppConfig {
 

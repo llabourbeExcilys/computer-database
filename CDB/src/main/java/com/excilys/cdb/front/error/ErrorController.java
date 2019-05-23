@@ -1,4 +1,4 @@
-package com.excilys.cdb.back.error;
+package com.excilys.cdb.front.error;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -14,21 +14,15 @@ public class ErrorController {
 	public ModelAndView renderErrorPage(HttpServletRequest httpRequest) {
 		int httpErrorCode = getErrorCode(httpRequest);
 		switch (httpErrorCode) {
-			case 403: {
-				return new ModelAndView("403");
-			}
-			case 404: {
-				return new ModelAndView("404");
-			}
-			case 500: {
-				return new ModelAndView("500");
-			}
-			default:
-				return new ModelAndView("500");
+			case 403: return new ModelAndView("403");
+			case 404: return new ModelAndView("404");
+			case 500: return new ModelAndView("500");
+			default : return new ModelAndView("500");
 		}
 	}
 
 	private int getErrorCode(HttpServletRequest httpRequest) {
 		return (Integer) httpRequest.getAttribute("javax.servlet.error.status_code");
 	}
+	
 }

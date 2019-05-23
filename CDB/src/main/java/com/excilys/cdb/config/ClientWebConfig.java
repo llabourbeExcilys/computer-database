@@ -23,7 +23,7 @@ import com.excilys.cdb.back.converter.StringToLocalDateConverter;
 
 @EnableWebMvc
 @Configuration
-@ComponentScan("com.excilys.cdb")
+@ComponentScan("com.excilys.cdb.front")
 public class ClientWebConfig implements WebMvcConfigurer {
 
 	@Override

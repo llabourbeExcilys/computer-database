@@ -17,7 +17,6 @@ import java.util.stream.Collectors;
 
 import javax.sql.DataSource;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.excilys.cdb.back.model.Company;
@@ -30,10 +29,10 @@ public class TestDatabase {
     private Map<Long, Company> companies = new TreeMap<>();
     private Map<Long, Computer> computers = new TreeMap<>();
     
-    @Autowired
     private DataSource dataSource;
 
-    public TestDatabase() {   	
+    public TestDatabase(DataSource dataSource) {   	
+    	this.dataSource=dataSource;
         addCompanies();
         addComputers();
     }

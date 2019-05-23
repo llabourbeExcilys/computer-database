@@ -15,16 +15,17 @@ public class MyWebAppInitializer implements WebApplicationInitializer {
 	public void onStartup(ServletContext servletCxt) throws ServletException {		
 		 // Create the 'root' Spring application context
         AnnotationConfigWebApplicationContext rootContext = new AnnotationConfigWebApplicationContext();
-        rootContext.register(AppConfig.class, MyWebAppInitializer.class);
+        rootContext.register(AppConfig.class);
 
         // Manage the lifecycle of the root application context
         servletCxt.addListener(new ContextLoaderListener(rootContext));
         // Create the dispatcher servlet's Spring application context
         AnnotationConfigWebApplicationContext dispatcherContext = new AnnotationConfigWebApplicationContext();
-
+        
+        dispatcherContext.register(ClientWebConfig.class);
+        
         // Register and map the dispatcher servlet
-        ServletRegistration.Dynamic dispatcher = servletCxt.addServlet("dispatcher",
-                new DispatcherServlet(dispatcherContext));
+        ServletRegistration.Dynamic dispatcher = servletCxt.addServlet("dispatcher",new DispatcherServlet(dispatcherContext));
         dispatcher.setLoadOnStartup(1);
         dispatcher.addMapping("/");
 	}
