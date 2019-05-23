@@ -68,26 +68,10 @@ public class WebController {
 				.collect(Collectors.toList());
 	}
 	
-	
-	public Optional<CompanyDTO> getCompanyById(String id){
-		long idL = Long.parseLong(id);
-		return getCompanyById(idL);
-	}
-	
-	public Optional<CompanyDTO> getCompanyById(long id){
-		Optional<Company> cOptional = service.getCompanyById(id);
-		return companyMapper.companyToDto(cOptional);
-	}
-	
 	public List<ComputerDTO> getComputerList() {		
 		return service.getComputerList().stream()
 				.map(computerMapper::computerToDTO)
 				.collect(Collectors.toList());
-	}
-
-	public Optional<ComputerDTO> getComputerById(String id) {
-		long idL = Long.parseLong(id);
-		return getComputerById(idL);		
 	}
 
 	public Optional<ComputerDTO> getComputerById(long idL) {
@@ -119,6 +103,7 @@ public class WebController {
 
 
 	// Update
+	
 	private Computer getComputer(ComputerDTO computerDTO) {
 		Optional<Computer> cOptional = service.getComputerById(computerDTO.getId());
 		if(!cOptional.isPresent())
@@ -151,10 +136,6 @@ public class WebController {
 		service.deleteComputerById(idL);
 	}
 	
-	public void deleteCompanyById(String id) {
-		long idL = Long.parseLong(id);
-		service.deleteCompanyById(idL);
-	}
 
 	// Getter Setter
 	public Service getService() {return service;}

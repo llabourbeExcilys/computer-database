@@ -31,7 +31,7 @@ public class EditComputer {
 	private List<CompanyDTO> getCompanyList() {return controller.getCompanyList();}
 	
 	@GetMapping
-	public ModelAndView doGet(Model model, @RequestParam(name = "idToEdit") String idToEdit){
+	public ModelAndView doGet(Model model, @RequestParam(name = "idToEdit") Long idToEdit){
 		Optional<ComputerDTO> computerOptional = controller.getComputerById(idToEdit);
 		if(computerOptional.isPresent()) {
 			ComputerDTO computerDTO = computerOptional.get();
