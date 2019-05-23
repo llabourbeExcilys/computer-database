@@ -1,4 +1,4 @@
-package com.excilys.cdb.front.viewController;
+package com.excilys.cdb.front.view;
 
 import java.util.ArrayList;
 import java.util.List;
