@@ -19,16 +19,13 @@
 
     <header class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
-            <a class="navbar-brand" href="dashboard?page=1&field=default&order=default"> Application - Computer Database </a>
+      		<a class="navbar-brand pull-left" href="dashboard?page=1&field=default&order=default"> Application - Computer Database </a>
+           	<a class="navbar-brand pull-right" href="?lang=en">English</a>|
+           	<p class="navbar-brand pull-right">|</p>
+           	<a class="navbar-brand pull-right" href="?lang=fr">Français</a>
         </div>
     </header>
-
-Language : <a href="?lang=en">English</a>|<a href="?lang=fr">French</a>
-<br>
-Size.computerDTO.name : <spring:message code="Size.computerDTO.name"/>
-<br>
-Current Locale : ${pageContext.response.locale}
-
+    
     <section id="main">
         <div class="container">
             <h1 id="homeTitle">

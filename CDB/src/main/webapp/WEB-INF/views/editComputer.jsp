@@ -14,11 +14,16 @@
 
 </head>
 <body>
+
     <header class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
-            <a class="navbar-brand" href="dashboard?page=1&field=default&order=default"> Application - Computer Database </a>
+      		<a class="navbar-brand pull-left" href="dashboard?page=1&field=default&order=default"> Application - Computer Database </a>
+           	<a class="navbar-brand pull-right" href="?lang=en">English</a>|
+           	<p class="navbar-brand pull-right">|</p>
+           	<a class="navbar-brand pull-right" href="?lang=fr">Français</a>
         </div>
     </header>
+    
     <section id="main">
         <div class="container">
             <div class="row">
