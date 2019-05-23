@@ -10,7 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
-import com.excilys.cdb.back.controller.Controller;
+import com.excilys.cdb.back.controller.CliController;
 import com.excilys.cdb.back.dao.SortingField;
 import com.excilys.cdb.back.dao.SortingOrder;
 import com.excilys.cdb.back.dto.ComputerDTO;
@@ -25,12 +25,12 @@ public class CLIview {
 	
 	private static Logger logger = LoggerFactory.getLogger( Main.class );
 
-	private Controller controller;
+	private CliController controller;
 	private Scanner sc;
 	
 	private static final String DATE_FORMAT = "yyyy-mm-dd";
 	
-	public CLIview(Controller controller) {
+	public CLIview(CliController controller) {
 		super();
 		this.controller = controller;
 		this.sc = new Scanner(System.in);

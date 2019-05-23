@@ -47,8 +47,6 @@ public class ComputerValidator {
 			Optional<Company> cOptional = service.getCompanyById(id);
 			if(!cOptional.isPresent())
 				throw new BadCompanyIdException("L'id de la company ne correspond à aucune company existante.");
-			if(!cOptional.get().getName().equals(name))
-				throw new BadInputException("Il n'existe aucune company portant ce nom.");
 		}
 	}
 

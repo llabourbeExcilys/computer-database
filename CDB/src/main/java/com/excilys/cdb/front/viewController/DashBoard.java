@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.excilys.cdb.back.controller.Controller;
+import com.excilys.cdb.back.controller.WebController;
 import com.excilys.cdb.back.dao.SortingField;
 import com.excilys.cdb.back.dao.SortingOrder;
 import com.excilys.cdb.back.dto.ComputerDTO;
@@ -20,7 +20,7 @@ import com.excilys.cdb.back.dto.ComputerDTO;
 public class DashBoard {
 
 	@Autowired 
-	private Controller controller;
+	private WebController controller;
 	private static int nbByPage = 10;
 	private static int page = 1;
 	private static String field = "";

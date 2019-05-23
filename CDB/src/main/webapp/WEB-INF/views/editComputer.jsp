@@ -24,35 +24,35 @@
             <div class="row">
                 <div class="col-xs-8 col-xs-offset-2 box">
                     <div class="label label-default pull-right">
-                        id: ${computer.id}
+                        id: ${computerDTO.id}
                     </div>
                     <h1><spring:message code="editComputer.title"/></h1>
 
-                    <form action="editComputer" method="POST">
-                        <input type="hidden" value="${computer.id}" name="id" id="id"/>
+                    <form:form action="editComputer" method="POST" modelAttribute="computerDTO">
+                        <input type="hidden" value="${computerDTO.id}" name="id" id="id"/>
                         <fieldset>
                             <div class="form-group">
-                                <label for="computerName"><spring:message code="editComputer.name"/></label>
-                                <input type="text" class="form-control" id="computerName" name="computerName" pattern="[A-Za-z0-9\. ]{3,30}" required title="3 characters minimum, 30 maximum" placeholder="Computer name" value="${computer.name}">
+								<form:label for="computerName" path="name"><spring:message code="editComputer.name"/></form:label>
+								<form:input class="form-control" id="computerName" path="name"/>
+                                <font color=red><form:errors path="name"/></font>								
                             </div>
                             <div class="form-group">
-                                <label for="introduced"><spring:message code="editComputer.introduction"/></label>
-                                <input type="date" class="form-control" id="introduced" name="introduced" placeholder="Introduced date" value="${computer.ldIntroduced}">
+								<form:label for="introduced" path="ldIntroduced"><spring:message code="editComputer.introduction"/></form:label>
+								<form:input type="date" class="form-control" id="introduced" path="ldIntroduced"/>        
+								<font color=red><form:errors path="ldIntroduced"/></font>		
                             </div>
                             <div class="form-group">
-                                <label for="discontinued"><spring:message code="editComputer.discontinuation"/></label>
-                                <input type="date" class="form-control" id="discontinued" name="discontinued" placeholder="Discontinued date" value="${computer.ldDiscontinued}">
+								<form:label for="discontinued" path="ldDiscontinued"><spring:message code="editComputer.discontinuation"/></form:label>
+								<form:input type="date" class="form-control" id="discontinued" path="ldDiscontinued"/>
+								<font color=red><form:errors path="ldDiscontinued"/></font>								                                                
                             </div>
                             <div class="form-group">
                                 <label for="companyId"><spring:message code="editComputer.company"/></label>
-                                <select class="form-control" id="companyId" name="companyId">	
-                              		<spring:message code="editComputer.placeholder.selectCompany" var="editComputerPlaceholder"/>
-                                   <option <c:if test="${computer.companyId == null}">selected="selected"</c:if>  value="">-- ${editComputerPlaceholder}</option>
-                                   <c:forEach  var="company" items="${companies}">
-                                   		<option <c:if test="${company.id==computer.companyId}">selected="selected"</c:if>  value="${company.id}">${company.name}</option>
-                               		</c:forEach>
-                                </select>
-                             
+								<form:select class="form-control" id="companyId" path="companyId">
+								    <spring:message code="editComputer.placeholder.selectCompany" var="selectCompanyPlaceholder"/>
+									<form:option value="" label="-- ${selectCompanyPlaceholder}"/>
+	              					<form:options items="${companies}" itemValue="id" itemLabel="name"/>
+								</form:select>  
                             </div>            
                         </fieldset>
 						<div class="actions pull-right">
@@ -60,7 +60,7 @@
                         	<spring:message code="editComputer.or"/>
                           	<a href="dashboard" class="btn btn-default"><spring:message code="editComputer.button.cancel"/></a>
                         </div>                        
-                    </form>
+                    </form:form>
                 </div>
             </div>
         </div>

@@ -1,5 +1,7 @@
 package com.excilys.cdb.front.viewController;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -10,7 +12,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.excilys.cdb.back.controller.Controller;
+import com.excilys.cdb.back.controller.WebController;
+import com.excilys.cdb.back.dto.CompanyDTO;
 import com.excilys.cdb.back.dto.ComputerDTO;
 
 @org.springframework.stereotype.Controller
@@ -18,16 +21,19 @@ import com.excilys.cdb.back.dto.ComputerDTO;
 public class AddComputer{
       
 	@Autowired
-	private Controller controller;
+	private WebController controller;
+	
+	@ModelAttribute(name = "computerDTO")
+	private ComputerDTO getComputerDTO() {return new ComputerDTO();}
+	
+	@ModelAttribute(name = "companies")
+	private List<CompanyDTO> getCompanyList() {return controller.getCompanyList();}
 
 	@GetMapping
 	public String doGet(Model model) {
-		model.addAttribute("companies", controller.getCompanyList());
-		model.addAttribute("computerDTO", new ComputerDTO());
-		model.addAttribute("placeHolderName", "Computer name");
 		return "addComputer";
 	}
-	
+		
 	@PostMapping
 	public ModelAndView doPost(Model model,@ModelAttribute(value = "computerDTO") @Validated ComputerDTO computerDTO,BindingResult result) {
 		if(result.hasErrors()) 

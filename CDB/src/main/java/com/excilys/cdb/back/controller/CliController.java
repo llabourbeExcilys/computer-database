@@ -24,7 +24,7 @@ import com.excilys.cdb.back.service.Service;
 import com.excilys.cdb.back.validator.ComputerValidator;
 
 @Component
-public class Controller {
+public class CliController {
 
 	private Service service;
 	private final CompanyMapper companyMapper;
@@ -32,7 +32,7 @@ public class Controller {
 	private final ComputerValidator computerValidator;
 	
 	
-	public Controller(Service service, CompanyMapper companyMapper, ComputerMapper computerMapper,
+	public CliController(Service service, CompanyMapper companyMapper, ComputerMapper computerMapper,
 			ComputerValidator computerValidator) {
 		super();
 		this.service = service;
@@ -170,6 +170,7 @@ public class Controller {
 	}
 
 	// Update
+	
 	private Computer getComputer(ComputerDTO computerDTO) {
 		Optional<Computer> cOptional = service.getComputerById(computerDTO.getId());
 		if(!cOptional.isPresent())

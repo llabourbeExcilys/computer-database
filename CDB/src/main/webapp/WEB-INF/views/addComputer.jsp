@@ -26,9 +26,10 @@
             <div class="row">
                 <div class="col-xs-8 col-xs-offset-2 box">
                     <h1><spring:message code="addComputer.title"/></h1>
-					<form:form method="POST" action="addComputer" modelAttribute="computerDTO">
+					<form:form action="addComputer" method="POST" modelAttribute="computerDTO">
                             <div class="form-group">
 								<form:label for="computerName" path="name"><spring:message code="addComputer.name"/></form:label>
+								<spring:message code="addComputer.placeholder.computerName" var="placeHolderName"/>
 								<form:input class="form-control" id="computerName" path="name" placeholder="${placeHolderName}"/>
                                 <font color=red><form:errors path="name"/></font>
                             </div>

@@ -2,28 +2,38 @@ package com.excilys.cdb.back.dto;
 
 import java.time.LocalDate;
 
-import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.PastOrPresent;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Positive;
 import javax.validation.constraints.Size;
+
+import org.springframework.format.annotation.NumberFormat;
 
 import com.excilys.cdb.back.validator.DateConstraint;;
 
 @DateConstraint(ldIntroduced = "ldIntroduced", ldDiscontinued = "ldDiscontinued")
 public class ComputerDTO {
 
-		//REQUIRED
+		private static final String REGEX_NO_WHITESPACE_BEGINING_END = "^[^\\s]+(\\s+[^\\s]+)*$";
+
 		private long id;
 		
-		@NotEmpty
+		@NotBlank
 		@Size(min = 3, max = 30)
+		@Pattern(regexp = REGEX_NO_WHITESPACE_BEGINING_END)
 		private String name;
 		
-		// OPTIONNAL
 		@PastOrPresent
 		private LocalDate ldIntroduced;
+		
 		@PastOrPresent
 		private LocalDate ldDiscontinued;
+		
+		@NumberFormat
+		@Positive
 		private Long companyId;
+		
 		private String companyName;
 		
 		public ComputerDTO() {	
