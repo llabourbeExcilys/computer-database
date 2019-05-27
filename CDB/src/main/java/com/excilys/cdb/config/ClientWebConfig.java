@@ -71,4 +71,4 @@ public class ClientWebConfig implements WebMvcConfigurer {
 		registry.addInterceptor(localeChangeInterceptor);
 	}
 
-};
+}

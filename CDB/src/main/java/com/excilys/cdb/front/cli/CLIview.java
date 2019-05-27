@@ -18,12 +18,11 @@ import com.excilys.cdb.back.exception.BadCompanyIdException;
 import com.excilys.cdb.back.exception.BadInputException;
 import com.excilys.cdb.back.exception.ComputerNotFoundException;
 import com.excilys.cdb.back.exception.RequestedPageException;
-import com.excilys.cdb.main.Main;
 
 @Component
 public class CLIview {
 	
-	private static Logger logger = LoggerFactory.getLogger( Main.class );
+	private static Logger logger = LoggerFactory.getLogger( CLIview.class );
 
 	private CliController controller;
 	private Scanner sc;
