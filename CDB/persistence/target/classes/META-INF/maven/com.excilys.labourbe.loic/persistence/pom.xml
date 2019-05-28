@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <artifactId>CDB</artifactId>
+    <groupId>com.excilys.labourbe.loic</groupId>
+    <version>1.0-SNAPSHOT</version>
+  </parent>
+
+  <artifactId>persistence</artifactId>
+
+  <name>persistence</name>
+
+  <properties>
+    <spring.version>5.1.7.RELEASE</spring.version>
+    <mysql.connector.version>8.0.15</mysql.connector.version>
+    <hikariCP.version>3.3.1</hikariCP.version>
+    <module.binding.version>1.0-SNAPSHOT</module.binding.version>
+  </properties>
+
+  <dependencies>
+
+	<dependency>
+		<groupId>org.springframework</groupId>
+		<artifactId>spring-orm</artifactId>
+		<version>${spring.version}</version>
+	</dependency>
+
+	<dependency>
+		<groupId>mysql</groupId>
+		<artifactId>mysql-connector-java</artifactId>
+		<version>${mysql.connector.version}</version>
+		<scope>runtime</scope>
+	</dependency>
+
+	<dependency>
+		<groupId>com.zaxxer</groupId>
+		<artifactId>HikariCP</artifactId>
+		<version>${hikariCP.version}</version>
+	</dependency>
+
+	<dependency>
+		<groupId>com.excilys.labourbe.loic</groupId>
+		<artifactId>binding</artifactId>
+		<version>${module.binding.version}</version>
+	</dependency>
+	
+  </dependencies>
+
+</project>

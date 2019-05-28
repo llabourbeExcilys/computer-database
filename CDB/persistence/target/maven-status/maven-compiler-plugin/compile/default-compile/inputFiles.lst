@@ -1,0 +1,5 @@
+/home/excilys/git/repository/CDB/persistence/src/main/java/com/excilys/cdb/persistence/config/PersistenceConfig.java
+/home/excilys/git/repository/CDB/persistence/src/main/java/com/excilys/cdb/persistence/dao/CompanyDAO.java
+/home/excilys/git/repository/CDB/persistence/src/main/java/com/excilys/cdb/persistence/dao/ComputerDAO.java
+/home/excilys/git/repository/CDB/persistence/src/main/java/com/excilys/cdb/persistence/dao/SortingField.java
+/home/excilys/git/repository/CDB/persistence/src/main/java/com/excilys/cdb/persistence/dao/SortingOrder.java
