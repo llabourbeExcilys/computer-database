@@ -10,8 +10,6 @@
   <artifactId>webapp</artifactId>
 
   <name>webapp</name>
-  <!-- FIXME change it to the project's website -->
-  <url>http://www.example.com</url>
 
   <properties>
     <spring.version>5.1.7.RELEASE</spring.version>

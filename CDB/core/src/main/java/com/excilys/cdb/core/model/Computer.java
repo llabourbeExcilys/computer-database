@@ -2,17 +2,33 @@ package com.excilys.cdb.core.model;
 
 import java.time.LocalDate;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+
+@Entity(name = "computer")
 public class Computer {
 	
 	//REQUIRED
+	@Id
 	private long id;
+	
+    @Column(nullable = false)
 	private String name;
 	
 	// OPTIONNAL
-	private LocalDate ldIntroduced = null;
-	private LocalDate ldDiscontinued = null;
-	private Company company=null;
-
+	private LocalDate ldIntroduced;
+	private LocalDate ldDiscontinued;
+	
+	@ManyToOne
+	@JoinColumn(name = "company")
+	private Company company;
+	
+	public Computer() {
+		super();
+	}
 
 	protected Computer(ComputerBuilder computerBuilder) {
 		this.id = computerBuilder.getId();
