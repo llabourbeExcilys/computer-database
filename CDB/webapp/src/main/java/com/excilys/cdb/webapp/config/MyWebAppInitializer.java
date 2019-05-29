@@ -11,8 +11,7 @@ import org.springframework.web.servlet.DispatcherServlet;
 
 import com.excilys.cdb.binding.config.BindingConfig;
 import com.excilys.cdb.persistence.config.PersistenceConfig;
-
-import config.ServiceConfig;
+import com.excilys.cdb.service.config.ServiceConfig;
 
 public class MyWebAppInitializer implements WebApplicationInitializer {
 

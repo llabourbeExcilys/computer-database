@@ -1,0 +1,5 @@
+com/excilys/cdb/persistence/dao/CompanyDAO.class
+com/excilys/cdb/persistence/config/PersistenceConfig.class
+com/excilys/cdb/persistence/dao/ComputerDAO.class
+com/excilys/cdb/persistence/dao/SortingField.class
+com/excilys/cdb/persistence/dao/SortingOrder.class

@@ -1,0 +1,10 @@
+com/excilys/cdb/webapp/view/DeleteComputer.class
+com/excilys/cdb/webapp/converter/LocalDateToStringConverter.class
+com/excilys/cdb/webapp/view/DashBoard.class
+com/excilys/cdb/webapp/view/AddComputer.class
+com/excilys/cdb/webapp/config/ClientWebConfig.class
+com/excilys/cdb/webapp/config/MyWebAppInitializer.class
+com/excilys/cdb/webapp/error/ErrorController.class
+com/excilys/cdb/webapp/converter/StringToLocalDateConverter.class
+com/excilys/cdb/webapp/view/EditComputer.class
+com/excilys/cdb/webapp/controller/WebController.class

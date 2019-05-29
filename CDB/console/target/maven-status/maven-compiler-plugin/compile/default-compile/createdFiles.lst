@@ -1,0 +1,5 @@
+com/excilys/cdb/console/main/Main.class
+com/excilys/cdb/console/cli/CLIview.class
+com/excilys/cdb/console/config/ConsoleConfig.class
+com/excilys/cdb/console/validator/ComputerValidator.class
+com/excilys/cdb/console/controller/CliController.class
