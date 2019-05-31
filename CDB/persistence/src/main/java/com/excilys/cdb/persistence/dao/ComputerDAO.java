@@ -8,15 +8,17 @@ import java.util.Optional;
 import java.util.TimeZone;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
+import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import javax.sql.DataSource;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
@@ -44,18 +46,6 @@ public class ComputerDAO {
 			+"ON "
 			+	"C.company_id = B.id ";
 	
-	private static final String SQL_COUNT_ALL_COMPUTER = 
-			"SELECT COUNT(*) AS count from computer";
-
-	private static final String SQL_SELECT_COMPUTER_BY_ID =  
-			SQL_SELECT_ALL_COMPUTER
-			+"WHERE "
-			+ 	"C.id = :id ";
-	
-	private static final String SQL_SELECT_COMPUTER_BY_NAME = 
-			SQL_SELECT_ALL_COMPUTER+
-			"WHERE "
-			+	"C.name = :name";
 	
 	private static final String SQL_SELECT_COMPUTER_PAGE = 
 			SQL_SELECT_ALL_COMPUTER
@@ -92,13 +82,11 @@ public class ComputerDAO {
     private EntityManager em;
 
 	private final ComputerMapper computerMapper;
-	private final JdbcTemplate jdbcTemplate;
 	private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 	private final SimpleJdbcInsert simpleJdbcInsert; 
 	
 	public ComputerDAO(ComputerMapper computerMapper, DataSource dataSource){
 		this.computerMapper=computerMapper;
-		this.jdbcTemplate = new JdbcTemplate(dataSource);
 		this.namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
 		this.simpleJdbcInsert = new SimpleJdbcInsert(dataSource).withTableName("computer").usingGeneratedKeyColumns("id");
 	}
@@ -135,22 +123,60 @@ public class ComputerDAO {
 	}
 	
 	public List<Computer> getComputerList() {
-		return jdbcTemplate.query(SQL_SELECT_ALL_COMPUTER, computerMapper);
+		CriteriaBuilder cb = em.getCriteriaBuilder();
+
+		CriteriaQuery<Computer> q = cb.createQuery(Computer.class);
+		Root<Computer> c = q.from(Computer.class);
+		q.select(c);
+
+		TypedQuery<Computer> query = em.createQuery(q);
+		List<Computer> results = query.getResultList();
+		return results;
 	}
 	
 	public Optional<Computer> getComputerById(long idL){
-		SqlParameterSource namedParameters = new MapSqlParameterSource().addValue("id", idL);
-		List<Computer> computerList = namedParameterJdbcTemplate
-				.query(SQL_SELECT_COMPUTER_BY_ID, namedParameters, computerMapper);
-		return Optional.ofNullable(computerList.isEmpty() ? null : computerList.get(0));
+		CriteriaBuilder cb = em.getCriteriaBuilder();
+		CriteriaQuery<Computer> q = cb.createQuery(Computer.class);
+		Root<Computer> r = q.from(Computer.class);
+
+		q.where(cb.equal(r.get("id"), idL));
+
+		TypedQuery<Computer> tq = em.createQuery(q);
+		
+		try {
+			Computer computer = tq.getSingleResult();
+			return Optional.ofNullable(computer);
+		} catch (NoResultException e) {
+			return Optional.empty();	
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			logger.debug(e.getMessage());
+			return Optional.empty();
+		}
 	}
 	
 	public Optional<Computer> getComputerByName(String name) {
-		SqlParameterSource namedParameters = new MapSqlParameterSource().addValue("name", name);
-		List<Computer> computerList = namedParameterJdbcTemplate
-				.query(SQL_SELECT_COMPUTER_BY_NAME,namedParameters,computerMapper);
-		return Optional.ofNullable(computerList.isEmpty() ? null : computerList.get(0));
-	}
+		CriteriaBuilder cb = em.getCriteriaBuilder();
+		CriteriaQuery<Computer> q = cb.createQuery(Computer.class);
+		Root<Computer> r = q.from(Computer.class);
+
+		q.where(cb.equal(r.get("name"), name));
+
+		TypedQuery<Computer> tq = em.createQuery(q);
+		
+		try {
+			Computer computer = tq.getSingleResult();
+			return Optional.ofNullable(computer);
+		} catch (NoResultException e) {
+			return Optional.empty();	
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			logger.debug(e.getMessage());
+			return Optional.empty();
+		}
+}	
+	
+	
 
 	public List<Computer> getComputerPage(int page, int nbByPage, SortingField field, SortingOrder order) {
 		String requestString = SQL_SELECT_COMPUTER_PAGE

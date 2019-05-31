@@ -19,7 +19,9 @@ public class Computer {
 	private String name;
 	
 	// OPTIONNAL
+    @Column(name = "introduced")
 	private LocalDate ldIntroduced;
+    @Column(name = "discontinued")
 	private LocalDate ldDiscontinued;
 	
 	@ManyToOne
