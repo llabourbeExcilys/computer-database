@@ -7,8 +7,15 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.TimeZone;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.PersistenceException;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
 import javax.sql.DataSource;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -17,6 +24,7 @@ import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Component;
 
 import com.excilys.cdb.binding.mapper.ComputerMapper;
+import com.excilys.cdb.core.exception.ComputerCountException;
 import com.excilys.cdb.core.exception.ComputerNotFoundException;
 import com.excilys.cdb.core.model.Computer;
 
@@ -76,6 +84,12 @@ public class ComputerDAO {
 			+	"id = :id ";
 
 	static {TimeZone.setDefault(TimeZone.getTimeZone("UTC"));}
+	
+	
+	private static Logger logger = LoggerFactory.getLogger( CompanyDAO.class );
+	
+    @PersistenceContext
+    private EntityManager em;
 
 	private final ComputerMapper computerMapper;
 	private final JdbcTemplate jdbcTemplate;
@@ -103,8 +117,21 @@ public class ComputerDAO {
 
 	// Read
 	
-	public int getNumberOfComputer() {
-		return jdbcTemplate.queryForObject(SQL_COUNT_ALL_COMPUTER, Integer.class);
+//	public int getNumberOfComputer() {
+//		return jdbcTemplate.queryForObject(SQL_COUNT_ALL_COMPUTER, Integer.class);
+//	}
+	
+	
+	public long getNumberOfComputer() {
+		CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
+		CriteriaQuery<Long> criteriaQuery = criteriaBuilder.createQuery(Long.class);
+		criteriaQuery.select(criteriaBuilder.count(criteriaQuery.from(Computer.class)));
+		try {
+			return em.createQuery(criteriaQuery).getSingleResult();
+		} catch (PersistenceException pe) {
+			logger.error(pe.getMessage());
+			throw new ComputerCountException("Une erreur est survenue en cherchant le nombre d'ordinateur présent en base.");
+		}
 	}
 	
 	public List<Computer> getComputerList() {

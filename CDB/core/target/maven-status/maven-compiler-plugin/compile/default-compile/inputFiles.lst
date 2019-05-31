@@ -5,5 +5,6 @@
 /home/excilys/git/repository/CDB/core/src/main/java/com/excilys/cdb/core/exception/BadCompanyIdException.java
 /home/excilys/git/repository/CDB/core/src/main/java/com/excilys/cdb/core/model/Computer.java
 /home/excilys/git/repository/CDB/core/src/main/java/com/excilys/cdb/core/exception/ComputerNotFoundException.java
+/home/excilys/git/repository/CDB/core/src/main/java/com/excilys/cdb/core/exception/ComputerCountException.java
 /home/excilys/git/repository/CDB/core/src/main/java/com/excilys/cdb/core/exception/RequestedPageException.java
 /home/excilys/git/repository/CDB/core/src/main/java/com/excilys/cdb/core/model/ComputerBuilder.java

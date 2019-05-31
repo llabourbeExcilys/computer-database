@@ -37,7 +37,7 @@ public class Service {
 		return companyDAO.getCompanyList();
 	}
 	
-	public int getNumberOfComputer() {
+	public long getNumberOfComputer() {
 		return computerDAO.getNumberOfComputer();
 	}
 

@@ -165,7 +165,7 @@ public class CliController {
 				.collect(Collectors.toList());
 	}
 	
-	public int getNumberOfComputer() {
+	public long getNumberOfComputer() {
 		return service.getNumberOfComputer();
 	}
 

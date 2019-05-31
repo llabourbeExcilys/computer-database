@@ -45,7 +45,7 @@ public class DashBoard {
 		if(pageString!=null)
 			page = Integer.parseInt(pageString);
 
-		int nbComputerFound = controller.getNumberOfComputer();
+		long nbComputerFound = controller.getNumberOfComputer();
 		int lastPage = (int) Math.ceil(nbComputerFound/(double)nbByPage) ;
 		
 		switch (field) {

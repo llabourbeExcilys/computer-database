@@ -90,7 +90,7 @@ public class WebController {
 				.collect(Collectors.toList());
 	}
 	
-	public int getNumberOfComputer() {
+	public long getNumberOfComputer() {
 		return service.getNumberOfComputer();
 	}
 	
