@@ -1,11 +1,11 @@
 package com.excilys.cdb.persistence.dao;
 
 public enum SortingField {
-	ID("C.id"),
-	NAME("C.name"),
-	DATE_INTRODUCTION("C.introduced"),
-	DATE_DISCONTINUATION("C.discontinued"),
-	COMPANY("B.name");
+	ID("id"),
+	NAME("name"),
+	DATE_INTRODUCTION("introduced"),
+	DATE_DISCONTINUATION("discontinued"),
+	COMPANY("company");
 	
 	private final String identifier;
 	

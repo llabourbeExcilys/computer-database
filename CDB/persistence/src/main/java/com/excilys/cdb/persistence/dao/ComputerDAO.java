@@ -21,9 +21,7 @@ import javax.transaction.Transactional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
-import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Component;
 
@@ -57,17 +55,6 @@ public class ComputerDAO {
 			+	":limit "
 			+"OFFSET "
 			+	":offset ";
-	
-	private static final String SQL_UPDATE_COMPUTER = 
-			"UPDATE "
-			+ 	"computer " 
-		    +"SET "
-		    +	"name = :name , "
-			+	"introduced = :introduced , "
-			+	"discontinued = :discontinued , "
-			+	"company_id = :company_id "
-			+"WHERE "
-			+	"id = :id ";
 	
 
 	static {TimeZone.setDefault(TimeZone.getTimeZone("UTC"));}
@@ -173,34 +160,46 @@ public class ComputerDAO {
 		}
 	}	
 	
+	public List<Computer> getComputerPage(int page, int nbByPage, SortingField field, SortingOrder order) {
+		CriteriaBuilder cb = em.getCriteriaBuilder();
+		CriteriaQuery<Computer> q = cb.createQuery(Computer.class);
+		Root<Computer> c = q.from(Computer.class);
+		q.select(c);
+		
+		if(order.equals(SortingOrder.ASC)) {
+			switch (field) {
+				case COMPANY: q.orderBy(cb.asc(c.get("company").get("id")));
+					break;
+				default: q.orderBy(cb.asc(c.get(field.getIdentifier())));
+					break;
+			}
+		}else{
+			switch (field) {
+				case COMPANY: q.orderBy(cb.desc(c.get("company").get("id")));
+					break;
+				default: q.orderBy(cb.desc(c.get(field.getIdentifier())));
+					break;
+			}
+		}
+		
+		TypedQuery<Computer> query = em.createQuery(q);
+		query.setFirstResult((page-1)*nbByPage).setMaxResults(nbByPage);
+		List<Computer> results = query.getResultList();
+		return results;
+	}
 	
 
-	public List<Computer> getComputerPage(int page, int nbByPage, SortingField field, SortingOrder order) {
-		String requestString = SQL_SELECT_COMPUTER_PAGE
-				.replace("%field", field.getIdentifier())
-				.replace("%order", order.name());
-		
-		SqlParameterSource namedParameters = new MapSqlParameterSource()
-				.addValue("OrderToReplace", order.name())
-				.addValue("offset", (page-1)*nbByPage)
-				.addValue("limit", nbByPage);
-		return namedParameterJdbcTemplate.query(requestString,namedParameters,computerMapper);
-	}
 	
 	// Update
 	
+	@Transactional
 	public void update(Computer c) {
-		SqlParameterSource namedParameters = new MapSqlParameterSource()
-				.addValue("id", c.getId())
-				.addValue("name", c.getName())
-				.addValue("introduced", c.getLdIntroduced() != null ? Date.valueOf(c.getLdIntroduced()) : null)
-				.addValue("discontinued", c.getLdDiscontinued() != null ? Date.valueOf(c.getLdDiscontinued()) : null)
-				.addValue("company_id", c.getCompany() != null ? c.getCompany().getId() : null);
+		if (!getComputerById(c.getId()).isPresent()) 
+			throw new ComputerNotFoundException("L'ordinateur à modifier n'existe pas.");
 		
-		int nbOfRowAffected = namedParameterJdbcTemplate.update(SQL_UPDATE_COMPUTER, namedParameters);	
-		if(nbOfRowAffected==0)
-			throw new ComputerNotFoundException("La requête n'a rien modifié dans la base de donnée.");
+		em.merge(c);
 	}
+	
 
 	// Delete
 	
