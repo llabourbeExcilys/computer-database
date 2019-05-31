@@ -1,4 +1,4 @@
 -------------------------------------------------------------------------------
 Test set: com.excilys.cdb.test.persistence.CompanyDAOTest
 -------------------------------------------------------------------------------
-Tests run: 5, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.281 s - in com.excilys.cdb.test.persistence.CompanyDAOTest
+Tests run: 5, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.173 s - in com.excilys.cdb.test.persistence.CompanyDAOTest

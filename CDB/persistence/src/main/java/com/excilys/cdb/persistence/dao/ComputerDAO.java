@@ -13,9 +13,11 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaDelete;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import javax.sql.DataSource;
+import javax.transaction.Transactional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -67,11 +69,6 @@ public class ComputerDAO {
 			+"WHERE "
 			+	"id = :id ";
 	
-	private static final String SQL_DELETE_COMPUTER_BY_ID = 
-			"DELETE FROM "
-			+	"computer "
-			+"WHERE "
-			+	"id = :id ";
 
 	static {TimeZone.setDefault(TimeZone.getTimeZone("UTC"));}
 	
@@ -174,7 +171,7 @@ public class ComputerDAO {
 			logger.debug(e.getMessage());
 			return Optional.empty();
 		}
-}	
+	}	
 	
 	
 
@@ -207,9 +204,14 @@ public class ComputerDAO {
 
 	// Delete
 	
+	@Transactional
 	public void deleteComputerById(long id) {
-		SqlParameterSource namedParameters = new MapSqlParameterSource().addValue("id", id);
-		namedParameterJdbcTemplate.update(SQL_DELETE_COMPUTER_BY_ID, namedParameters);
+		CriteriaBuilder cb = this.em.getCriteriaBuilder();
+
+		CriteriaDelete<Computer> deleteComputer = cb.createCriteriaDelete(Computer.class);
+		Root<Computer> rootComputer = deleteComputer.from(Computer.class);
+		deleteComputer.where(cb.equal(rootComputer.get("id"), id));
+		this.em.createQuery(deleteComputer).executeUpdate();
 	}
 
 }
