@@ -54,11 +54,11 @@ public class CompanyDAOTest {
 		
 		Optional<Company> company = companyDAO.getCompanyById(2);
 		if(!company.isPresent())
-			Assert.fail();
+			Assert.fail("La company d'id 2 devrait etre renvoyé par le getCompanyById");
 		
 		Company testCompany = testDataBase.findCompanyById(2L);
 		if(testCompany == null)
-			Assert.fail();
+			Assert.fail("La company de test d'id 2 devrait etre renvoyé par le findCompanyById");
 		
 		Assert.assertEquals("La company renvoyée par la companyDAO n'est pas identique a celle de test",
 				company.get(), testCompany);

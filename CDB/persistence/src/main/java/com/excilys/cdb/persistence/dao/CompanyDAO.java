@@ -5,77 +5,33 @@ import java.util.Optional;
 import java.util.TimeZone;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaDelete;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
-import javax.sql.DataSource;
 
-import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
-import org.springframework.jdbc.core.namedparam.SqlParameterSource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.excilys.cdb.binding.mapper.CompanyMapper;
 import com.excilys.cdb.core.model.Company;
+import com.excilys.cdb.core.model.Computer;
 
 @Component
 public class CompanyDAO{
 
-//	private static final String SQL_SELECT_ALL_COMPANY = 
-//			"SELECT "
-//			+	"id, "
-//			+	"name "
-//			+"FROM "
-//			+	"company";
-	
-	private static final String SQL_SELECT_COMPANY_BY_ID = 
-			"SELECT "
-			+	"id, "
-			+	"name "
-			+"FROM "
-			+	"company "
-			+"WHERE "
-			+	"company.id = :id";
-	
-	private static final String SQL_DELETE_COMPUTER_BY_COMPANY_ID = 
-			"DELETE FROM "
-			+	"computer "
-			+"WHERE "
-			+	"company_id = :id";
-	
-	
-	private static final String SQL_DELETE_COMPANY_BY_ID =
-			"DELETE FROM "
-			+	"company "
-			+"WHERE "
-			+	"id = :id";
-
+	private static Logger logger = LoggerFactory.getLogger( CompanyDAO.class );
 
 	static {TimeZone.setDefault(TimeZone.getTimeZone("UTC"));}
-	
-	private final CompanyMapper companyMapper;
-//	private final JdbcTemplate jdbcTemplate;
-	private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
-	
-    public CompanyDAO(CompanyMapper companyMapper, DataSource dataSource) {
-		this.companyMapper = companyMapper;
-//		this.jdbcTemplate =  new JdbcTemplate(dataSource);
-		this.namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
-	}
-    
+
     @PersistenceContext
     private EntityManager em;
 
 	// Read
-    
-    
-//    public List<Company> getCompanyList() {
-//		return jdbcTemplate.query(SQL_SELECT_ALL_COMPANY, companyMapper);
-//	}
-//    
 	
 	public List<Company> getCompanyList() {
 		CriteriaBuilder cb = em.getCriteriaBuilder();
@@ -90,17 +46,64 @@ public class CompanyDAO{
 	}
 
 	public Optional<Company> getCompanyById(long idL) {
-		SqlParameterSource namedParameters = new MapSqlParameterSource().addValue("id", idL);
-		List<Company> companyList = namedParameterJdbcTemplate
-				.query(SQL_SELECT_COMPANY_BY_ID, namedParameters, companyMapper);
-		return Optional.ofNullable(companyList.isEmpty() ? null : companyList.get(0));
+		CriteriaBuilder cb = em.getCriteriaBuilder();
+		CriteriaQuery<Company> q = cb.createQuery(Company.class);
+		Root<Company> r = q.from(Company.class);
+
+		q.where(cb.equal(r.get("id"), idL));
+
+		TypedQuery<Company> tq = em.createQuery(q);
+		
+		try {
+			Company company = tq.getSingleResult();
+			return Optional.ofNullable(company);
+		} catch (NoResultException e) {
+			return Optional.empty();	
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			logger.debug(e.getMessage());
+			return Optional.empty();
+		}
 	}
 	
 	@Transactional
 	public void deleteCompanyById(long idL) {
-		SqlParameterSource namedParameters = new MapSqlParameterSource().addValue("id", idL);
-		namedParameterJdbcTemplate.update(SQL_DELETE_COMPUTER_BY_COMPANY_ID, namedParameters);
-		namedParameterJdbcTemplate.update(SQL_DELETE_COMPANY_BY_ID, namedParameters);
+		CriteriaBuilder cb = this.em.getCriteriaBuilder();
+
+		CriteriaDelete<Computer> deleteComputer = cb.createCriteriaDelete(Computer.class);
+		Root<Computer> rootComputer = deleteComputer.from(Computer.class);
+		deleteComputer.where(cb.equal(rootComputer.get("company").get("id"), idL));
+		this.em.createQuery(deleteComputer).executeUpdate();
+
+		CriteriaDelete<Company> deleteCompany = cb.createCriteriaDelete(Company.class);
+		Root<Company> rootCompany = deleteCompany.from(Company.class);
+		deleteCompany.where(cb.equal(rootCompany.get("id"), idL));
+		this.em.createQuery(deleteCompany).executeUpdate();
 	}
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

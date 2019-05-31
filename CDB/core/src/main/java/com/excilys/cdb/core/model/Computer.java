@@ -23,7 +23,7 @@ public class Computer {
 	private LocalDate ldDiscontinued;
 	
 	@ManyToOne
-	@JoinColumn(name = "company")
+	@JoinColumn(name = "company_id")
 	private Company company;
 	
 	public Computer() {
