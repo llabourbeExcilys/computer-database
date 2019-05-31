@@ -1,9 +1,6 @@
 package com.excilys.cdb.persistence.dao;
 
-import java.sql.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.TimeZone;
 
@@ -16,83 +13,36 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaDelete;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
-import javax.sql.DataSource;
 import javax.transaction.Transactional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
-import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Component;
 
-import com.excilys.cdb.binding.mapper.ComputerMapper;
 import com.excilys.cdb.core.exception.ComputerCountException;
 import com.excilys.cdb.core.exception.ComputerNotFoundException;
 import com.excilys.cdb.core.model.Computer;
 
 @Component
-public class ComputerDAO {
-	
-	private static final String SQL_SELECT_ALL_COMPUTER = 
-			"SELECT "
-			+	"C.id AS computer_id, "
-			+	"C.name AS computer_name, "
-			+	"C.introduced AS computer_introduced, "
-			+	"C.discontinued AS computer_discontinued, "
-			+	"B.id AS company_id, "
-			+	"B.name AS company_name "
-			+"FROM "
-			+	"computer C LEFT JOIN company B "
-			+"ON "
-			+	"C.company_id = B.id ";
-	
-	
-	private static final String SQL_SELECT_COMPUTER_PAGE = 
-			SQL_SELECT_ALL_COMPUTER
-			+"ORDER BY "
-			+	"%field IS NULL, %field %order "
-			+"LIMIT "
-			+	":limit "
-			+"OFFSET "
-			+	":offset ";
-	
+public class ComputerDAO {	
 
 	static {TimeZone.setDefault(TimeZone.getTimeZone("UTC"));}
-	
 	
 	private static Logger logger = LoggerFactory.getLogger( CompanyDAO.class );
 	
     @PersistenceContext
     private EntityManager em;
 
-	private final ComputerMapper computerMapper;
-	private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
-	private final SimpleJdbcInsert simpleJdbcInsert; 
-	
-	public ComputerDAO(ComputerMapper computerMapper, DataSource dataSource){
-		this.computerMapper=computerMapper;
-		this.namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
-		this.simpleJdbcInsert = new SimpleJdbcInsert(dataSource).withTableName("computer").usingGeneratedKeyColumns("id");
-	}
-     
 	// Create	
 
+	@Transactional
 	public long addComputer(Computer computer) {
-		 Map<String, Object> parameters = new HashMap<String, Object>();
-		 parameters.put("name", computer.getName());
-		 parameters.put("introduced", computer.getLdIntroduced() != null ? Date.valueOf(computer.getLdIntroduced()) : null);
-		 parameters.put("discontinued", computer.getLdDiscontinued() != null ? Date.valueOf(computer.getLdDiscontinued()) : null);
-		 parameters.put("company_id", computer.getCompany() != null ? computer.getCompany().getId() : null);
-		return simpleJdbcInsert.executeAndReturnKey(parameters).longValue();
+		 em.persist(computer);
+		 return computer.getId();
 	}
 
 
 	// Read
-	
-//	public int getNumberOfComputer() {
-//		return jdbcTemplate.queryForObject(SQL_COUNT_ALL_COMPUTER, Integer.class);
-//	}
-	
 	
 	public long getNumberOfComputer() {
 		CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
@@ -188,8 +138,6 @@ public class ComputerDAO {
 		return results;
 	}
 	
-
-	
 	// Update
 	
 	@Transactional
@@ -200,7 +148,6 @@ public class ComputerDAO {
 		em.merge(c);
 	}
 	
-
 	// Delete
 	
 	@Transactional

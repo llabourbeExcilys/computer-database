@@ -38,11 +38,6 @@ public class PersistenceConfig {
 		return new HikariDataSource(config);
 	}
 
-//	@Bean
-//	public DataSourceTransactionManager getTransactionManager(DataSource dataSource) {
-//		return new DataSourceTransactionManager(dataSource);
-//	}
-
 	
    @Bean
    public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
@@ -72,9 +67,7 @@ public class PersistenceConfig {
     
    Properties additionalProperties() {
        Properties properties = new Properties();
-       //properties.setProperty("hibernate.hbm2ddl.auto", "validate");
-       properties.setProperty("hibernate.dialect", "org.hibernate.dialect.MySQL5Dialect");
-           
+       properties.setProperty("hibernate.dialect", "org.hibernate.dialect.MySQL5Dialect");           
        return properties;
    }
 	
