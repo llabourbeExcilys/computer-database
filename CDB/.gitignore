@@ -8,5 +8,5 @@ resources.config.properties
 
 /log_files
 
-*/target
-*.project
+/*/target/
+/*/.project
