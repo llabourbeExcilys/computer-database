@@ -8,5 +8,5 @@ target
 
 /log_files
 
-target/
-/*/.project
+/**/target
+/**/.project
