@@ -1,7 +1,0 @@
-com/excilys/cdb/binding/dto/CompanyDTO.class
-com/excilys/cdb/binding/dto/ComputerDTO.class
-com/excilys/cdb/binding/mapper/ComputerMapper.class
-com/excilys/cdb/binding/config/BindingConfig.class
-com/excilys/cdb/binding/validator/DateConstraintValidator.class
-com/excilys/cdb/binding/validator/DateConstraint.class
-com/excilys/cdb/binding/mapper/CompanyMapper.class

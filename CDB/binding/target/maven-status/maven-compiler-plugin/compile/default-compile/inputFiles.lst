@@ -1,7 +1,0 @@
-/home/excilys/git/repository/CDB/binding/src/main/java/com/excilys/cdb/binding/dto/CompanyDTO.java
-/home/excilys/git/repository/CDB/binding/src/main/java/com/excilys/cdb/binding/validator/DateConstraint.java
-/home/excilys/git/repository/CDB/binding/src/main/java/com/excilys/cdb/binding/dto/ComputerDTO.java
-/home/excilys/git/repository/CDB/binding/src/main/java/com/excilys/cdb/binding/validator/DateConstraintValidator.java
-/home/excilys/git/repository/CDB/binding/src/main/java/com/excilys/cdb/binding/mapper/CompanyMapper.java
-/home/excilys/git/repository/CDB/binding/src/main/java/com/excilys/cdb/binding/mapper/ComputerMapper.java
-/home/excilys/git/repository/CDB/binding/src/main/java/com/excilys/cdb/binding/config/BindingConfig.java
