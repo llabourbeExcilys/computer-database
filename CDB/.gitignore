@@ -2,7 +2,7 @@ resources.config.properties
 
 target
 /.settings
-
+/**/.settings
 .classpath
 .project
 
