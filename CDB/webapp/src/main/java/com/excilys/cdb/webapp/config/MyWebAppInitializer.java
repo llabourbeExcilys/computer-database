@@ -22,8 +22,8 @@ public class MyWebAppInitializer implements WebApplicationInitializer {
         
         rootContext.register(PersistenceConfig.class);
         rootContext.register(BindingConfig.class);
-
         rootContext.register(ServiceConfig.class);
+        rootContext.register(SpringSecurityConfig.class);
 
         // Manage the lifecycle of the root application context
         servletCxt.addListener(new ContextLoaderListener(rootContext));

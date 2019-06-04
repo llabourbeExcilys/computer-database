@@ -13,12 +13,29 @@
 
   <properties>
     <spring.version>5.1.7.RELEASE</spring.version>
+    <spring.security.version>5.1.5.RELEASE</spring.security.version>
+    <spring.security.config.version>5.1.5.RELEASE</spring.security.config.version>    
     <javax.servlet-api.version>4.0.1</javax.servlet-api.version>
     <jstl.version>1.2</jstl.version>
     <module.service.version>1.0-SNAPSHOT</module.service.version>
   </properties>
 
   <dependencies>
+
+
+  
+
+	<dependency>
+		<groupId>org.springframework.security</groupId>
+		<artifactId>spring-security-web</artifactId>
+		<version>${spring.security.version}</version>
+	</dependency>
+
+	<dependency>
+		<groupId>org.springframework.security</groupId>
+		<artifactId>spring-security-config</artifactId>
+		<version>${spring.security.config.version}</version>
+	</dependency>
 
 	<dependency>
 		<groupId>org.springframework</groupId>

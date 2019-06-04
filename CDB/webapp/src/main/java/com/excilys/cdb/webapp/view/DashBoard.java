@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -23,8 +21,6 @@ import com.excilys.cdb.webapp.page.Page;
 @RequestMapping("/dashboard")
 @SessionAttributes(value = "page",types = {Page.class})
 public class DashBoard {
-	
-	private static Logger logger = LoggerFactory.getLogger( DashBoard.class );
 
 	private WebController controller;
 	
@@ -52,7 +48,7 @@ public class DashBoard {
 			if(pageString!=null) 
 				page.setPage(Integer.parseInt(pageString));
 		} catch (NumberFormatException e) {
-			logger.info(e.getMessage());
+			e.printStackTrace();
 		}
 
 		if(fieldString!=null && !fieldString.equals("")) {
@@ -64,12 +60,13 @@ public class DashBoard {
 				default: 		  page.setSortingField(SortingField.ID); break;
 			}
 		}
-		
+		System.out.println("LOL");
 		if(orderString!=null && !orderString.equals("")) {
+			System.out.println("in order string:"+orderString);
 			switch (orderString) {
-			case "asc": page.setSortingOrder(SortingOrder.ASC); break;
-			case "desc":page.setSortingOrder(SortingOrder.DESC); break;
-			default: 	page.setSortingOrder(SortingOrder.ASC); break;
+				case "asc": page.setSortingOrder(SortingOrder.ASC); break;
+				case "desc":page.setSortingOrder(SortingOrder.DESC); break;
+				default: 	page.setSortingOrder(SortingOrder.ASC); break;
 			}
 		}		
 		
