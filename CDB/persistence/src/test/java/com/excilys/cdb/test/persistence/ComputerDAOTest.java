@@ -175,9 +175,9 @@ public class ComputerDAOTest {
 		Computer c = optComputer.get();
 		
 		Assert.assertTrue("La date d'introduction ne devrait pas etre null",
-				c.getLdIntroduced()!=null);
+				c.getIntroduced()!=null);
 		 
-		LocalDate dateModified= c.getLdIntroduced().plusYears(1);
+		LocalDate dateModified= c.getIntroduced().plusYears(1);
 		c.setLdIntroduced(dateModified);
 		computerDAO.update(c);
 		
@@ -187,7 +187,7 @@ public class ComputerDAOTest {
 		c = optComputer.get();
 		
 		Assert.assertEquals("La date d'introduction n'a pas été correctement modifiée."
-				,c.getLdIntroduced(),dateModified);
+				,c.getIntroduced(),dateModified);
 
 	}
 	
