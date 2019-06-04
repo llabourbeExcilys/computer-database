@@ -108,8 +108,8 @@ public class WebController {
 	public void updateComputer(ComputerDTO computerDTO) {
 		Computer computer = getComputer(computerDTO);
 		computer.setName(computerDTO.getName());
-		computer.setLdIntroduced(computerDTO.getLdIntroduced());
-		computer.setLdDiscontinued(computerDTO.getLdDiscontinued());
+		computer.setIntroduced(computerDTO.getLdIntroduced());
+		computer.setDiscontinued(computerDTO.getLdDiscontinued());
 
 		Company company = null;
 		if(computerDTO.getCompanyId() != null) {

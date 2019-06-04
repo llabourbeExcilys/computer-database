@@ -20,9 +20,9 @@ public class Computer {
 	
 	// OPTIONNAL
     @Column(name = "introduced")
-	private LocalDate ldIntroduced;
+	private LocalDate introduced;
     @Column(name = "discontinued")
-	private LocalDate ldDiscontinued;
+	private LocalDate discontinued;
 	
 	@ManyToOne
 	@JoinColumn(name = "company_id")
@@ -35,8 +35,8 @@ public class Computer {
 	protected Computer(ComputerBuilder computerBuilder) {
 		this.id = computerBuilder.getId();
 		this.name = computerBuilder.getName();
-		this.ldIntroduced = computerBuilder.getLdIntroduced();
-		this.ldDiscontinued = computerBuilder.getLdDiscontinued();
+		this.introduced = computerBuilder.getLdIntroduced();
+		this.discontinued = computerBuilder.getLdDiscontinued();
 		this.company = computerBuilder.getCompany();		
 	}
 
@@ -45,8 +45,8 @@ public class Computer {
 		return "{\n"+
 				"\t"+"id:"+id+"\n"+
 				"\t"+"name:"+name+"\n"+
-				(ldIntroduced!=null?"\tintroduced:"+ldIntroduced+"\n":"")+
-				(ldDiscontinued!=null?"\tdiscontinued:"+ldDiscontinued+"\n":"")+
+				(introduced!=null?"\tintroduced:"+introduced+"\n":"")+
+				(discontinued!=null?"\tdiscontinued:"+discontinued+"\n":"")+
 				(company!=null?"\t\tcomputer:"+company+"\n":"")+
 				"}";
 	}
@@ -57,8 +57,8 @@ public class Computer {
 		int result = 1;
 		result = prime * result + ((company == null) ? 0 : company.hashCode());
 		result = prime * result + (int) (id ^ (id >>> 32));
-		result = prime * result + ((ldDiscontinued == null) ? 0 : ldDiscontinued.hashCode());
-		result = prime * result + ((ldIntroduced == null) ? 0 : ldIntroduced.hashCode());
+		result = prime * result + ((discontinued == null) ? 0 : discontinued.hashCode());
+		result = prime * result + ((introduced == null) ? 0 : introduced.hashCode());
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
 		return result;
 	}
@@ -79,15 +79,15 @@ public class Computer {
 			return false;
 		if (id != other.id)
 			return false;
-		if (ldDiscontinued == null) {
-			if (other.ldDiscontinued != null)
+		if (discontinued == null) {
+			if (other.discontinued != null)
 				return false;
-		} else if (!ldDiscontinued.equals(other.ldDiscontinued))
+		} else if (!discontinued.equals(other.discontinued))
 			return false;
-		if (ldIntroduced == null) {
-			if (other.ldIntroduced != null)
+		if (introduced == null) {
+			if (other.introduced != null)
 				return false;
-		} else if (!ldIntroduced.equals(other.ldIntroduced))
+		} else if (!introduced.equals(other.introduced))
 			return false;
 		if (name == null) {
 			if (other.name != null)
@@ -104,9 +104,9 @@ public class Computer {
 	public void setName(String name) {this.name = name;}
 	public Company getCompany() {return company;}
 	public void setCompany(Company company) { this.company = company;}
-	public LocalDate getLdIntroduced() {return ldIntroduced;}
-	public void setLdIntroduced(LocalDate ldIntroduced) {this.ldIntroduced = ldIntroduced;}
-	public LocalDate getLdDiscontinued() {return ldDiscontinued;}
-	public void setLdDiscontinued(LocalDate ldDiscontinued) {this.ldDiscontinued = ldDiscontinued;}
+	public LocalDate getIntroduced() {return introduced;}
+	public void setIntroduced(LocalDate introduced) {this.introduced = introduced;}
+	public LocalDate getDiscontinued() {return discontinued;}
+	public void setDiscontinued(LocalDate discontinued) {this.discontinued = discontinued;}
 
 }
