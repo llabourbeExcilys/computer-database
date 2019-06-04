@@ -203,7 +203,7 @@ public class CliController {
 		computerValidator.validate(computerDTO);
 	
 		Computer computer = getComputer(computerDTO);
-		computer.setIntroduced(introductionDate);
+		computer.setLdIntroduced(introductionDate);
 		service.update(computer);
 	}
 
@@ -213,7 +213,7 @@ public class CliController {
 		computerValidator.validate(computerDTO);
 	
 		Computer computer = getComputer(computerDTO);
-		computer.setDiscontinued(discontDate);
+		computer.setLdDiscontinued(discontDate);
 		service.update(computer);
 	}
 	
@@ -227,8 +227,8 @@ public class CliController {
 		computerValidator.validate(computerDTO);
 	
 		Computer computer = getComputer(computerDTO);
-		computer.setIntroduced(introductionDate);
-		computer.setDiscontinued(discontDate);
+		computer.setLdIntroduced(introductionDate);
+		computer.setLdDiscontinued(discontDate);
 		service.update(computer);
 	}
 

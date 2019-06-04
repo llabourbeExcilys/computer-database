@@ -21,7 +21,7 @@ import com.excilys.cdb.webapp.page.Page;
 
 @org.springframework.stereotype.Controller
 @RequestMapping("/dashboard")
-@SessionAttributes(value = "mypage",types = {Page.class})
+@SessionAttributes(value = "page",types = {Page.class})
 public class DashBoard {
 	
 	private static Logger logger = LoggerFactory.getLogger( DashBoard.class );
@@ -32,14 +32,14 @@ public class DashBoard {
 		this.controller = webController;
 	}
 	
-	@ModelAttribute("mypage")
+	@ModelAttribute("page")
 	public Page getMyPage() {
 		return new Page(10,1,SortingField.ID,SortingOrder.ASC);
 	}
 	
    @GetMapping
     public String handle(Model model,
-    		@ModelAttribute("mypage") Page mypage,
+    		@ModelAttribute("page") Page page,
     		@RequestParam(name = "field", required = false) String fieldString,
     		@RequestParam(name = "order", required = false) String orderString,
     		@RequestParam(name = "nbByPage", required = false) String nbByPageString,
@@ -48,28 +48,28 @@ public class DashBoard {
 	   
 		try {
 			if(nbByPageString!=null)
-				mypage.setNbByPage(Integer.parseInt(nbByPageString));
+				page.setNbByPage(Integer.parseInt(nbByPageString));
 			if(pageString!=null) 
-				mypage.setPage(Integer.parseInt(pageString));
+				page.setPage(Integer.parseInt(pageString));
 		} catch (NumberFormatException e) {
 			logger.info(e.getMessage());
 		}
 
 		if(fieldString!=null && !fieldString.equals("")) {
 			switch (fieldString) {
-				case "name":	  mypage.setSortingField(SortingField.NAME); break;
-				case "introDate": mypage.setSortingField(SortingField.DATE_INTRODUCTION);	break;
-				case "disconDate":mypage.setSortingField(SortingField.DATE_DISCONTINUATION); break;
-				case "company":	  mypage.setSortingField(SortingField.COMPANY); break;
-				default: 		  mypage.setSortingField(SortingField.ID); break;
+				case "name":	  page.setSortingField(SortingField.NAME); break;
+				case "introDate": page.setSortingField(SortingField.DATE_INTRODUCTION);	break;
+				case "disconDate":page.setSortingField(SortingField.DATE_DISCONTINUATION); break;
+				case "company":	  page.setSortingField(SortingField.COMPANY); break;
+				default: 		  page.setSortingField(SortingField.ID); break;
 			}
 		}
 		
 		if(orderString!=null && !orderString.equals("")) {
 			switch (orderString) {
-			case "asc": mypage.setSortingOrder(SortingOrder.ASC); break;
-			case "desc":mypage.setSortingOrder(SortingOrder.DESC); break;
-			default: 	mypage.setSortingOrder(SortingOrder.ASC); break;
+			case "asc": page.setSortingOrder(SortingOrder.ASC); break;
+			case "desc":page.setSortingOrder(SortingOrder.DESC); break;
+			default: 	page.setSortingOrder(SortingOrder.ASC); break;
 			}
 		}		
 		
@@ -79,16 +79,15 @@ public class DashBoard {
 			if (optComputer.isPresent())
 				computers.add(optComputer.get());
 		}else {
-			computers = controller.getComputerPage(mypage.getPage(), mypage.getNbByPage(),mypage.getSortingField(), mypage.getSortingOrder());
+			computers = controller.getComputerPage(page.getPage(), page.getNbByPage(),page.getSortingField(), page.getSortingOrder());
 		}
 
 		long nbComputerFound = controller.getNumberOfComputer();
-		int lastPage = (int) Math.ceil(nbComputerFound/(double)mypage.getNbByPage()) ;
+		int lastPage = (int) Math.ceil(nbComputerFound/(double)page.getNbByPage()) ;
 		
-		model.addAttribute("mypage", mypage);
 		model.addAttribute("nbComputerFound", nbComputerFound);
 		model.addAttribute("lastPage", lastPage);
-		model.addAttribute("page", mypage.getPage());
+		model.addAttribute("page", page.getPage());
 		model.addAttribute("computers", computers);
 		
         return "dashboard";

@@ -13,8 +13,8 @@ public class ComputerMapper{
 	public ComputerDTO computerToDTO(Computer c) {
 		return new ComputerDTO(c.getId(),
 				c.getName(),
-				c.getIntroduced(),
-				c.getDiscontinued(),
+				c.getLdIntroduced(),
+				c.getLdDiscontinued(),
 				(c.getCompany() != null) ? c.getCompany().getId() : null,
 				(c.getCompany() != null) ? c.getCompany().getName() : null);
 	}

@@ -54,7 +54,20 @@
 			<artifactId>HikariCP</artifactId>
 			<version>${hikariCP.version}</version>
 		</dependency>
+		
+		 <dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>jcl-over-slf4j</artifactId>
+			<version>${slf4j-api.version}</version>
+			<scope>test</scope>
+		</dependency>
 
+		<dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-classic</artifactId>
+			<version>${logback-classic.version}</version>
+			<scope>test</scope>			
+		</dependency>
 
 		<dependency>
 			<groupId>com.excilys.labourbe.loic</groupId>
