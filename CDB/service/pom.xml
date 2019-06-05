@@ -12,10 +12,24 @@
   <name>service</name>
 
   <properties>
+    <spring.security.version>5.1.5.RELEASE</spring.security.version>
+    <spring.security.config.version>5.1.5.RELEASE</spring.security.config.version>    
     <module.persistence.version>1.0-SNAPSHOT</module.persistence.version>
   </properties>
 
   <dependencies>
+ 
+	<dependency>
+		<groupId>org.springframework.security</groupId>
+		<artifactId>spring-security-web</artifactId>
+		<version>${spring.security.version}</version>
+	</dependency>
+
+	<dependency>
+		<groupId>org.springframework.security</groupId>
+		<artifactId>spring-security-config</artifactId>
+		<version>${spring.security.config.version}</version>
+	</dependency>
 
 	<dependency>
 		<groupId>com.excilys.labourbe.loic</groupId>

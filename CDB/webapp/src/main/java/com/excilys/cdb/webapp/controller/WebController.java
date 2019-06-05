@@ -17,7 +17,7 @@ import com.excilys.cdb.core.model.Computer;
 import com.excilys.cdb.core.model.ComputerBuilder;
 import com.excilys.cdb.persistence.dao.SortingField;
 import com.excilys.cdb.persistence.dao.SortingOrder;
-import com.excilys.cdb.service.Service;
+import com.excilys.cdb.service.service.Service;
 
 @Component
 public class WebController {

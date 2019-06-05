@@ -10,7 +10,7 @@ import com.excilys.cdb.core.exception.BadCompanyIdException;
 import com.excilys.cdb.core.exception.BadInputException;
 import com.excilys.cdb.core.exception.DateFormatException;
 import com.excilys.cdb.core.model.Company;
-import com.excilys.cdb.service.Service;
+import com.excilys.cdb.service.service.Service;
 
 @Component
 public class ComputerValidator {

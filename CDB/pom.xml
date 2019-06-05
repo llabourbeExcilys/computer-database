@@ -101,9 +101,9 @@
 	</build>
 	<modules>
 		<module>core</module>
+		<module>binding</module>
 		<module>persistence</module>
 		<module>service</module>
-		<module>binding</module>
 		<module>webapp</module>
 		<module>console</module>
 	</modules>
