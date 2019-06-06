@@ -11,18 +11,19 @@
   
   <name>console</name>
 
-  <properties>
-    <module.binding.version>1.0-SNAPSHOT</module.binding.version>
-    <module.service.version>1.0-SNAPSHOT</module.service.version>
-  </properties>
-
   <dependencies>
   
 	<dependency>
 		<groupId>com.excilys.labourbe.loic</groupId>
 		<artifactId>service</artifactId>
-		<version>${module.service.version}</version>
 	</dependency>
+	
+	<dependency>
+		<groupId>junit</groupId>
+		<artifactId>junit</artifactId>
+		<scope>test</scope>
+	</dependency>	
+	
   </dependencies>
 
 </project>

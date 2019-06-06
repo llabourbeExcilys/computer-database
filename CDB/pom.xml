@@ -14,11 +14,40 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
+		
+		<!-- module version -->
+    	<module.service.version>1.0-SNAPSHOT</module.service.version>
+    	<module.persistence.version>1.0-SNAPSHOT</module.persistence.version>
+		<module.binding.version>1.0-SNAPSHOT</module.binding.version>
 
+		<!-- root dependencies -->
 		<hibernate.version>5.3.2.Final</hibernate.version>
 		<jaxb-api.version>2.3.1</jaxb-api.version>
 		<junit.version>4.12</junit.version>
 		<spring.version>5.1.7.RELEASE</spring.version>
+		
+		<!-- webapp -->
+		<javax.servlet-api.version>4.0.1</javax.servlet-api.version>
+		<jstl.version>1.2</jstl.version>
+		
+		<!-- service -->
+		<spring.security.version>5.1.5.RELEASE</spring.security.version>
+		<spring.security.config.version>5.1.5.RELEASE</spring.security.config.version>    
+		
+		<!-- persistence -->
+		<h2.version>1.3.166</h2.version>
+		<mysql.connector.version>8.0.15</mysql.connector.version>
+		<hikariCP.version>3.3.1</hikariCP.version>
+		<slf4j-api.version>1.7.26</slf4j-api.version>
+		<logback-classic.version>1.2.3</logback-classic.version>
+		
+		<!-- binding -->
+		<mockito.version>2.27.0</mockito.version>
+		<module.core.version>1.0-SNAPSHOT</module.core.version>
+		<hibernate.validator.version>6.0.16.Final</hibernate.validator.version>
+		<javax.el.version>3.0.0</javax.el.version>
+		<org.glassfish.web.javax.el.version>2.2.4</org.glassfish.web.javax.el.version>
+		<javax.validator.version>2.0.1.Final</javax.validator.version>
 		
 		<!-- Plugin properties -->
 		<maven-surefire-plugin.version>2.22.1</maven-surefire-plugin.version>
@@ -30,49 +59,194 @@
 
 	<packaging>pom</packaging>
 
-	<dependencies>
+	<modules>
+		<module>core</module>
+		<module>binding</module>
+		<module>persistence</module>
+		<module>service</module>
+		<module>webapp</module>
+		<module>console</module>
+	</modules>
 
-		<dependency>
-			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate-core</artifactId>
-			<version>${hibernate.version}</version>
-		</dependency>
+	<dependencyManagement>
+	
+		<dependencies>
+		
+			<!-- module -->
+			
+			<dependency>
+				<groupId>com.excilys.labourbe.loic</groupId>
+				<artifactId>service</artifactId>
+				<version>${module.service.version}</version>
+			</dependency>
+			
+			<dependency>
+				<groupId>com.excilys.labourbe.loic</groupId>
+				<artifactId>persistence</artifactId>
+				<version>${module.persistence.version}</version>
+			</dependency>
+			
+			<dependency>
+				<groupId>com.excilys.labourbe.loic</groupId>
+				<artifactId>binding</artifactId>
+				<version>${module.binding.version}</version>
+			</dependency>
+	
+			<dependency>
+				<groupId>com.excilys.labourbe.loic</groupId>
+				<artifactId>core</artifactId>
+				<version>${module.core.version}</version>
+			</dependency>
+			
+			<!-- dependencies -->
+	
+			<dependency>
+				<groupId>org.hibernate</groupId>
+				<artifactId>hibernate-core</artifactId>
+				<version>${hibernate.version}</version>
+			</dependency>
+	
+			<dependency>
+				<groupId>javax.xml.bind</groupId>
+				<artifactId>jaxb-api</artifactId>
+				<version>${jaxb-api.version}</version>
+			</dependency>
+	
+			<dependency>
+				<groupId>junit</groupId>
+				<artifactId>junit</artifactId>
+				<version>${junit.version}</version>
+				<scope>test</scope>
+			</dependency>
+	
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-context</artifactId>
+				<version>${spring.version}</version>
+			</dependency>
+	
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-test</artifactId>
+				<version>${spring.version}</version>
+				<scope>test</scope>
+			</dependency>
+	
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-web</artifactId>
+				<version>${spring.version}</version>
+			</dependency>
+		
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-webmvc</artifactId>
+				<version>${spring.version}</version>
+			</dependency>
+		
+			<dependency>
+				<groupId>javax.servlet</groupId>
+				<artifactId>javax.servlet-api</artifactId>
+				<version>${javax.servlet-api.version}</version>
+				<scope>provided</scope>
+			</dependency>
+		
+			<dependency>
+				<groupId>jstl</groupId>
+				<artifactId>jstl</artifactId>
+				<version>${jstl.version}</version>
+			</dependency>
+		
+			<dependency>
+				<groupId>org.springframework.security</groupId>
+				<artifactId>spring-security-web</artifactId>
+				<version>${spring.security.version}</version>
+			</dependency>
+		
+			<dependency>
+				<groupId>org.springframework.security</groupId>
+				<artifactId>spring-security-config</artifactId>
+				<version>${spring.security.config.version}</version>
+			</dependency>
+			
+			<dependency>
+				<groupId>com.h2database</groupId>
+				<artifactId>h2</artifactId>
+				<version>${h2.version}</version>
+				<scope>test</scope>
+			</dependency>
+	
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-jdbc</artifactId>
+				<version>${spring.version}</version>
+			</dependency>
+	
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-orm</artifactId>
+				<version>${spring.version}</version>
+			</dependency>
+	
+			<dependency>
+				<groupId>mysql</groupId>
+				<artifactId>mysql-connector-java</artifactId>
+				<version>${mysql.connector.version}</version>
+				<scope>runtime</scope>
+			</dependency>
+	
+			<dependency>
+				<groupId>com.zaxxer</groupId>
+				<artifactId>HikariCP</artifactId>
+				<version>${hikariCP.version}</version>
+			</dependency>
+			
+			 <dependency>
+				<groupId>org.slf4j</groupId>
+				<artifactId>jcl-over-slf4j</artifactId>
+				<version>${slf4j-api.version}</version>
+			</dependency>
+	
+			<dependency>
+				<groupId>ch.qos.logback</groupId>
+				<artifactId>logback-classic</artifactId>
+				<version>${logback-classic.version}</version>
+			</dependency>		
+	
+			<dependency>
+				<groupId>org.mockito</groupId>
+				<artifactId>mockito-core</artifactId>
+				<version>${mockito.version}</version>
+				<scope>test</scope>
+			</dependency>
+		
+			<dependency>
+				<groupId>org.hibernate.validator</groupId>
+				<artifactId>hibernate-validator</artifactId>
+				<version>${hibernate.validator.version}</version>
+			</dependency>
+			
+		 	<dependency>
+				<groupId>javax.el</groupId>
+				<artifactId>javax.el-api</artifactId>
+				<version>${javax.el.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.glassfish.web</groupId>
+				<artifactId>javax.el</artifactId>
+				<version>${org.glassfish.web.javax.el.version}</version>
+			</dependency>
+		
+			<dependency>
+				<groupId>javax.validation</groupId>
+				<artifactId>validation-api</artifactId>
+				<version>${javax.validator.version}</version>
+			</dependency>
+	
+		</dependencies>
+		
+	</dependencyManagement>
 
-		<dependency>
-			<groupId>javax.xml.bind</groupId>
-			<artifactId>jaxb-api</artifactId>
-			<version>${jaxb-api.version}</version>
-		</dependency>
-
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>${junit.version}</version>
-			<scope>test</scope>
-		</dependency>
-
-
-
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-context</artifactId>
-			<version>${spring.version}</version>
-		</dependency>
-
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-jdbc</artifactId>
-			<version>${spring.version}</version>
-		</dependency>
-
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-test</artifactId>
-			<version>${spring.version}</version>
-			<scope>test</scope>
-		</dependency>
-
-	</dependencies>
 
 	<build>
 		<pluginManagement>
@@ -99,12 +273,5 @@
 			</plugins>
 		</pluginManagement>
 	</build>
-	<modules>
-		<module>core</module>
-		<module>binding</module>
-		<module>persistence</module>
-		<module>service</module>
-		<module>webapp</module>
-		<module>console</module>
-	</modules>
+
 </project>
