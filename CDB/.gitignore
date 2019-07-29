@@ -1,10 +1,12 @@
 resources.config.properties
 
-/target
+target
 /.settings
-
+/**/.settings
 .classpath
 .project
 
 /log_files
 
+/**/target
+/**/.project
