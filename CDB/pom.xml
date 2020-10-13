@@ -23,7 +23,7 @@
 		<!-- root dependencies -->
 		<hibernate.version>5.3.2.Final</hibernate.version>
 		<jaxb-api.version>2.3.1</jaxb-api.version>
-		<junit.version>4.12</junit.version>
+		<junit.version>4.13.1</junit.version>
 		<spring.version>5.1.7.RELEASE</spring.version>
 		
 		<!-- webapp -->
